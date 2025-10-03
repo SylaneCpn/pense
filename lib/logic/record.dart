@@ -46,6 +46,15 @@ class RecordElement {
       rethrow;
     }
   }
+
+  Map<String , dynamic> toJson() {
+    return {
+          'month': month,
+          'year': year,
+          'expenses': expenses.map((expense) => expense.toJson()).toList(),
+          'incomes' : incomes.map((income) => income.toJson()).toList()
+        };
+  }
 }
 
 class Category {
