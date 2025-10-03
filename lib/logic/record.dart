@@ -1,19 +1,29 @@
+import 'package:flutter/material.dart';
 import 'package:pense/logic/month.dart';
 
-class Record {}
+class Record  extends ChangeNotifier {
+  List<RecordElement>? elements;
+
+  void notify() {
+    notifyListeners();
+  }
+
+}
 
 class RecordElement {
   final Month month;
   final int year;
-  List<Category> categories;
+  List<Category> expenses;
+  List<Category> incomes;
 
   RecordElement({
     required this.month,
     required this.year,
-    required this.categories,
+    required this.expenses,
+    required this.incomes
   });
   RecordElement.empty({required this.month, required this.year})
-    : categories = [];
+    : expenses = [] , incomes = [];
 
   factory RecordElement.fromJson(Map<String, dynamic> json) {
     try {
@@ -21,12 +31,14 @@ class RecordElement {
         {
           'month': String month,
           'year': int year,
-          'categories': List<Map<String, dynamic>> categories,
+          'expenses': List<Map<String, dynamic>> expenses,
+          'incomes' : List<Map<String, dynamic>> incomes
         } =>
           RecordElement(
             month: Month.values.byName(month),
             year: year,
-            categories: categories.map(Category.fromJson).toList(),
+            expenses: expenses.map(Category.fromJson).toList(),
+            incomes: incomes.map(Category.fromJson).toList(),
           ),
         _ => throw const FormatException('Failed to load source.'),
       };
@@ -59,6 +71,14 @@ class Category {
     } catch (e) {
       rethrow;
     }
+  }
+
+
+  Map<String , dynamic> toJson() {
+    return {
+      'label' : label,
+      'sources' : sources.map((source) => source.toJson()).toList()
+    };
   }
 }
 
