@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:pense/logic/app_state.dart';
+import 'package:pense/ui/body.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -49,12 +50,3 @@ class Home extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
-  const Body({super.key});
-  @override
-  Widget build(BuildContext context) {
-    
-    return Placeholder();
-  }
-
-}
