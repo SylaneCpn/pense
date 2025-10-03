@@ -77,4 +77,12 @@ class Source {
       _ => throw const FormatException('Failed to load source.'),
     };
   }
+
+
+  Map<String , dynamic> toJson() {
+    return {
+      'label' : label,
+      'value' : value
+    };
+  }
 }
