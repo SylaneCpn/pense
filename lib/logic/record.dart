@@ -51,6 +51,16 @@ class Record extends ChangeNotifier {
   void notify() {
     notifyListeners();
   }
+
+  RecordElement where(Month month, int year) {
+    try {
+      return elements.firstWhere((e) => e.month == month && e.year == year);
+    } on StateError catch (_) {
+      final newElem = RecordElement.empty(month: month, year: year);
+      elements.add(newElem);
+      return newElem;
+    }
+  }
 }
 
 class RecordElement {
@@ -99,6 +109,22 @@ class RecordElement {
       'incomes': incomes.map((income) => income.toJson()).toList(),
     };
   }
+
+  double totalIncome() {
+    return incomes
+        .map((e) => e.sourceSum())
+        .fold(0.0, (value, element) => value + element);
+  }
+
+  double totalExpense() {
+    return expenses
+        .map((e) => e.sourceSum())
+        .fold(0.0, (value, element) => value + element);
+  }
+
+  double totalElement() {
+    return totalIncome() - totalExpense();
+  }
 }
 
 class Category {
@@ -132,17 +158,23 @@ class Category {
       'sources': sources.map((source) => source.toJson()).toList(),
     };
   }
+
+  double sourceSum() {
+    return sources
+        .map((e) => e.value)
+        .fold(0.0, (value, element) => value + element);
+  }
 }
 
 class Source {
   final String label;
-  final String value;
+  final double value;
 
   const Source({required this.label, required this.value});
 
   factory Source.fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {'label': String label, 'value': String value} => Source(
+      {'label': String label, 'value': double value} => Source(
         label: label,
         value: value,
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/main_page/date_banner.dart';
+import 'package:pense/ui/main_page/sum_banner.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -9,11 +11,49 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   Month month = DateTime.now().month.toMonth();
   int year = DateTime.now().year;
+
+  void toPrevMonth() {
+    setState(() {
+      final (Month m, int y) = month.prev(year);
+      month = m;
+      year = y;
+    });
+  }
+
+  void toNextMonth() {
+    setState(() {
+      final (Month m, int y) = month.next(year);
+      month = m;
+      year = y;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child: Column(children: [Placeholder()]));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              DateBanner(
+                height: constraints.maxHeight * 0.1,
+                month: month,
+                year: year,
+                prevMonthCallback: toPrevMonth,
+                nextMonthCallback: toNextMonth,
+              ),
+              SumBanner(
+                month: month,
+                year: year,
+                height: constraints.maxHeight * 0.6,
+                width: constraints.maxWidth,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

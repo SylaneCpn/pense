@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/main_page.dart';
 import 'package:pense/ui/processing_record.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -34,11 +35,12 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
 
-    final body = (record != null) ? MainPage() : ProcessingRecord();
+    final body = (record != null) ? ChangeNotifierProvider(create: (context) => record! , child: MainPage(),) : ProcessingRecord();
     
-    return Scaffold(
-      appBar: AppBar( backgroundColor: Theme.of(context).colorScheme.inversePrimary,),
-      body: body,
+    return SafeArea(
+      child: Scaffold(
+        body: body,
+      ),
     );
   }
 }
