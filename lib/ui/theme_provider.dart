@@ -17,19 +17,7 @@ class ThemeProvider extends StatelessWidget {
       builder:
           (lightDynamic, darkDynamic) => MaterialApp(
             title: 'Pense',
-            theme: ThemeData(
-              colorScheme:
-                  appState.isDark
-                      ? darkDynamic ??
-                          ColorScheme.fromSeed(
-                            brightness: Brightness.dark,
-                            seedColor: AppState.defaultSeedColor,
-                          )
-                      : lightDynamic ??
-                          ColorScheme.fromSeed(
-                            seedColor: AppState.defaultSeedColor,
-                          ),
-            ),
+            theme: appState.theme(lightDynamic, darkDynamic),
             home: const Body(),
           ),
     );

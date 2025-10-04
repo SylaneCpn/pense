@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
+import 'package:provider/provider.dart';
 
 class DateBanner extends StatelessWidget {
 
@@ -13,10 +15,12 @@ class DateBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final appState = context.read<AppState>();
      return Padding(
        padding: const EdgeInsets.all(8.0),
        child: Container(
-        decoration: BoxDecoration( color: Theme.of(context).colorScheme.inversePrimary,borderRadius: BorderRadius.circular(8.0)),
+        decoration: BoxDecoration( color: appState.inversePrimary(context),borderRadius: BorderRadius.circular(8.0)),
          child: SizedBox(
           height: height,
            child: Row(
@@ -32,13 +36,13 @@ class DateBanner extends StatelessWidget {
                        Text(
                          style: TextStyle(
                           fontSize: 28.0,
-                          color: Theme.of(context).colorScheme.onSurface),
+                          color: appState.onSurface(context)),
                          month.toStringFr()),
 
                          Text(
                          style: TextStyle(
                           fontSize: 14.0,
-                          color: Theme.of(context).colorScheme.onSurface),
+                          color: appState.onSurface(context)),
                          year.toString() ),
                      ],
                    ),

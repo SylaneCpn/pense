@@ -20,17 +20,20 @@ class SumBanner extends StatelessWidget {
     required this.height,
   });
 
-  Decoration containerDecoration(context) => BoxDecoration(
+  Decoration containerDecoration(BuildContext context , AppState appState) {
+    return BoxDecoration(
     borderRadius: BorderRadius.circular(8.0),
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [Theme.of(context).colorScheme.primaryContainer, Colors.black],
+      colors: [appState.primaryContainer(context), Colors.black],
+      stops: [0.1,1]
     ),
-  );
+  );}
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.read<AppState>();
     final record = context.watch<rc.Record>();
     final currentElement = record.where(month, year);
 
@@ -42,7 +45,7 @@ class SumBanner extends StatelessWidget {
         height: height,
         width: width,
         child: Container(
-          decoration: containerDecoration(context),
+          decoration: containerDecoration(context,appState ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -86,7 +89,7 @@ class Epargne extends StatelessWidget {
         children: [
           Text(
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: appState.onPrimaryContainer(context),
             ),
             "Epargne :",
           ),
@@ -95,7 +98,7 @@ class Epargne extends StatelessWidget {
               fontSize: height / 3,
               color: sumColor(
                 sum,
-                Theme.of(context).colorScheme.onPrimaryContainer,
+                appState.onPrimaryContainer(context),
               ),
             ),
             "$sum ${appState.currency}",
