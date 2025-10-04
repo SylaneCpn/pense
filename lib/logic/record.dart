@@ -28,9 +28,9 @@ Future<void> storeRecord(Record record) async {
 }
 
 class Record extends ChangeNotifier {
-  List<RecordElement>? elements;
+  List<RecordElement> elements;
 
-  Record({this.elements});
+  Record({required this.elements});
   factory Record.fromJson(List<Map<String, dynamic>> json) {
     try {
       final elements = json.map(RecordElement.fromJson).toList();
@@ -42,7 +42,7 @@ class Record extends ChangeNotifier {
 
   List<Map<String, dynamic>> toJson() {
     try {
-      return elements?.map((element) => element.toJson()).toList() ?? [];
+      return elements.map((element) => element.toJson()).toList();
     } catch (e) {
       rethrow;
     }
