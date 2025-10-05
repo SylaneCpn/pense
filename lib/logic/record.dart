@@ -1,50 +1,42 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pense/logic/month.dart';
 
 Future<Record> getRecord() async {
-  print("Fetching record");
   final appDir = await getApplicationDocumentsDirectory();
-  print("Got AppDir : ${appDir.path}");
   try {
     final record = await File("${appDir.path}/record.json").readAsString();
-    print("read file : ${appDir.path}/record.json");
-    final jsonRecord = await compute(jsonDecode, record);
-    print("Parsed json");
-    print("Record wil be generated from json");
-    return Record.fromJson(
-      (jsonRecord as List<Object?>).cast<Map<String, Object?>>(),
-    );
-
+    final json = await compute(jsonDecode, record);
+    return Record.fromJson(json);
   }
   // file doesn't exist
   catch (e) {
-    print("$e appened : default record");
     return Record(elements: []);
   }
 }
 
-Future<void> storeRecord(Record record) async {
 
-  print("storing record");
+
+Future<void> storeRecord(Record record) async {
   final appDir = await getApplicationDocumentsDirectory();
-  print("Got AppDir : ${appDir.path}");
   final recordAsJson = record.toJson();
-  print("record converted to json");
   final recordAsString = await compute(jsonEncode, recordAsJson);
-  print("record encoded to json");
   await File("${appDir.path}/record.json").writeAsString(recordAsString);
-  print("file written to : ${appDir.path}/record.json");
 }
 
-class Record extends ChangeNotifier {
-  List<RecordElement> elements;
 
-  Record({required this.elements});
-  factory Record.fromJson(List<Map<String, dynamic>> json) {
+class Record extends ChangeNotifier {
+  List<RecordElement> _elements;
+
+  UnmodifiableListView get elements => UnmodifiableListView(_elements);
+
+  Record({required List<RecordElement> elements}) : _elements = elements;
+  factory Record.fromJson(List<dynamic> json) {
     try {
       final elements = json.map(RecordElement.fromJson).toList();
       return Record(elements: elements);
@@ -55,7 +47,7 @@ class Record extends ChangeNotifier {
 
   List<Map<String, dynamic>> toJson() {
     try {
-      return elements.map((element) => element.toJson()).toList();
+      return _elements.map((element) => element.toJson()).toList();
     } catch (e) {
       rethrow;
     }
@@ -67,10 +59,10 @@ class Record extends ChangeNotifier {
 
   RecordElement where(Month month, int year) {
     try {
-      return elements.firstWhere((e) => e.month == month && e.year == year);
+      return _elements.firstWhere((e) => e.month == month && e.year == year);
     } on StateError catch (_) {
       final newElem = RecordElement.empty(month: month, year: year);
-      elements.add(newElem);
+      _elements.add(newElem);
       return newElem;
     }
   }
@@ -92,14 +84,14 @@ class RecordElement {
     : expenses = [],
       incomes = [];
 
-  factory RecordElement.fromJson(Map<String, dynamic> json) {
+  factory RecordElement.fromJson(dynamic json) {
     try {
       return switch (json) {
         {
           'month': String month,
           'year': int year,
-          'expenses': List<Map<String, dynamic>> expenses,
-          'incomes': List<Map<String, dynamic>> incomes,
+          'expenses': List<dynamic> expenses,
+          'incomes': List<dynamic> incomes,
         } =>
           RecordElement(
             month: Month.values.byName(month),
@@ -107,7 +99,7 @@ class RecordElement {
             expenses: expenses.map(Category.fromJson).toList(),
             incomes: incomes.map(Category.fromJson).toList(),
           ),
-        _ => throw const FormatException('Failed to load source.'),
+        _ => throw const FormatException('Failed to load record element.'),
       };
     } catch (e) {
       rethrow;
@@ -116,7 +108,7 @@ class RecordElement {
 
   Map<String, dynamic> toJson() {
     return {
-      'month': month.toString(),
+      'month': month.name,
       'year': year,
       'expenses': expenses.map((expense) => expense.toJson()).toList(),
       'incomes': incomes.map((income) => income.toJson()).toList(),
@@ -147,18 +139,18 @@ class Category {
   Category({required this.label, required this.sources});
   Category.empty({required this.label}) : sources = [];
 
-  factory Category.fromJson(Map<String, dynamic> json) {
+  factory Category.fromJson(dynamic json) {
     try {
       return switch (json) {
         {
           'label': String label,
-          'sources': List<Map<String, dynamic>> sources,
+          'sources': List<dynamic> sources,
         } =>
           Category(
             label: label,
             sources: sources.map(Source.fromJson).toList(),
           ),
-        _ => throw const FormatException('Failed to load source.'),
+        _ => throw const FormatException('Failed to load category.'),
       };
     } catch (e) {
       rethrow;
@@ -185,7 +177,7 @@ class Source {
 
   const Source({required this.label, required this.value});
 
-  factory Source.fromJson(Map<String, dynamic> json) {
+  factory Source.fromJson(dynamic json) {
     return switch (json) {
       {'label': String label, 'value': double value} => Source(
         label: label,

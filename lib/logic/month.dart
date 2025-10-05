@@ -12,23 +12,6 @@ enum Month {
   november,
   december;
 
-  @override
-  String toString() {
-    return switch (this) {
-      Month.january => "january",
-      Month.febuary => "febuary",
-      Month.march => "march",
-      Month.april => "april",
-      Month.may => "may",
-      Month.june => "june",
-      Month.july => "july",
-      Month.august => "august",
-      Month.september => "september",
-      Month.october => "october",
-      Month.november => "november",
-      Month.december => "december",
-    };
-  }
 
   String toStringFr() {
     return switch (this) {
