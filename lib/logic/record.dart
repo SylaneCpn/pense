@@ -6,25 +6,38 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pense/logic/month.dart';
 
 Future<Record> getRecord() async {
+  print("Fetching record");
   final appDir = await getApplicationDocumentsDirectory();
+  print("Got AppDir : ${appDir.path}");
   try {
     final record = await File("${appDir.path}/record.json").readAsString();
+    print("read file : ${appDir.path}/record.json");
     final jsonRecord = await compute(jsonDecode, record);
+    print("Parsed json");
+    print("Record wil be generated from json");
     return Record.fromJson(
       (jsonRecord as List<Object?>).cast<Map<String, Object?>>(),
     );
+
   }
   // file doesn't exist
   catch (e) {
+    print("$e appened : default record");
     return Record(elements: []);
   }
 }
 
 Future<void> storeRecord(Record record) async {
+
+  print("storing record");
   final appDir = await getApplicationDocumentsDirectory();
+  print("Got AppDir : ${appDir.path}");
   final recordAsJson = record.toJson();
+  print("record converted to json");
   final recordAsString = await compute(jsonEncode, recordAsJson);
+  print("record encoded to json");
   await File("${appDir.path}/record.json").writeAsString(recordAsString);
+  print("file written to : ${appDir.path}/record.json");
 }
 
 class Record extends ChangeNotifier {
@@ -103,7 +116,7 @@ class RecordElement {
 
   Map<String, dynamic> toJson() {
     return {
-      'month': month,
+      'month': month.toString(),
       'year': year,
       'expenses': expenses.map((expense) => expense.toJson()).toList(),
       'incomes': incomes.map((income) => income.toJson()).toList(),

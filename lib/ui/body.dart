@@ -11,8 +11,7 @@ class Body extends StatefulWidget {
   State<Body> createState() => _BodyState();
 }
 
-class _BodyState extends State<Body> {
-
+class _BodyState extends State<Body> with WidgetsBindingObserver {
   Record? record;
 
   @override
@@ -23,24 +22,34 @@ class _BodyState extends State<Body> {
       });
     });
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
-
 
   @override
   void dispose() {
     if (record != null) storeRecord(record!);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      if (record != null) storeRecord(record!);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
-    final body = (record != null) ? ChangeNotifierProvider(create: (context) => record! , child: MainPage(),) : ProcessingRecord();
-    
-    return SafeArea(
-      child: Scaffold(
-        body: body,
-      ),
-    );
+  @override
+  Widget build(BuildContext context) {
+    final body =
+        (record != null)
+            ? ChangeNotifierProvider(
+              create: (context) => record!,
+              child: MainPage(),
+            )
+            : ProcessingRecord();
+
+    return SafeArea(child: Scaffold(body: body));
   }
 }

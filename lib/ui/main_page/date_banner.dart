@@ -20,13 +20,13 @@ class DateBanner extends StatelessWidget {
      return Padding(
        padding: const EdgeInsets.all(8.0),
        child: Container(
-        decoration: BoxDecoration( color: appState.inversePrimary(context),borderRadius: BorderRadius.circular(8.0)),
+        decoration: BoxDecoration( color: appState.primaryContainer(context),borderRadius: BorderRadius.circular(8.0)),
          child: SizedBox(
           height: height,
            child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
              children: [
-              IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios)),
+              IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios , color: appState.onPrimaryContainer(context),)),
                Expanded(
                  child: Align(
                   alignment: Alignment.center,
@@ -36,19 +36,19 @@ class DateBanner extends StatelessWidget {
                        Text(
                          style: TextStyle(
                           fontSize: 28.0,
-                          color: appState.onSurface(context)),
+                          color: appState.onPrimaryContainer(context)),
                          month.toStringFr()),
 
                          Text(
                          style: TextStyle(
                           fontSize: 14.0,
-                          color: appState.onSurface(context)),
+                          color: appState.onPrimaryContainer(context)),
                          year.toString() ),
                      ],
                    ),
                  ),
                ),
-               IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios)),
+               IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios , color : appState.onPrimaryContainer(context))),
              ],
            ),
          ),

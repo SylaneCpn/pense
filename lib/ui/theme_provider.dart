@@ -18,7 +18,7 @@ class ThemeProvider extends StatelessWidget {
           (lightDynamic, darkDynamic) => MaterialApp(
             title: 'Pense',
             theme: appState.theme(lightDynamic, darkDynamic),
-            home: const Body(),
+            home: Body(),
           ),
     );
   }

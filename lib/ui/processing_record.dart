@@ -10,7 +10,10 @@ class ProcessingRecord extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CircularProgressIndicator(),
-          Text("En attente de traitement des données"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("En attente de traitement des données..."),
+          ),
         ],
       ),
     );

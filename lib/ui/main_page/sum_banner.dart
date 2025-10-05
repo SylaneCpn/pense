@@ -20,16 +20,17 @@ class SumBanner extends StatelessWidget {
     required this.height,
   });
 
-  Decoration containerDecoration(BuildContext context , AppState appState) {
+  Decoration containerDecoration(BuildContext context, AppState appState) {
     return BoxDecoration(
-    borderRadius: BorderRadius.circular(8.0),
-    gradient: LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [appState.primaryContainer(context), Colors.black],
-      stops: [0.1,1]
-    ),
-  );}
+      borderRadius: BorderRadius.circular(8.0),
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [appState.primaryContainer(context), Colors.black],
+        stops: [0.0, 0.5],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +46,21 @@ class SumBanner extends StatelessWidget {
         height: height,
         width: width,
         child: Container(
-          decoration: containerDecoration(context,appState ),
+          decoration: containerDecoration(context, appState),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Epargne(sum: sum, height: height * 0.5, width: width),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(child: TopSources(categories: currentElement.incomes , label: "Vos sources de revenus principales :",)),
+                      Expanded(child: TopSources(categories: currentElement.expenses, label : "Vos dépenses principales :")),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -88,23 +97,32 @@ class Epargne extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            style: TextStyle(
-              color: appState.onPrimaryContainer(context),
-            ),
+            style: TextStyle(color: appState.onPrimaryContainer(context)),
             "Epargne :",
           ),
           Text(
             style: TextStyle(
               fontSize: height / 3,
-              color: sumColor(
-                sum,
-                appState.onPrimaryContainer(context),
-              ),
+              color: sumColor(sum, appState.onPrimaryContainer(context)),
             ),
             "$sum ${appState.currency}",
           ),
         ],
       ),
     );
+  }
+}
+
+class TopSources extends StatelessWidget {
+  final List<rc.Category> categories;
+  final String label;
+
+  const TopSources({super.key, required this.categories , required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+    
+    Column();
   }
 }

@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             children: [
               DateBanner(
-                height: constraints.maxHeight * 0.1,
+                height: 100.0,
                 month: month,
                 year: year,
                 prevMonthCallback: toPrevMonth,
@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> {
               SumBanner(
                 month: month,
                 year: year,
-                height: constraints.maxHeight * 0.6,
+                height: 400.0,
                 width: constraints.maxWidth,
               ),
             ],

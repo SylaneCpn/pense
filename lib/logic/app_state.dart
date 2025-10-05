@@ -2,91 +2,110 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class AppState extends ChangeNotifier {
-  late bool isDark;
-  String currency = avalaibleCurrencies[0];
-  late  AppColors? customColors;
-
-  AppState() {
-    isDark =
-      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-      Brightness.dark;
-
-    customColors = generateDefaultAppColor();
-
-    
-  }
-  
-  
   static final Color defaultPrimarySeedColor = Colors.greenAccent;
   static final Color defaultSecondarySeedColor = Colors.blueAccent;
   static final Color defaultTertiarySeedColor = Colors.deepPurpleAccent;
-  AppColors generateDefaultAppColor() {
-    return AppColors(
-        isDark: isDark,
-        primarySeed: AppState.defaultPrimarySeedColor,
-        secondarySeed: AppState.defaultSecondarySeedColor,
-        tertiarySeed: AppState.defaultTertiarySeedColor,
-      );
+  static final avalaibleCurrencies = ['€', '£', '\$'];
+
+  late bool isDark;
+  String currency = avalaibleCurrencies[0];
+  bool trySystemColors = true;
+  bool _canUseSystemColors = false;
+  late AppColors _customColors;
+
+  bool get canUseSystemColors => _canUseSystemColors;
+
+
+  AppState() {
+    isDark =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
+    _customColors = generateDefaultAppColor();
   }
 
-  static final avalaibleCurrencies = ['€', '£', '\$'];
+  AppColors generateDefaultAppColor() {
+    return AppColors(
+      isDark: isDark,
+      primarySeed: AppState.defaultPrimarySeedColor,
+      secondarySeed: AppState.defaultSecondarySeedColor,
+      tertiarySeed: AppState.defaultTertiarySeedColor,
+    );
+  }
 
   void toggleTheme() {
     isDark = !isDark;
-    if (customColors != null) {
-      customColors = AppColors(
-        primarySeed: customColors!.primarySeed,
-        secondarySeed: customColors!.secondarySeed,
-        tertiarySeed: customColors!.tertiarySeed,
-      );
-    }
+
+    _customColors = AppColors(
+      primarySeed: _customColors.primarySeed,
+      secondarySeed: _customColors.secondarySeed,
+      tertiarySeed: _customColors.tertiarySeed,
+    );
+    notifyListeners();
+  }
+
+  void toggleDynamicColors() {
+    trySystemColors = !trySystemColors;
     notifyListeners();
   }
 
   Color primaryColor(BuildContext context) {
-    return customColors?.primaryScheme.primary ??
-        Theme.of(context).colorScheme.primary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.primary
+        : _customColors.primaryScheme.primary;
   }
 
   Color onPrimaryColor(BuildContext context) {
-    return customColors?.primaryScheme.onPrimary ??
-        Theme.of(context).colorScheme.primary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.primary
+        : _customColors.primaryScheme.onPrimary;
   }
 
   Color secondaryColor(BuildContext context) {
-    return customColors?.secondaryScheme.primary ??
-        Theme.of(context).colorScheme.secondary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.secondary
+        : _customColors.secondaryScheme.primary;
   }
 
   Color onSecondaryColor(BuildContext context) {
-    return customColors?.secondaryScheme.onPrimary ??
-        Theme.of(context).colorScheme.onSecondary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.onSecondary
+        : _customColors.secondaryScheme.onPrimary;
   }
 
   Color tertiaryColor(BuildContext context) {
-    return customColors?.tertiaryScheme.primary ??
-        Theme.of(context).colorScheme.tertiary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.tertiary
+        : _customColors.tertiaryScheme.primary;
   }
 
   Color onTertiaryColor(BuildContext context) {
-    return customColors?.tertiaryScheme.onPrimary ??
-        Theme.of(context).colorScheme.onTertiary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.onTertiary
+        : _customColors.tertiaryScheme.onPrimary;
   }
 
   Color onPrimaryContainer(BuildContext context) {
-    return customColors?.primaryScheme.onPrimaryContainer ??  Theme.of(context).colorScheme.onPrimaryContainer;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.onPrimaryContainer
+        : _customColors.primaryScheme.onPrimaryContainer;
   }
 
   Color primaryContainer(BuildContext context) {
-    return customColors?.primaryScheme.primaryContainer ??  Theme.of(context).colorScheme.primaryContainer;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.primaryContainer
+        : _customColors.primaryScheme.primaryContainer;
   }
 
   Color onSurface(BuildContext context) {
-    return customColors?.primaryScheme.onSurface ?? Theme.of(context).colorScheme.onSurface;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.onSurface
+        : _customColors.primaryScheme.onSurface;
   }
 
   Color inversePrimary(BuildContext context) {
-    return customColors?.primaryScheme.inversePrimary ?? Theme.of(context).colorScheme.inversePrimary;
+    return trySystemColors && _canUseSystemColors
+        ? Theme.of(context).colorScheme.inversePrimary
+        : _customColors.primaryScheme.inversePrimary;
   }
 
   Color backgroundColor() {
@@ -97,15 +116,22 @@ class AppState extends ChangeNotifier {
     return isDark ? Colors.white70 : Colors.black87;
   }
 
-  ThemeData theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+
+  ThemeData _theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
     if (lightDynamic == null || darkDynamic == null) {
-      customColors = generateDefaultAppColor();
-      return ThemeData(colorScheme: customColors!.primaryScheme);
+      return ThemeData(colorScheme: _customColors.primaryScheme);
     } else {
       final scheme =
-          customColors?.primaryScheme ?? (isDark ? darkDynamic : lightDynamic);
+          trySystemColors
+              ? (isDark ? darkDynamic : lightDynamic)
+              : _customColors.primaryScheme;
       return ThemeData(colorScheme: scheme);
     }
+  }
+
+  ThemeData theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+    _canUseSystemColors = (lightDynamic !=  null) && (darkDynamic != null);
+    return _theme(lightDynamic, darkDynamic);
   }
 }
 
