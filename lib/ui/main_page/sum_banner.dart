@@ -1,10 +1,11 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
+import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:provider/provider.dart';
 
-import 'package:pense/logic/record.dart' as rc;
+import 'package:pense/logic/record.dart';
 
 class SumBanner extends StatelessWidget {
   final Month month;
@@ -35,7 +36,7 @@ class SumBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
-    final record = context.watch<rc.Record>();
+    final record = context.watch<Record>();
     final currentElement = record.where(month, year);
 
     final sum = currentElement.totalElement();
@@ -56,8 +57,8 @@ class SumBanner extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      Expanded(child: TopSources(categories: currentElement.incomes , label: "Vos sources de revenus principales :",)),
-                      Expanded(child: TopSources(categories: currentElement.expenses, label : "Vos dépenses principales :")),
+                      Expanded(child: TopSources(categoryType: CategoryType.income, categories: currentElement.incomes , sourceCount: 3, label: "Vos sources de revenus principales :",)),
+                      Expanded(child: TopSources(categoryType: CategoryType.expense, categories: currentElement.expenses, sourceCount: 3, label : "Vos dépenses principales :")),
                     ],
                   ),
                 ),
@@ -114,15 +115,49 @@ class Epargne extends StatelessWidget {
 }
 
 class TopSources extends StatelessWidget {
-  final List<rc.Category> categories;
+  final List<Category> categories;
+  final CategoryType categoryType;
+  final int sourceCount;
   final String label;
 
-  const TopSources({super.key, required this.categories , required this.label});
+
+  const TopSources({super.key, required this.categories , required this.label , required this.sourceCount , required this.categoryType});
 
   @override
   Widget build(BuildContext context) {
+
+    final appState = context.read<AppState>();
+
+
+    if (categories.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text("Pas de ${categoryType.toStringFr()} disponible.", style: TextStyle(fontSize: 28.0,color: appState.primaryColor(context)),),
+        Text("Ajoutez des élements pour les voir apparaire." , style:  TextStyle(color: appState.primaryColor(context)),)
+      ],
+    );
+    }
+
+
+    final sortedSources = Category.getTopSourcesInAllCategory(categories , sourceCount);
+
+    final sourceWidgets = sortedSources.map((s) {
+      return Row(
+        children: [
+          Text(s.label),
+          Text("${s.value} ${appState.currency}")
+        ],
+      );
+    });
+
+
     return 
-    
-    Column();
+    Column(
+      children: [
+        Text(style: TextStyle(color : appState.primaryColor(context), fontSize: 14), label),
+        ...sourceWidgets
+      ],
+    );
   }
 }

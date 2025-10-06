@@ -3,32 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pense/logic/month.dart';
-
-Future<Record> getRecord() async {
-  final appDir = await getApplicationDocumentsDirectory();
-  try {
-    final record = await File("${appDir.path}/record.json").readAsString();
-    final json = await compute(jsonDecode, record);
-    return Record.fromJson(json);
-  }
-  // file doesn't exist
-  catch (e) {
-    return Record(elements: []);
-  }
-}
-
-
-
-Future<void> storeRecord(Record record) async {
-  final appDir = await getApplicationDocumentsDirectory();
-  final recordAsJson = record.toJson();
-  final recordAsString = await compute(jsonEncode, recordAsJson);
-  await File("${appDir.path}/record.json").writeAsString(recordAsString);
-}
-
 
 class Record extends ChangeNotifier {
   List<RecordElement> _elements;
@@ -53,8 +29,29 @@ class Record extends ChangeNotifier {
     }
   }
 
+  // expose notifyListeners to watchers
   void notify() {
     notifyListeners();
+  }
+
+  static Future<Record> getRecord() async {
+    final appDir = await getApplicationSupportDirectory();
+    try {
+      final record = await File("${appDir.path}/record.json").readAsString();
+      final json = await compute(jsonDecode, record);
+      return Record.fromJson(json);
+    }
+    // file doesn't exist
+    catch (e) {
+      return Record(elements: []);
+    }
+  }
+
+  Future<void> storeRecord() async {
+    final appDir = await getApplicationSupportDirectory();
+    final recordAsJson = toJson();
+    final recordAsString = await compute(jsonEncode, recordAsJson);
+    await File("${appDir.path}/record.json").writeAsString(recordAsString);
   }
 
   RecordElement where(Month month, int year) {
@@ -142,14 +139,10 @@ class Category {
   factory Category.fromJson(dynamic json) {
     try {
       return switch (json) {
-        {
-          'label': String label,
-          'sources': List<dynamic> sources,
-        } =>
-          Category(
-            label: label,
-            sources: sources.map(Source.fromJson).toList(),
-          ),
+        {'label': String label, 'sources': List<dynamic> sources} => Category(
+          label: label,
+          sources: sources.map(Source.fromJson).toList(),
+        ),
         _ => throw const FormatException('Failed to load category.'),
       };
     } catch (e) {
@@ -168,6 +161,21 @@ class Category {
     return sources
         .map((e) => e.value)
         .fold(0.0, (value, element) => value + element);
+  }
+
+
+  Iterable<Source> getTopSources(int count) {
+    final  List<Source> sortedSources = List.from(sources);
+    sortedSources.sort((a,b) => Comparable.compare(b.value, a.value));
+    return sortedSources.take(count);
+  }
+
+
+  static Iterable<Source> getTopSourcesInAllCategory(Iterable<Category> categories , int count) {
+    final top = categories.map((e) => e.getTopSources(count)).expand((e) => e).toList();
+    top.sort((a,b) => Comparable.compare(b.value, a.value));
+    return top.take(count);
+
   }
 }
 

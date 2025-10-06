@@ -26,7 +26,10 @@ class DateBanner extends StatelessWidget {
            child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
              children: [
-              IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios , color: appState.onPrimaryContainer(context),)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios , color: appState.onPrimaryContainer(context),)),
+              ),
                Expanded(
                  child: Align(
                   alignment: Alignment.center,
@@ -48,7 +51,10 @@ class DateBanner extends StatelessWidget {
                    ),
                  ),
                ),
-               IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios , color : appState.onPrimaryContainer(context))),
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios , color : appState.onPrimaryContainer(context))),
+               ),
              ],
            ),
          ),

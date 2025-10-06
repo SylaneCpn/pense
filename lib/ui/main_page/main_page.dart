@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/main_page/categories_widget.dart';
 import 'package:pense/ui/main_page/date_banner.dart';
 import 'package:pense/ui/main_page/sum_banner.dart';
 
@@ -49,6 +51,22 @@ class _MainPageState extends State<MainPage> {
                 year: year,
                 height: 400.0,
                 width: constraints.maxWidth,
+              ),
+
+              CategoriesWidget(
+                label: "Revenus",
+                width: constraints.maxWidth,
+                categoryType: CategoryType.income,
+                month: month,
+                year: year,
+              ),
+
+              CategoriesWidget(
+                label: "Dépenses",
+                width: constraints.maxWidth,
+                categoryType: CategoryType.income,
+                month: month,
+                year: year,
               ),
             ],
           ),

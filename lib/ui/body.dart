@@ -16,7 +16,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    getRecord().then((value) {
+    Record.getRecord().then((value) {
       setState(() {
         record = value;
       });
@@ -27,7 +27,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    if (record != null) storeRecord(record!);
+     record?.storeRecord();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -35,7 +35,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
-      if (record != null) storeRecord(record!);
+      record?.storeRecord();
     }
     super.didChangeAppLifecycleState(state);
   }
