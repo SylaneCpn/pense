@@ -20,6 +20,7 @@ class CategoriesWidget extends StatelessWidget {
     required this.label,
     required this.categoryType,
   });
+  
   @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
