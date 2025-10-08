@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pense/logic/record.dart';
@@ -27,7 +28,7 @@ class SumBanner extends StatelessWidget {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [appState.primaryContainer(context), Colors.black],
+        colors: [appState.primaryContainer(context), appState.backgroundColor()],
         stops: [0.0, 0.5],
       ),
     );
@@ -57,8 +58,22 @@ class SumBanner extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      Expanded(child: TopSources(categoryType: CategoryType.income, categories: currentElement.incomes , sourceCount: 3, label: "Vos sources de revenus principales :",)),
-                      Expanded(child: TopSources(categoryType: CategoryType.expense, categories: currentElement.expenses, sourceCount: 3, label : "Vos dépenses principales :")),
+                      Expanded(
+                        child: TopSources(
+                          categoryType: CategoryType.income,
+                          categories: currentElement.incomes,
+                          sourceCount: 3,
+                          label: "Vos sources de revenus principales :",
+                        ),
+                      ),
+                      Expanded(
+                        child: TopSources(
+                          categoryType: CategoryType.expense,
+                          categories: currentElement.expenses,
+                          sourceCount: 3,
+                          label: "Vos dépenses principales :",
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -120,43 +135,43 @@ class TopSources extends StatelessWidget {
   final int sourceCount;
   final String label;
 
-
-  const TopSources({super.key, required this.categories , required this.label , required this.sourceCount , required this.categoryType});
+  const TopSources({
+    super.key,
+    required this.categories,
+    required this.label,
+    required this.sourceCount,
+    required this.categoryType,
+  });
 
   @override
   Widget build(BuildContext context) {
-
     final appState = context.read<AppState>();
 
-
-    if (categories.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text("Pas de ${categoryType.toStringFr()} disponible.", style: TextStyle(fontSize: 28.0,color: appState.primaryColor(context)),),
-        Text("Ajoutez des élements pour les voir apparaire." , style:  TextStyle(color: appState.primaryColor(context)),)
-      ],
+    final sortedSources = Category.getTopSourcesInAllCategory(
+      categories,
+      sourceCount,
     );
+
+    if (sortedSources.isEmpty) {
+      return DefaultText(
+        missing: categoryType.toStringFr(),
+        textColor: appState.onPrimaryColor(context),
+      );
     }
-
-
-    final sortedSources = Category.getTopSourcesInAllCategory(categories , sourceCount);
 
     final sourceWidgets = sortedSources.map((s) {
       return Row(
-        children: [
-          Text(s.label),
-          Text("${s.value} ${appState.currency}")
-        ],
+        children: [Text(s.label), Text("${s.value} ${appState.currency}")],
       );
     });
 
-
-    return 
-    Column(
+    return Column(
       children: [
-        Text(style: TextStyle(color : appState.primaryColor(context), fontSize: 14), label),
-        ...sourceWidgets
+        Text(
+          style: TextStyle(color: appState.primaryColor(context), fontSize: 14),
+          label,
+        ),
+        ...sourceWidgets,
       ],
     );
   }

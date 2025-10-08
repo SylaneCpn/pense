@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Accordition extends StatefulWidget {
   final Widget header;
   final Widget child;
+  final Widget? tail;
   final BoxDecoration? decoration;
   final double width;
   final Duration duration;
@@ -12,6 +15,7 @@ class Accordition extends StatefulWidget {
   const Accordition({
     super.key,
     required this.header,
+    this.tail,
     required this.child,
     this.decoration,
     required this.width,
@@ -29,6 +33,7 @@ class _AccorditionState extends State<Accordition>
   final Tween<double> tween = Tween(begin: 0.0, end: 1.0);
   late AnimationController _controller;
   late Animation<double> _animation;
+  double _animationValue = 0.0;
 
   @override
   void initState() {
@@ -37,6 +42,13 @@ class _AccorditionState extends State<Accordition>
       vsync: this,
     );
     _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
+    
+    
+    _controller.addListener(() {
+      setState(() {
+        _animationValue = _animation.value;
+      });
+    });
     super.initState();
   }
 
@@ -52,35 +64,34 @@ class _AccorditionState extends State<Accordition>
 
   @override
   Widget build(BuildContext context) {
-    final header = Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child:
-              _collapsed
-                  ? Icon(Icons.keyboard_arrow_down)
-                  : Icon(Icons.keyboard_arrow_up),
-        ),
-        Padding(padding: EdgeInsets.all(8.0), child: widget.header),
-      ],
+    final header = GestureDetector(
+      onTap: toggleCollapsed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Transform.rotate(angle: pi * _animationValue, child: Icon(Icons.keyboard_arrow_up)),
+          ),
+          Expanded(child: Padding(padding: EdgeInsets.all(8.0), child: widget.header)),
+          if (widget.tail != null) widget.tail!,
+        ],
+      ),
     );
 
     final child = Column(
       children: [
         header,
-        Opacity(opacity: 1.0 - _animation.value, child: SizeTransition(sizeFactor: _animation, child: widget.child)),
+        SizeTransition(sizeFactor: _animation, child: widget.child),
       ],
     );
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: toggleCollapsed,
-        child: Container(
-          width: widget.width,
-          decoration: widget.decoration,
-          child: child,
-        ),
+      child: Container(
+        width: widget.width,
+        decoration: widget.decoration,
+        child: child,
       ),
     );
   }

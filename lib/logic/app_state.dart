@@ -7,20 +7,22 @@ class AppState extends ChangeNotifier {
   static final Color defaultTertiarySeedColor = Colors.deepPurpleAccent;
   static final avalaibleCurrencies = ['€', '£', '\$'];
 
-  late bool isDark;
+  bool isDark;
   String currency = avalaibleCurrencies[0];
+  bool useSystemBrightness = true;
   bool trySystemColors = true;
   bool _canUseSystemColors = false;
   late AppColors _customColors;
 
   bool get canUseSystemColors => _canUseSystemColors;
 
-
-  AppState() {
-    isDark =
-        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-        Brightness.dark;
+  AppState({this.isDark = false}) {
     _customColors = generateDefaultAppColor();
+  }
+
+  static bool isSystemDark() {
+    return SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
   }
 
   AppColors generateDefaultAppColor() {
@@ -45,6 +47,11 @@ class AppState extends ChangeNotifier {
 
   void toggleDynamicColors() {
     trySystemColors = !trySystemColors;
+    notifyListeners();
+  }
+
+  void toggleUseSystemBrighness() {
+    useSystemBrightness = !useSystemBrightness;
     notifyListeners();
   }
 
@@ -109,28 +116,43 @@ class AppState extends ChangeNotifier {
   }
 
   Color backgroundColor() {
-    return isDark ? Colors.black : Colors.white;
+    if (useSystemBrightness) {
+      return isSystemDark() ? Colors.black : Colors.white;
+    } else {
+      return isDark ? Colors.black : Colors.white;
+    }
   }
 
   Color onBackgroundColor() {
-    return isDark ? Colors.white70 : Colors.black87;
+    if (useSystemBrightness) {
+      return isSystemDark() ? Colors.white70 : Colors.black87;
+    } else {
+      return isDark ? Colors.white70 : Colors.black87;
+    }
   }
-
 
   ThemeData _theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
     if (lightDynamic == null || darkDynamic == null) {
       return ThemeData(colorScheme: _customColors.primaryScheme);
     } else {
-      final scheme =
-          trySystemColors
-              ? (isDark ? darkDynamic : lightDynamic)
-              : _customColors.primaryScheme;
+
+      late ColorScheme scheme;
+
+      if (trySystemColors) {
+        if (useSystemBrightness) {
+          scheme = (isSystemDark()) ? darkDynamic : lightDynamic;
+        } else {
+          scheme = isDark ? darkDynamic : lightDynamic;
+        }
+      } else {
+        scheme = _customColors.primaryScheme;
+      }
       return ThemeData(colorScheme: scheme);
     }
   }
 
   ThemeData theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-    _canUseSystemColors = (lightDynamic !=  null) && (darkDynamic != null);
+    _canUseSystemColors = (lightDynamic != null) && (darkDynamic != null);
     return _theme(lightDynamic, darkDynamic);
   }
 }
@@ -164,5 +186,11 @@ class AppColors {
       brightness: this.isDark ? Brightness.dark : Brightness.light,
       seedColor: secondarySeed,
     );
+  }
+}
+
+extension IsDark on Brightness {
+  bool isDark() {
+    return this == Brightness.dark;
   }
 }
