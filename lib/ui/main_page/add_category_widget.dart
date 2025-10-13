@@ -4,12 +4,12 @@ import 'package:pense/logic/record.dart';
 import 'package:provider/provider.dart';
 
 class AddCategoryWidget extends StatefulWidget {
-  final List<Category> categoryList;
+  final List<Category> categories;
 
   //used to to refresh the UI. For Some reason, the this provider can't be read from the context
   final Record record;
 
-  const AddCategoryWidget({super.key, required this.categoryList , required this.record});
+  const AddCategoryWidget({super.key, required this.categories , required this.record});
 
   @override
   State<AddCategoryWidget> createState() => _AddCategoryWidgetState();
@@ -28,7 +28,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
     return AlertDialog(
-      backgroundColor: appState.primaryContainer(context),
+      backgroundColor: appState.backgroundColor(),
       title: Text("Ajouter une catégorie."),
       actions: [
         TextButton(
@@ -40,24 +40,31 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 250,
-            child: TextField(
-              controller: _controller,
-              obscureText: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Catégorie',
+            width: 300,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                controller: _controller,
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Catégorie',
+                ),
               ),
             ),
           ),
-          TextButton(
-            onPressed: () {
-              widget.categoryList.add(Category.empty(label: _controller.text));
-              Navigator.pop(context);
-              widget.record.notify();
-              
-            },
-            child: Text("Ajouter"),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextButton(
+              onPressed: () {
+
+                widget.categories.add(Category.empty(label: _controller.text));
+                Navigator.pop(context);
+                widget.record.notify();
+                
+              },
+              child: Text("Ajouter"),
+            ),
           ),
         ],
       ),

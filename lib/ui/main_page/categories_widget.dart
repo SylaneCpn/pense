@@ -4,6 +4,7 @@ import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
+import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +23,6 @@ class CategoriesWidget extends StatelessWidget {
     required this.label,
     required this.categoryType,
   });
-
-  void addCategory(Record record, List<Category> categories) {
-    categories.add(Category.empty(label: "Dummy"));
-    record.notify();
-  }
 
   void deleteCategory(
     Record record,
@@ -72,7 +68,8 @@ class CategoriesWidget extends StatelessWidget {
                             children: [
                               CategoryWidget(
                                 category: e,
-                                width: width * 0.75,
+                                width: width * 0.8,
+                                categoryType: categoryType,
                                 tail: IconButton(
                                   onPressed: () {
                                     deleteCategory(record, categories, e);
@@ -102,17 +99,18 @@ class CategoriesWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: Center(
-              child: IconButton(
+              child: TextButton(
                 onPressed: () {
-                  // addCategory(record, categories);
                   showDialog(
                     context: context,
                     builder:
-                        (context) =>
-                            AddCategoryWidget(categoryList: categories , record: record,),
+                        (context) => AddCategoryWidget(
+                          categories: categories,
+                          record: record,
+                        ),
                   );
                 },
-                icon: Icon(Icons.add, color: appState.primaryColor(context)),
+                child: Text(" + Catégorie"),
               ),
             ),
           ),
@@ -126,11 +124,13 @@ class CategoryWidget extends StatelessWidget {
   final Category category;
   final double width;
   final Widget? tail;
+  final CategoryType categoryType;
   const CategoryWidget({
     super.key,
     required this.category,
     required this.width,
     this.tail,
+    this.categoryType = CategoryType.income
   });
 
   @override
@@ -145,7 +145,11 @@ class CategoryWidget extends StatelessWidget {
       width: width,
       header: header,
       tail: tail,
-      child: Placeholder(),
+      decoration: BoxDecoration(
+        border: Border.all(color: appState.primaryColor(context)),
+        borderRadius: BorderRadius.circular(8.0)
+      ),
+      child: SourcesWidget(sources: category.sources, categoryType: categoryType,),
     );
   }
 }
