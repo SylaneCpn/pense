@@ -3,7 +3,8 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
-import 'package:pense/ui/utils/accordition.dart';
+import 'package:pense/ui/main_page/add_category_widget.dart';
+import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,7 @@ class CategoriesWidget extends StatelessWidget {
       CategoryType.income => currentElement.incomes,
     };
 
-    return Accordition(
+    return Accordion(
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
@@ -76,7 +77,10 @@ class CategoriesWidget extends StatelessWidget {
                                   onPressed: () {
                                     deleteCategory(record, categories, e);
                                   },
-                                  icon: Icon(Icons.delete_forever_rounded, color: Colors.red),
+                                  icon: Icon(
+                                    Icons.delete_forever_rounded,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
                             ],
@@ -100,7 +104,13 @@ class CategoriesWidget extends StatelessWidget {
             child: Center(
               child: IconButton(
                 onPressed: () {
-                  addCategory(record, categories);
+                  // addCategory(record, categories);
+                  showDialog(
+                    context: context,
+                    builder:
+                        (context) =>
+                            AddCategoryWidget(categoryList: categories , record: record,),
+                  );
                 },
                 icon: Icon(Icons.add, color: appState.primaryColor(context)),
               ),
@@ -131,7 +141,7 @@ class CategoryWidget extends StatelessWidget {
       category.label,
     );
 
-    return Accordition(
+    return Accordion(
       width: width,
       header: header,
       tail: tail,

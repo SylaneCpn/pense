@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class Accordition extends StatefulWidget {
+class Accordion extends StatefulWidget {
   final Widget header;
   final Widget child;
   final Widget? tail;
@@ -12,7 +12,7 @@ class Accordition extends StatefulWidget {
   final Curve curve;
   
 
-  const Accordition({
+  const Accordion({
     super.key,
     required this.header,
     this.tail,
@@ -24,10 +24,10 @@ class Accordition extends StatefulWidget {
   });
 
   @override
-  State<Accordition> createState() => _AccorditionState();
+  State<Accordion> createState() => _AccordionState();
 }
 
-class _AccorditionState extends State<Accordition>
+class _AccordionState extends State<Accordion>
     with TickerProviderStateMixin {
   bool _collapsed = true;
   final Tween<double> tween = Tween(begin: 0.0, end: 1.0);
