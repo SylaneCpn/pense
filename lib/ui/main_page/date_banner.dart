@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
-import 'package:pense/ui/main_page/port_view.dart';
+import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 
 class DateBanner extends StatelessWidget {

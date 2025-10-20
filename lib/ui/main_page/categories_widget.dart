@@ -12,13 +12,11 @@ import 'package:provider/provider.dart';
 
 class CategoriesWidget extends StatelessWidget {
   final String label;
-  final double width;
   final CategoryType categoryType;
   final Month month;
   final int year;
   const CategoriesWidget({
     super.key,
-    required this.width,
     required this.month,
     required this.year,
     required this.label,
@@ -45,7 +43,6 @@ class CategoriesWidget extends StatelessWidget {
     };
 
     return Accordion(
-      width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: appState.backgroundColor(),
@@ -67,17 +64,21 @@ class CategoriesWidget extends StatelessWidget {
                           (e) => Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CategoryWidget(
-                                category: e,
-                                width: width * 0.82,
-                                categoryType: categoryType,
-                                tail: IconButton(
-                                  onPressed: () {
-                                    deleteCategory(record, categories, e);
-                                  },
-                                  icon: Icon(
-                                    Icons.delete_forever_rounded,
-                                    color: Colors.red,
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CategoryWidget(
+                                    category: e,
+                                    categoryType: categoryType,
+                                    tail: IconButton(
+                                      onPressed: () {
+                                        deleteCategory(record, categories, e);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete_forever_rounded,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -123,13 +124,11 @@ class CategoriesWidget extends StatelessWidget {
 
 class CategoryWidget extends StatelessWidget {
   final Category category;
-  final double width;
   final Widget? tail;
   final CategoryType categoryType;
   const CategoryWidget({
     super.key,
     required this.category,
-    required this.width,
     this.tail,
     this.categoryType = CategoryType.income
   });
@@ -143,7 +142,6 @@ class CategoryWidget extends StatelessWidget {
     );
 
     return Accordion(
-      width: width,
       header: header,
       tail: tail,
       decoration: BoxDecoration(

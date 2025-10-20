@@ -7,7 +7,7 @@ class Accordion extends StatefulWidget {
   final Widget child;
   final Widget? tail;
   final BoxDecoration? decoration;
-  final double width;
+  final double? width;
   final Duration duration;
   final Curve curve;
   
@@ -18,7 +18,7 @@ class Accordion extends StatefulWidget {
     this.tail,
     required this.child,
     this.decoration,
-    required this.width,
+    this.width,
     this.duration = const Duration(milliseconds: 100),
     this.curve = Curves.fastLinearToSlowEaseIn
   });

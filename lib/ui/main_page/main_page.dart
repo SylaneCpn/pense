@@ -54,7 +54,6 @@ class _MainPageState extends State<MainPage> {
 
               CategoriesWidget(
                 label: "Revenus",
-                width: constraints.maxWidth,
                 categoryType: CategoryType.income,
                 month: month,
                 year: year,
@@ -62,7 +61,6 @@ class _MainPageState extends State<MainPage> {
 
               CategoriesWidget(
                 label: "Dépenses",
-                width: constraints.maxWidth,
                 categoryType: CategoryType.expense,
                 month: month,
                 year: year,

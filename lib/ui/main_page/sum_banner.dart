@@ -59,7 +59,7 @@ class SumBanner extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 20.0),
+                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 40.0),
                     child: TopSources(
                       categoryType: CategoryType.income,
                       categories: currentElement.incomes,
@@ -70,7 +70,7 @@ class SumBanner extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 20.0),
+                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 40.0),
                     child: TopSources(
                       categoryType: CategoryType.expense,
                       categories: currentElement.expenses,
@@ -152,7 +152,7 @@ class TopSources extends StatelessWidget {
 
     return TextStyle(
       color: color.harmonizeWith(appState.primaryColor(context)),
-      fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width)
+      fontSize: PortView.biggerRegularTextSize(MediaQuery.sizeOf(context).width)
     );
   }
 
