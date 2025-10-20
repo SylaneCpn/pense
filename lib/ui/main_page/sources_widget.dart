@@ -4,7 +4,7 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_source_widget.dart';
-import 'package:pense/ui/main_page/port_view.dart';
+import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class SourcesWidget extends StatelessWidget {
       children: [
         sources.isNotEmpty
             ? Column(
-              spacing: 5.0,
+              spacing: 18.0,
               children:
                   sources
                       .map(
@@ -104,7 +104,7 @@ class SourceItem extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 28.0),
+          padding: const EdgeInsets.only( left : 14.0, right: 14.0),
           child: Text("${source.value} ${appState.currency}" , style: style(context,appState),),
         )
       ],

@@ -4,7 +4,7 @@ import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
-import 'package:pense/ui/main_page/port_view.dart';
+import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
@@ -69,7 +69,7 @@ class CategoriesWidget extends StatelessWidget {
                             children: [
                               CategoryWidget(
                                 category: e,
-                                width: width * 0.8,
+                                width: width * 0.82,
                                 categoryType: categoryType,
                                 tail: IconButton(
                                   onPressed: () {

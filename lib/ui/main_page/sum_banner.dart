@@ -4,7 +4,7 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/utils.dart';
-import 'package:pense/ui/main_page/port_view.dart';
+import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
 
@@ -177,9 +177,12 @@ class TopSources extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(child: Text(s.label, style: soureStyle(context, appState))),
-          Text(
-            "${s.value} ${appState.currency}",
-            style: soureStyle(context, appState),
+          Padding(
+            padding: EdgeInsets.only(left: 12.0),
+            child: Text(
+              "${s.value} ${appState.currency}",
+              style: soureStyle(context, appState),
+            ),
           ),
         ],
       );
@@ -198,7 +201,7 @@ class TopSources extends StatelessWidget {
             label,
           ),
         ),
-        Column(spacing: 5.0, children: sourceWidgets.toList(),)
+        Column(spacing: 18.0, children: sourceWidgets.toList(),)
        ,
       ],
     );

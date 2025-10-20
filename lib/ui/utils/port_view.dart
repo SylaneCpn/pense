@@ -31,12 +31,12 @@ class PortView {
       return 18.0;
     }
 
-    else if (viewSize > 400.0) {
+    else if (viewSize > 360.0) {
       return 14.0;
     }
 
     else {
-      return 12.0;
+      return 10.0;
     }
   }
 
@@ -50,7 +50,7 @@ class PortView {
     }
 
     else {
-      return 14.0;
+      return 13.0;
     }
   }
 
@@ -64,7 +64,7 @@ class PortView {
     }
 
     else {
-      return 24.0;
+      return 20.0;
     }
   }
 }

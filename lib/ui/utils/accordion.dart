@@ -74,7 +74,10 @@ class _AccordionState extends State<Accordion>
             child: Transform.rotate(angle: pi * _animationValue, child: Icon(Icons.keyboard_arrow_down)),
           ),
           Expanded(child: Padding(padding: EdgeInsets.all(8.0), child: widget.header)),
-          if (widget.tail != null) widget.tail!,
+          if (widget.tail != null) Padding(
+            padding: EdgeInsets.only(left : 10.0),
+            child: widget.tail!,
+          ),
         ],
       ),
     );
