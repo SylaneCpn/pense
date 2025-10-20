@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/main_page/port_view.dart';
 import 'package:provider/provider.dart';
 
 class DateBanner extends StatelessWidget {
@@ -38,13 +39,13 @@ class DateBanner extends StatelessWidget {
                      children: [
                        Text(
                          style: TextStyle(
-                          fontSize: 28.0,
+                          fontSize: PortView.doubleRegularTextSize(MediaQuery.sizeOf(context).width),
                           color: appState.onPrimaryContainer(context)),
                          month.toStringFr()),
 
                          Text(
                          style: TextStyle(
-                          fontSize: 14.0,
+                          fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width),
                           color: appState.onPrimaryContainer(context)),
                          year.toString() ),
                      ],

@@ -49,7 +49,6 @@ class _MainPageState extends State<MainPage> {
               SumBanner(
                 month: month,
                 year: year,
-                height: 400.0,
                 width: constraints.maxWidth,
               ),
 

@@ -4,6 +4,7 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_source_widget.dart';
+import 'package:pense/ui/main_page/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ class SourcesWidget extends StatelessWidget {
       children: [
         sources.isNotEmpty
             ? Column(
+              spacing: 5.0,
               children:
                   sources
                       .map(
@@ -85,7 +87,7 @@ class SourceItem extends StatelessWidget {
       CategoryType.income => Colors.green,
       CategoryType.expense => Colors.red
     };
-    return TextStyle(color: color.harmonizeWith(appState.inversePrimary(context)) , fontSize: 20.0);
+    return TextStyle(color: color.harmonizeWith(appState.inversePrimary(context)) , fontSize: PortView.biggerRegularTextSize(MediaQuery.sizeOf(context).width));
   }
   const SourceItem({super.key, required this.source , this.categoryType = CategoryType.income});
 
@@ -95,9 +97,11 @@ class SourceItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 28.0),
-          child: Text(source.label, style: style(context,appState)),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 28.0),
+            child: Text(source.label, style: style(context,appState)),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 28.0),

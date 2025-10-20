@@ -4,6 +4,7 @@ import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
+import 'package:pense/ui/main_page/port_view.dart';
 import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
@@ -52,7 +53,7 @@ class CategoriesWidget extends StatelessWidget {
       header: Text(
         style: TextStyle(
           color: appState.onPrimaryColor(context),
-          fontSize: 28.0,
+          fontSize: PortView.doubleRegularTextSize(MediaQuery.sizeOf(context).width),
         ),
         label,
       ),
@@ -137,7 +138,7 @@ class CategoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final header = Text(
-      style: TextStyle(color: appState.onPrimaryColor(context), fontSize: 28.0),
+      style: TextStyle(color: appState.onPrimaryColor(context), fontSize: PortView.doubleRegularTextSize(MediaQuery.sizeOf(context).width)),
       category.label,
     );
 

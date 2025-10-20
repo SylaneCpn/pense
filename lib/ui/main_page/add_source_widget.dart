@@ -18,6 +18,12 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
   final TextEditingController _labelController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
 
+
+  double processAmountInput() {
+    final value = _valueController.text.replaceAll(',', '.');
+    return double.tryParse(value)?.truncateToDecimalPlaces(2) ?? 0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
@@ -69,7 +75,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
                 widget.sources.add(
                   Source(
                     label: _labelController.text,
-                    value: double.tryParse(_valueController.text)?.truncateToDecimalPlaces(2) ?? 0.0,
+                    value: processAmountInput(),
                   ),
                 );
                 Navigator.pop(context);
