@@ -26,7 +26,7 @@ class SourcesWidget extends StatelessWidget {
       children: [
         sources.isNotEmpty
             ? Column(
-              spacing: 18.0,
+              spacing: 6.0,
               children:
                   sources
                       .map(
@@ -87,7 +87,7 @@ class SourceItem extends StatelessWidget {
       CategoryType.income => Colors.green,
       CategoryType.expense => Colors.red
     };
-    return TextStyle(color: color.harmonizeWith(appState.inversePrimary(context)) , fontSize: PortView.biggerRegularTextSize(MediaQuery.sizeOf(context).width));
+    return TextStyle(color: color.harmonizeWith(appState.inversePrimary(context)) , fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.sizeOf(context).width));
   }
   const SourceItem({super.key, required this.source , this.categoryType = CategoryType.income});
 
@@ -105,7 +105,7 @@ class SourceItem extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only( left : 14.0, right: 14.0),
-          child: Text("${source.value} ${appState.currency}" , style: style(context,appState),),
+          child: Text(appState.formatWithCurrency(source.value) , style: style(context,appState),),
         )
       ],
     );

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
-import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,6 @@ class SumBanner extends StatelessWidget {
     required this.month,
     required this.year,
     required this.width,
-
   });
 
   Decoration containerDecoration(BuildContext context, AppState appState) {
@@ -52,14 +50,18 @@ class SumBanner extends StatelessWidget {
         decoration: containerDecoration(context, appState),
         child: Column(
           children: [
-            Epargne(sum: sum, height: 120,),
+            Epargne(sum: sum, height: 120),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 40.0),
+                    padding: EdgeInsets.only(
+                      left: width / 20,
+                      right: width / 20,
+                      bottom: 40.0,
+                    ),
                     child: TopSources(
                       categoryType: CategoryType.income,
                       categories: currentElement.incomes,
@@ -70,7 +72,11 @@ class SumBanner extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: width / 20  , right: width / 20 , bottom: 40.0),
+                    padding: EdgeInsets.only(
+                      left: width / 20,
+                      right: width / 20,
+                      bottom: 40.0,
+                    ),
                     child: TopSources(
                       categoryType: CategoryType.expense,
                       categories: currentElement.expenses,
@@ -98,31 +104,34 @@ class Epargne extends StatelessWidget {
         : Colors.red.harmonizeWith(baseColor);
   }
 
-  const Epargne({
-    super.key,
-    required this.sum,
-    required this.height,
-  });
+  const Epargne({super.key, required this.sum, required this.height});
   @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
     return Padding(
-      padding: EdgeInsets.only(top: height / 2 , bottom: height /2),
+      padding: EdgeInsets.only(top: height / 2, bottom: height / 2),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            style: TextStyle(color: appState.onPrimaryContainer(context),
-            fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width)),
+            style: TextStyle(
+              color: appState.onPrimaryContainer(context),
+              fontSize: PortView.regularTextSize(
+                MediaQuery.sizeOf(context).width,
+              ),
+            ),
             "Epargne :",
           ),
           Text(
+            textAlign:  TextAlign.center,
             style: TextStyle(
-              fontSize: PortView.sumBannerSize(MediaQuery.sizeOf(context).width),
+              fontSize: PortView.sumBannerSize(
+                MediaQuery.sizeOf(context).width,
+              ),
               color: sumColor(sum, appState.onPrimaryContainer(context)),
             ),
-            "${sum.truncateToDecimalPlaces(2)} ${appState.currency}",
+            appState.formatWithCurrency(sum),
           ),
         ],
       ),
@@ -152,7 +161,9 @@ class TopSources extends StatelessWidget {
 
     return TextStyle(
       color: color.harmonizeWith(appState.primaryColor(context)),
-      fontSize: PortView.biggerRegularTextSize(MediaQuery.sizeOf(context).width)
+      fontSize: PortView.regularTextSize(
+        MediaQuery.sizeOf(context).width,
+      ),
     );
   }
 
@@ -176,11 +187,17 @@ class TopSources extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(child: Text(s.label, style: soureStyle(context, appState))),
+          Expanded(
+            child: Text(
+              overflow: TextOverflow.clip,
+              s.label,
+              style: soureStyle(context, appState),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(left: 12.0),
             child: Text(
-              "${s.value} ${appState.currency}",
+              appState.formatWithCurrency(s.value),
               style: soureStyle(context, appState),
             ),
           ),
@@ -192,17 +209,18 @@ class TopSources extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom:  20.0),
+          padding: const EdgeInsets.only(bottom: 20.0),
           child: Text(
             style: TextStyle(
               color: appState.primaryColor(context),
-              fontSize: PortView.doubleRegularTextSize(MediaQuery.sizeOf(context).width),
+              fontSize: PortView.mediumTextSize(
+                MediaQuery.sizeOf(context).width,
+              ),
             ),
             label,
           ),
         ),
-        Column(spacing: 18.0, children: sourceWidgets.toList(),)
-       ,
+        Column(spacing: 18.0, children: sourceWidgets.toList()),
       ],
     );
   }

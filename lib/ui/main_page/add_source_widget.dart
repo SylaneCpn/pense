@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/record.dart';
-import 'package:pense/logic/utils.dart';
 import 'package:provider/provider.dart';
 
 class AddSourceWidget extends StatefulWidget {
@@ -20,8 +19,8 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
 
 
   double processAmountInput() {
-    final value = _valueController.text.replaceAll(',', '.');
-    return double.tryParse(value)?.truncateToDecimalPlaces(2) ?? 0.0;
+    final value = _valueController.text.replaceAll(',', '.').replaceAll(" ", "");
+    return double.tryParse(value) ?? 0.0;
   }
 
   @override

@@ -12,6 +12,18 @@ enum Month {
   november,
   december;
 
+  bool isFuture(int year) {
+    final now = DateTime.now();
+    if (year > now.year) {
+      return true;
+    }
+
+    if (toInt() > now.month && year == now.year) {
+      return true;
+    }
+
+    return false;
+  }
 
   String toStringFr() {
     return switch (this) {

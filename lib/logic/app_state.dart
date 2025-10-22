@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pense/logic/utils.dart';
 
 class AppState extends ChangeNotifier {
   static final Color defaultPrimarySeedColor = Colors.greenAccent;
@@ -23,6 +24,16 @@ class AppState extends ChangeNotifier {
   static bool isSystemDark() {
     return SchedulerBinding.instance.platformDispatcher.platformBrightness ==
         Brightness.dark;
+  }
+
+
+  String formatWithCurrency(double amount) {
+    switch (currency) {
+      case '€' :
+        return "${amount.truncateToDecimalPlaces(2).prettyToString().replaceAll(".", ",")} €";
+      default :
+        return "$currency ${amount.truncateToDecimalPlaces(2).prettyToString()}";
+    }
   }
 
   AppColors generateDefaultAppColor() {

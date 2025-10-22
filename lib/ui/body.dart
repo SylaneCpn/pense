@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/record.dart';
-import 'package:pense/ui/main_page/main_page.dart';
+import 'package:pense/ui/page_switcher.dart';
 import 'package:pense/ui/processing_record.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
         (record != null)
             ? ChangeNotifierProvider(
               create: (context) => record!,
-              child: MainPage(),
+              child: PageSwitcher(),
             )
             : ProcessingRecord();
 

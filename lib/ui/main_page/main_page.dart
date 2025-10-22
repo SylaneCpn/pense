@@ -5,32 +5,13 @@ import 'package:pense/ui/main_page/categories_widget.dart';
 import 'package:pense/ui/main_page/date_banner.dart';
 import 'package:pense/ui/main_page/sum_banner.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key , required this.month , required this.year , this.toPrevMonth , this.toNextMonth});
 
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  Month month = DateTime.now().month.toMonth();
-  int year = DateTime.now().year;
-
-  void toPrevMonth() {
-    setState(() {
-      final (Month m, int y) = month.prev(year);
-      month = m;
-      year = y;
-    });
-  }
-
-  void toNextMonth() {
-    setState(() {
-      final (Month m, int y) = month.next(year);
-      month = m;
-      year = y;
-    });
-  }
+  final Month month;
+  final int year;
+  final void Function()? toNextMonth;
+  final void Function()? toPrevMonth;
 
   @override
   Widget build(BuildContext context) {
