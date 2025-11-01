@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pense/ui/utils/port_view.dart';
 
 class DefaultText extends StatelessWidget{
   final String missing;
@@ -8,10 +9,9 @@ class DefaultText extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Text("Pas de $missing disponible.", style: TextStyle(fontSize: 24.0,color: textColor),),
-        Text("Ajoutez des élements pour les voir apparaire." , style:  TextStyle(color: textColor),)
+        Text("Pas de $missing disponible.", style: TextStyle(fontSize: PortView.mediumTextSize(MediaQuery.sizeOf(context).width),color: textColor),),
+        Text("Ajoutez des élements pour les voir apparaire." , style:  TextStyle(fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width), color: textColor),)
       ],
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PortView {
+abstract final class PortView {
   static double height(BuildContext context) {
     return MediaQuery.sizeOf(context).height;
   }
@@ -66,6 +66,17 @@ class PortView {
       return 21.0;
     } else {
       return 15.0;
+    }
+  }
+
+
+  static double bigTextSize(double viewSize) {
+    if (viewSize > 800.0) {
+      return 28.0;
+    } else if (viewSize > 400.0) {
+      return 25.0;
+    } else {
+      return 17.0;
     }
   }
 }

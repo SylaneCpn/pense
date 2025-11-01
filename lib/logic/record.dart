@@ -9,6 +9,8 @@ import 'package:pense/logic/month.dart';
 class Record extends ChangeNotifier {
   List<RecordElement> _elements;
 
+  static const path = "record.json";
+
   UnmodifiableListView get elements => UnmodifiableListView(_elements);
 
   Record({required List<RecordElement> elements}) : _elements = elements;
@@ -37,7 +39,7 @@ class Record extends ChangeNotifier {
   static Future<Record> getRecord() async {
     final appDir = await getApplicationSupportDirectory();
     try {
-      final record = await File("${appDir.path}/record.json").readAsString();
+      final record = await File("${appDir.path}/$path").readAsString();
       final json = await compute(jsonDecode, record);
       return Record.fromJson(json);
     }
@@ -51,7 +53,7 @@ class Record extends ChangeNotifier {
     final appDir = await getApplicationSupportDirectory();
     final recordAsJson = toJson();
     final recordAsString = await compute(jsonEncode, recordAsJson);
-    await File("${appDir.path}/record.json").writeAsString(recordAsString);
+    await File("${appDir.path}/$path").writeAsString(recordAsString);
   }
 
   RecordElement where(Month month, int year) {

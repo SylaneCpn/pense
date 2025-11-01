@@ -33,6 +33,10 @@ class MainPage extends StatelessWidget {
                 width: constraints.maxWidth,
               ),
 
+              SizedBox(
+                height: 40,
+              ),
+
               CategoriesWidget(
                 label: "Revenus",
                 categoryType: CategoryType.income,
@@ -40,11 +44,19 @@ class MainPage extends StatelessWidget {
                 year: year,
               ),
 
+              SizedBox(
+                height: 40,
+              ),
+
               CategoriesWidget(
                 label: "Dépenses",
                 categoryType: CategoryType.expense,
                 month: month,
                 year: year,
+              ),
+
+              SizedBox(
+                height: 40,
               ),
             ],
           ),

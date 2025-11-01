@@ -37,6 +37,7 @@ dependencies:
   dynamic_color: ^1.8.1
   provider: ^6.1.5+1
   path_provider: ^2.1.5
+  fl_chart: ^1.1.0
 
 dev_dependencies:
   flutter_test:

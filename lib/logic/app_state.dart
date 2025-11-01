@@ -26,12 +26,11 @@ class AppState extends ChangeNotifier {
         Brightness.dark;
   }
 
-
   String formatWithCurrency(double amount) {
     switch (currency) {
-      case '€' :
+      case '€':
         return "${amount.truncateToDecimalPlaces(2).prettyToString().replaceAll(".", ",")} €";
-      default :
+      default:
         return "$currency ${amount.truncateToDecimalPlaces(2).prettyToString()}";
     }
   }
@@ -134,6 +133,22 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Color lightBackgroundColor() {
+    if (useSystemBrightness) {
+      return isSystemDark() ? Colors.grey[900]! : Colors.grey[100]!;
+    } else {
+      return isDark ? Colors.grey[900]! : Colors.grey[100]!;
+    }
+  }
+
+  Color lessContrastBackgroundColor() {
+    if (useSystemBrightness) {
+      return isSystemDark() ? Color.fromRGBO(20, 20, 20, 1.0) : Colors.grey[50]!;
+    } else {
+      return isDark ? Color.fromRGBO(20, 20, 20, 1.0) : Colors.grey[50]!;
+    }
+  }
+
   Color onBackgroundColor() {
     if (useSystemBrightness) {
       return isSystemDark() ? Colors.white70 : Colors.black87;
@@ -146,7 +161,6 @@ class AppState extends ChangeNotifier {
     if (lightDynamic == null || darkDynamic == null) {
       return ThemeData(colorScheme: _customColors.primaryScheme);
     } else {
-
       late ColorScheme scheme;
 
       if (trySystemColors) {

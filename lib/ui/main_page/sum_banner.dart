@@ -14,6 +14,8 @@ class SumBanner extends StatelessWidget {
   final int year;
   final double width;
 
+  static const bRadius = 8.0;
+
   const SumBanner({
     super.key,
     required this.month,
@@ -23,7 +25,7 @@ class SumBanner extends StatelessWidget {
 
   Decoration containerDecoration(BuildContext context, AppState appState) {
     return BoxDecoration(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(bRadius),
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -31,7 +33,7 @@ class SumBanner extends StatelessWidget {
           appState.primaryContainer(context),
           appState.backgroundColor(),
         ],
-        stops: [0.0, 0.5],
+        stops: [0.0, 0.66],
       ),
     );
   }
@@ -46,48 +48,52 @@ class SumBanner extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: containerDecoration(context, appState),
-        child: Column(
-          children: [
-            Epargne(sum: sum, height: 120),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: width / 20,
-                      right: width / 20,
-                      bottom: 40.0,
-                    ),
-                    child: TopSources(
-                      categoryType: CategoryType.income,
-                      categories: currentElement.incomes,
-                      sourceCount: 3,
-                      label: "Revenus principaux :",
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: width / 20,
-                      right: width / 20,
-                      bottom: 40.0,
-                    ),
-                    child: TopSources(
-                      categoryType: CategoryType.expense,
-                      categories: currentElement.expenses,
-                      sourceCount: 3,
-                      label: "Dépenses principales :",
+      child: Material(
+        elevation: 8.0,
+        borderRadius: BorderRadius.circular(bRadius),
+        child: Container(
+          decoration: containerDecoration(context, appState),
+          child: Column(
+            children: [
+              Epargne(sum: sum, height: 120),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: width / 20,
+                        right: width / 20,
+                        bottom: 40.0,
+                      ),
+                      child: TopSources(
+                        categoryType: CategoryType.income,
+                        categories: currentElement.incomes,
+                        sourceCount: 3,
+                        label: "Revenus principaux :",
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: width / 20,
+                        right: width / 20,
+                        bottom: 40.0,
+                      ),
+                      child: TopSources(
+                        categoryType: CategoryType.expense,
+                        categories: currentElement.expenses,
+                        sourceCount: 3,
+                        label: "Dépenses principales :",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -160,7 +166,7 @@ class TopSources extends StatelessWidget {
     };
 
     return TextStyle(
-      color: color.harmonizeWith(appState.primaryColor(context)),
+      color: color.harmonizeWith(appState.backgroundColor()),
       fontSize: PortView.regularTextSize(
         MediaQuery.sizeOf(context).width,
       ),
@@ -179,7 +185,7 @@ class TopSources extends StatelessWidget {
     if (sortedSources.isEmpty) {
       return DefaultText(
         missing: categoryType.toStringFr(),
-        textColor: appState.onPrimaryColor(context),
+        textColor: appState.onPrimaryContainer(context),
       );
     }
 
@@ -212,7 +218,7 @@ class TopSources extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 20.0),
           child: Text(
             style: TextStyle(
-              color: appState.primaryColor(context),
+              color: appState.onPrimaryContainer(context),
               fontSize: PortView.mediumTextSize(
                 MediaQuery.sizeOf(context).width,
               ),

@@ -6,6 +6,7 @@ import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_source_widget.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
+import 'package:pense/ui/utils/text_add_button.dart';
 import 'package:provider/provider.dart';
 
 class SourcesWidget extends StatelessWidget {
@@ -47,20 +48,20 @@ class SourcesWidget extends StatelessWidget {
                       )
                       .toList(),
             )
-            : SizedBox(
-              height: 200.0,
-              child: Align(
-                alignment: Alignment.center,
-                child: DefaultText(
-                  missing: "source",
-                  textColor: appState.onPrimaryColor(context),
-                ),
+            : Padding(
+              padding: const EdgeInsets.only(top: 30.0,bottom: 30.0),
+              child: DefaultText(
+                missing: "source",
+                textColor: appState.onPrimaryColor(context),
               ),
             ),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(28.0),
-            child: TextButton(onPressed: () {
+            child: TextAddButton(
+              backgroundColor: appState.primaryColor(context),
+              textColor: appState.backgroundColor(),
+              onPressed: () {
               showDialog(
                     context: context,
                     builder:
@@ -69,7 +70,7 @@ class SourcesWidget extends StatelessWidget {
                           record: record,
                         ),
                   );
-            }, child: Text("+ Source")),
+            }, text: "Source"),
           ),
         ),
       ],
@@ -87,7 +88,7 @@ class SourceItem extends StatelessWidget {
       CategoryType.income => Colors.green,
       CategoryType.expense => Colors.red
     };
-    return TextStyle(color: color.harmonizeWith(appState.inversePrimary(context)) , fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.sizeOf(context).width));
+    return TextStyle(color: color.harmonizeWith(appState.backgroundColor()) , fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.sizeOf(context).width));
   }
   const SourceItem({super.key, required this.source , this.categoryType = CategoryType.income});
 
