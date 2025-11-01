@@ -74,6 +74,7 @@ class CategoryChip extends StatelessWidget {
     final appState = context.watch<AppState>();
     final style = TextStyle(
       fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width),
+      // overflow: TextOverflow.ellipsis
     );
 
     return Material(
@@ -89,15 +90,17 @@ class CategoryChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border: BoxBorder.fromLTRB(
-                  right: BorderSide(color: appState.primaryColor(context)),
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: BoxBorder.fromLTRB(
+                    right: BorderSide(color: appState.primaryColor(context)),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(style: style, category.label),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(style: style, category.label),
+                ),
               ),
             ),
       
