@@ -193,20 +193,18 @@ class TopSources extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
+          Expanded(
             child: Text(
               overflow: TextOverflow.clip,
               s.label,
               style: soureStyle(context, appState),
             ),
           ),
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(left: 12.0),
-              child: Text(
-                appState.formatWithCurrency(s.value),
-                style: soureStyle(context, appState),
-              ),
+          Padding(
+            padding: EdgeInsets.only(left: 12.0),
+            child: Text(
+              appState.formatWithCurrency(s.value),
+              style: soureStyle(context, appState),
             ),
           ),
         ],

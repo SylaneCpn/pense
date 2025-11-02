@@ -36,7 +36,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
         ),
       ],
       content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
             width: 300,

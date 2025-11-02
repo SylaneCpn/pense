@@ -49,7 +49,7 @@ class _ThemeProviderState extends State<ThemeProvider> with WidgetsBindingObserv
       builder:
           (lightDynamic, darkDynamic) => MaterialApp(
             title: 'Pense',
-            theme: appState.theme( lightDynamic, darkDynamic),
+            theme: appState.theme(lightDynamic, darkDynamic),
             home: Body(),
           ),
     );

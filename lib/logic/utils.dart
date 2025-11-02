@@ -14,6 +14,10 @@ import 'package:flutter/material.dart';
     return asHsv.withHue((asHsv.hue + index/length * 45) % 360).toColor();
   }
 
+  Color gradientPairColor(Color color) {
+    return colorShade(color,1,2);
+  }
+
 
 extension Utils on double {
   double truncateToDecimalPlaces(int fractionalDigits) =>

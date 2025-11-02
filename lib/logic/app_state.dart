@@ -190,7 +190,7 @@ class AppState extends ChangeNotifier {
       } else {
         scheme = _customColors.primaryScheme;
       }
-      return ThemeData(colorScheme: scheme);
+      return ThemeData(colorScheme: scheme , fontFamily: "HankenGrotesk");
     }
   }
 

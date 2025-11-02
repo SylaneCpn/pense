@@ -37,7 +37,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
         ),
       ],
       content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
             width: 300,

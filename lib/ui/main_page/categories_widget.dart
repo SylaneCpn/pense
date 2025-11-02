@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
+import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
 import 'package:pense/ui/main_page/categories_pie_chart.dart';
+import 'package:pense/ui/utils/gradient_text.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
@@ -46,7 +50,7 @@ class CategoriesWidget extends StatelessWidget {
     };
 
     final total = categories.fold(0.0, (acc, c) => acc + c.sourceSum());
-
+    final labelColor = appState.primaryColor(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -56,31 +60,40 @@ class CategoriesWidget extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                begin: AlignmentGeometry.topRight,
-                end: AlignmentGeometry.bottomLeft,
-                colors: [
-                  appState.primaryContainer(context),
-                  appState.lightBackgroundColor(),
-                  appState.lightBackgroundColor(),
-                  appState.primaryContainer(context),
-                ],
-                stops: [0,0.2,0.8, 1],
-                transform: GradientRotation(12.0)
-              ),
+            gradient: LinearGradient(
+              begin: AlignmentGeometry.topRight,
+              end: AlignmentGeometry.bottomLeft,
+              colors: [
+                appState.primaryContainer(context),
+                appState.lightBackgroundColor(),
+                appState.lightBackgroundColor(),
+                appState.primaryContainer(context),
+              ],
+              stops: [0, 0.2, 0.8, 1],
+              transform: GradientRotation(12.0),
+            ),
           ),
           child: WithTitle(
-            padding: EdgeInsetsGeometry.only(
-              left: 10.0,
-              top: 20.0,
-            ),
-            title: label,
-            style: TextStyle(
-              color: appState.onPrimaryContainer(context),
-              fontSize: PortView.doubleRegularTextSize(
-                MediaQuery.sizeOf(context).width,
+            titleAlignment: AlignmentGeometry.centerLeft,
+            title: Padding(
+              padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
+              child: GradientText(
+                gradient: LinearGradient(
+                  colors: [labelColor, gradientPairColor(labelColor)],
+                ),
+                text: Text(
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: appState.onPrimaryContainer(context),
+                    fontSize: PortView.doubleRegularTextSize(
+                      MediaQuery.sizeOf(context).width,
+                    ),
+                  ),
+                  label,
+                ),
               ),
             ),
+
             child: Column(
               children: [
                 categories.isNotEmpty
@@ -88,28 +101,40 @@ class CategoriesWidget extends StatelessWidget {
                       children: [
                         if (total > 0.0)
                           WithTitle(
-                            style: TextStyle(
-                              color: appState.onLightBackgroundColor(),
-                              fontSize: PortView.mediumTextSize(
-                                MediaQuery.sizeOf(context).width,
+                            title: Align(
+                              alignment: AlignmentGeometry.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  style: TextStyle(
+                                    color: appState.onLightBackgroundColor(),
+                                    fontSize: PortView.mediumTextSize(
+                                      MediaQuery.sizeOf(context).width,
+                                    ),
+                                  ),
+                                  "Vue d'ensemble",
+                                ),
                               ),
                             ),
-                            title: "Vue d'ensemble",
-                            padding: const EdgeInsets.all(10.0),
                             child: CategoriesPieChart(
                               total: total,
                               categories: categories,
                             ),
                           ),
                         WithTitle(
-                          style: TextStyle(
-                            color: appState.onLightBackgroundColor(),
-                            fontSize: PortView.mediumTextSize(
-                              MediaQuery.sizeOf(context).width,
+                          titleAlignment: AlignmentGeometry.centerLeft,
+                          title: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              style: TextStyle(
+                                color: appState.onLightBackgroundColor(),
+                                fontSize: PortView.mediumTextSize(
+                                  MediaQuery.sizeOf(context).width,
+                                ),
+                              ),
+                              "Catégories",
                             ),
                           ),
-                          padding: const EdgeInsets.all(10.0),
-                          title: "Catégories",
                           child: Column(
                             children: [
                               ...categories.map(
@@ -130,9 +155,12 @@ class CategoriesWidget extends StatelessWidget {
                                                 e,
                                               );
                                             },
-                                            icon: Icon(
-                                              Icons.delete_forever_rounded,
-                                              color: Colors.red,
+                                            icon: Transform.rotate(
+                                              angle: pi/4,
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Colors.red,
+                                              ),
                                             ),
                                           ),
                                         ),
