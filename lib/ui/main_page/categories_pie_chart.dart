@@ -73,6 +73,7 @@ class CategoryChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final style = TextStyle(
+      color: appState.onLessContrastBackgroundColor(),
       fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width),
       // overflow: TextOverflow.ellipsis
     );

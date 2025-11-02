@@ -50,25 +50,30 @@ class CategoriesWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
+        color: appState.lightBackgroundColor(),
         borderRadius: BorderRadius.circular(8.0),
         elevation: 8.0,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            gradient: LinearGradient(
-              begin: AlignmentGeometry.topRight,
-              end: AlignmentGeometry.bottomLeft,
-              colors: [
-                appState.primaryContainer(context),
-                appState.lightBackgroundColor(),
-                appState.lightBackgroundColor(),
-                appState.primaryContainer(context),
-              ],
-              stops: [0,0.2,0.8, 1],
-            ),
+              gradient: LinearGradient(
+                begin: AlignmentGeometry.topRight,
+                end: AlignmentGeometry.bottomLeft,
+                colors: [
+                  appState.primaryContainer(context),
+                  appState.lightBackgroundColor(),
+                  appState.lightBackgroundColor(),
+                  appState.primaryContainer(context),
+                ],
+                stops: [0,0.2,0.8, 1],
+                transform: GradientRotation(12.0)
+              ),
           ),
           child: WithTitle(
-            padding: EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
+            padding: EdgeInsetsGeometry.only(
+              left: 10.0,
+              top: 20.0,
+            ),
             title: label,
             style: TextStyle(
               color: appState.onPrimaryContainer(context),
@@ -84,7 +89,7 @@ class CategoriesWidget extends StatelessWidget {
                         if (total > 0.0)
                           WithTitle(
                             style: TextStyle(
-                              color: appState.onPrimaryContainer(context),
+                              color: appState.onLightBackgroundColor(),
                               fontSize: PortView.mediumTextSize(
                                 MediaQuery.sizeOf(context).width,
                               ),
@@ -98,7 +103,7 @@ class CategoriesWidget extends StatelessWidget {
                           ),
                         WithTitle(
                           style: TextStyle(
-                            color: appState.onPrimaryContainer(context),
+                            color: appState.onLightBackgroundColor(),
                             fontSize: PortView.mediumTextSize(
                               MediaQuery.sizeOf(context).width,
                             ),
@@ -119,7 +124,11 @@ class CategoriesWidget extends StatelessWidget {
                                           categoryType: categoryType,
                                           tail: IconButton(
                                             onPressed: () {
-                                              deleteCategory(record, categories, e);
+                                              deleteCategory(
+                                                record,
+                                                categories,
+                                                e,
+                                              );
                                             },
                                             icon: Icon(
                                               Icons.delete_forever_rounded,
@@ -141,10 +150,10 @@ class CategoriesWidget extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
                       child: DefaultText(
                         missing: "catégorie",
-                        textColor: appState.onPrimaryContainer(context),
+                        textColor: appState.onLessContrastBackgroundColor(),
                       ),
                     ),
-        
+
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: Center(
@@ -290,7 +299,7 @@ class CategoryWidget extends StatelessWidget {
     final appState = context.watch<AppState>();
     final header = Text(
       style: TextStyle(
-        color: appState.onPrimaryContainer(context),
+        color: appState.onLightBackgroundColor(),
         fontSize: PortView.mediumTextSize(MediaQuery.sizeOf(context).width),
       ),
       category.label,

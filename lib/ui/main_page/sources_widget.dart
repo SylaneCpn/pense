@@ -60,7 +60,7 @@ class SourcesWidget extends StatelessWidget {
             padding: const EdgeInsets.all(28.0),
             child: TextAddButton(
               backgroundColor: appState.primaryColor(context),
-              textColor: appState.backgroundColor(),
+              textColor: appState.lessContrastBackgroundColor(),
               onPressed: () {
               showDialog(
                     context: context,

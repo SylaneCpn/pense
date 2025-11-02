@@ -16,8 +16,8 @@ class DateBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final appState = context.read<AppState>();
+    final color = appState.onLightBackgroundColor();
      return Padding(
        padding: const EdgeInsets.all(8.0),
        child: Container(
@@ -29,7 +29,7 @@ class DateBanner extends StatelessWidget {
              children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios , color: prevMonthCallback != null ? appState.onPrimaryContainer(context) : null,)),
+                child: IconButton(onPressed: prevMonthCallback, icon: Icon(Icons.arrow_back_ios , color: prevMonthCallback != null ? color : null,)),
               ),
                Expanded(
                  child: Align(
@@ -40,13 +40,13 @@ class DateBanner extends StatelessWidget {
                        Text(
                          style: TextStyle(
                           fontSize: PortView.doubleRegularTextSize(MediaQuery.sizeOf(context).width),
-                          color: appState.onPrimaryContainer(context)),
+                          color: color),
                          month.toStringFr()),
 
                          Text(
                          style: TextStyle(
                           fontSize: PortView.regularTextSize(MediaQuery.sizeOf(context).width),
-                          color: appState.onPrimaryContainer(context)),
+                          color: color),
                          year.toString() ),
                      ],
                    ),
@@ -54,7 +54,7 @@ class DateBanner extends StatelessWidget {
                ),
                Padding(
                  padding: const EdgeInsets.all(8.0),
-                 child: IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios , color : nextMonthCallback!= null ? appState.onPrimaryContainer(context) : null)),
+                 child: IconButton(onPressed: nextMonthCallback, icon: Icon(Icons.arrow_forward_ios , color : nextMonthCallback!= null ? color : null)),
                ),
              ],
            ),

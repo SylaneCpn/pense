@@ -133,11 +133,27 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Color onBackgroundColor() {
+    if (useSystemBrightness) {
+      return isSystemDark() ? Colors.white : Colors.black;
+    } else {
+      return isDark ? Colors.white : Colors.black;
+    }
+  }
+
   Color lightBackgroundColor() {
     if (useSystemBrightness) {
       return isSystemDark() ? Colors.grey[900]! : Colors.grey[100]!;
     } else {
       return isDark ? Colors.grey[900]! : Colors.grey[100]!;
+    }
+  }
+
+  Color onLightBackgroundColor() {
+    if (useSystemBrightness) {
+      return isSystemDark() ?  Colors.grey[100]! : Colors.grey[900]! ;
+    } else {
+      return isDark ? Colors.grey[100]! : Colors.grey[900]!;
     }
   }
 
@@ -149,13 +165,15 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  Color onBackgroundColor() {
+  Color onLessContrastBackgroundColor() {
     if (useSystemBrightness) {
-      return isSystemDark() ? Colors.white70 : Colors.black87;
+      return isSystemDark() ?  Colors.grey[50]! : Color.fromRGBO(20, 20, 20, 1.0) ;
     } else {
-      return isDark ? Colors.white70 : Colors.black87;
+      return isDark ? Colors.grey[50]! : Color.fromRGBO(20, 20, 20, 1.0);
     }
   }
+
+  
 
   ThemeData _theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
     if (lightDynamic == null || darkDynamic == null) {

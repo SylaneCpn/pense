@@ -31,7 +31,7 @@ class SumBanner extends StatelessWidget {
         end: Alignment.bottomCenter,
         colors: [
           appState.primaryContainer(context),
-          appState.backgroundColor(),
+          appState.lessContrastBackgroundColor(),
         ],
         stops: [0.0, 0.66],
       ),
@@ -122,7 +122,7 @@ class Epargne extends StatelessWidget {
         children: [
           Text(
             style: TextStyle(
-              color: appState.onPrimaryContainer(context),
+              color: appState.onLightBackgroundColor(),
               fontSize: PortView.regularTextSize(
                 MediaQuery.sizeOf(context).width,
               ),
@@ -135,7 +135,7 @@ class Epargne extends StatelessWidget {
               fontSize: PortView.sumBannerSize(
                 MediaQuery.sizeOf(context).width,
               ),
-              color: sumColor(sum, appState.onPrimaryContainer(context)),
+              color: sumColor(sum, appState.lessContrastBackgroundColor()),
             ),
             appState.formatWithCurrency(sum),
           ),
@@ -185,26 +185,28 @@ class TopSources extends StatelessWidget {
     if (sortedSources.isEmpty) {
       return DefaultText(
         missing: categoryType.toStringFr(),
-        textColor: appState.onPrimaryContainer(context),
+        textColor: appState.onLightBackgroundColor(),
       );
     }
 
     final sourceWidgets = sortedSources.map((s) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
+          Flexible(
             child: Text(
               overflow: TextOverflow.clip,
               s.label,
               style: soureStyle(context, appState),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 12.0),
-            child: Text(
-              appState.formatWithCurrency(s.value),
-              style: soureStyle(context, appState),
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(left: 12.0),
+              child: Text(
+                appState.formatWithCurrency(s.value),
+                style: soureStyle(context, appState),
+              ),
             ),
           ),
         ],
@@ -218,7 +220,7 @@ class TopSources extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 20.0),
           child: Text(
             style: TextStyle(
-              color: appState.onPrimaryContainer(context),
+              color: appState.onLightBackgroundColor(),
               fontSize: PortView.mediumTextSize(
                 MediaQuery.sizeOf(context).width,
               ),
