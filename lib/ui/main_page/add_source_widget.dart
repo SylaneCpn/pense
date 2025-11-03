@@ -18,9 +18,9 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
   final TextEditingController _valueController = TextEditingController();
 
 
-  double processAmountInput() {
+  int processAmountInput() {
     final value = _valueController.text.replaceAll(',', '.').replaceAll(" ", "");
-    return double.tryParse(value) ?? 0.0;
+    return ((double.tryParse(value) ?? 0.0) * 100).toInt();
   }
 
   @override

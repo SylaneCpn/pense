@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 
 class WithTitle extends StatelessWidget{
   final Widget child;
-  final Widget title; 
-  final AlignmentGeometry titleAlignment;
-  const WithTitle({super.key, required this.child , required this.title , this.titleAlignment = AlignmentGeometry.center});
+  final Widget title;
+  final Widget? leading;
+  final EdgeInsets titlePadding;
+  const WithTitle({super.key, required this.child , required this.title , this.leading , this.titlePadding = const EdgeInsets.all(0.0)});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(alignment: titleAlignment, child: title),
+        Padding(
+          padding: titlePadding,
+          child: Row(
+            children: [
+              ?leading,
+              Flexible(child: title),
+            ],
+          ),
+        ),
         child
       ],
     );

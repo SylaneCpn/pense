@@ -114,19 +114,19 @@ class RecordElement {
     };
   }
 
-  double totalIncome() {
+  int totalIncome() {
     return incomes
         .map((e) => e.sourceSum())
-        .fold(0.0, (value, element) => value + element);
+        .fold(0, (value, element) => value + element);
   }
 
-  double totalExpense() {
+  int totalExpense() {
     return expenses
         .map((e) => e.sourceSum())
-        .fold(0.0, (value, element) => value + element);
+        .fold(0, (value, element) => value + element);
   }
 
-  double totalElement() {
+  int totalElement() {
     return totalIncome() - totalExpense();
   }
 }
@@ -159,10 +159,10 @@ class Category {
     };
   }
 
-  double sourceSum() {
+  int sourceSum() {
     return sources
         .map((e) => e.value)
-        .fold(0.0, (value, element) => value + element);
+        .fold(0, (value, element) => value + element);
   }
 
 
@@ -183,13 +183,14 @@ class Category {
 
 class Source {
   final String label;
-  final double value;
+  //as cents
+  final int value;
 
   const Source({required this.label, required this.value});
 
   factory Source.fromJson(dynamic json) {
     return switch (json) {
-      {'label': String label, 'value': double value} => Source(
+      {'label': String label, 'value': int value} => Source(
         label: label,
         value: value,
       ),

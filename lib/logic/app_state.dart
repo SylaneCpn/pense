@@ -26,12 +26,12 @@ class AppState extends ChangeNotifier {
         Brightness.dark;
   }
 
-  String formatWithCurrency(double amount) {
+  String formatWithCurrency(int amount) {
     switch (currency) {
       case '€':
-        return "${amount.truncateToDecimalPlaces(2).prettyToString().replaceAll(".", ",")} €";
+        return "${amount.prettyToString().replaceAll(".", ",")} €";
       default:
-        return "$currency ${amount.truncateToDecimalPlaces(2).prettyToString()}";
+        return "$currency ${amount.prettyToString()}";
     }
   }
 

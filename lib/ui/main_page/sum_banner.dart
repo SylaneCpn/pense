@@ -101,11 +101,11 @@ class SumBanner extends StatelessWidget {
 }
 
 class Epargne extends StatelessWidget {
-  final double sum;
+  final int sum;
   final double height;
 
-  Color sumColor(double sum, Color baseColor) {
-    return sum > 0.0
+  Color sumColor(int sum, Color baseColor) {
+    return sum > 0
         ? Colors.green.harmonizeWith(baseColor)
         : Colors.red.harmonizeWith(baseColor);
   }

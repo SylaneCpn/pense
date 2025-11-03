@@ -14,6 +14,7 @@ import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:pense/ui/utils/text_add_button.dart';
+import 'package:pense/ui/utils/gradient_chip.dart';
 import 'package:pense/ui/utils/with_title.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,7 @@ class CategoriesWidget extends StatelessWidget {
       CategoryType.income => currentElement.incomes,
     };
 
-    final total = categories.fold(0.0, (acc, c) => acc + c.sourceSum());
+    final total = categories.fold(0, (acc, c) => acc + c.sourceSum());
     final labelColor = appState.primaryColor(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -74,7 +75,6 @@ class CategoriesWidget extends StatelessWidget {
             ),
           ),
           child: WithTitle(
-            titleAlignment: AlignmentGeometry.centerLeft,
             title: Padding(
               padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
               child: GradientText(
@@ -84,7 +84,7 @@ class CategoriesWidget extends StatelessWidget {
                 text: Text(
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: appState.onPrimaryContainer(context),
+                    color: Colors.white,
                     fontSize: PortView.doubleRegularTextSize(
                       MediaQuery.sizeOf(context).width,
                     ),
@@ -98,13 +98,25 @@ class CategoriesWidget extends StatelessWidget {
               children: [
                 categories.isNotEmpty
                     ? Column(
-                      children: [
-                        if (total > 0.0)
-                          WithTitle(
-                            title: Align(
-                              alignment: AlignmentGeometry.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                        children: [
+                          if (total > 0.0)
+                            WithTitle(
+                              leading: GradientChip(
+                                start: labelColor,
+                                end: gradientPairColor(labelColor),
+                                width: 4.0,
+                                height: PortView.bigTextSize(
+                                  MediaQuery.widthOf(context),
+                                ),
+                                borderRadius: 4.0,
+                              ),
+                              titlePadding: const EdgeInsets.only(
+                                top: 10.0,
+                                left: 10.0,
+                                bottom: 10.0,
+                              ),
+                              title: Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
                                 child: Text(
                                   style: TextStyle(
                                     color: appState.onLightBackgroundColor(),
@@ -115,72 +127,60 @@ class CategoriesWidget extends StatelessWidget {
                                   "Vue d'ensemble",
                                 ),
                               ),
-                            ),
-                            child: CategoriesPieChart(
-                              total: total,
-                              categories: categories,
-                            ),
-                          ),
-                        WithTitle(
-                          titleAlignment: AlignmentGeometry.centerLeft,
-                          title: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              style: TextStyle(
-                                color: appState.onLightBackgroundColor(),
-                                fontSize: PortView.mediumTextSize(
-                                  MediaQuery.sizeOf(context).width,
-                                ),
+                              child: CategoriesPieChart(
+                                total: total,
+                                categories: categories,
                               ),
-                              "Catégories",
+                            ),
+                          WithTitle(
+                            leading: GradientChip(
+                                start: labelColor,
+                                end: gradientPairColor(labelColor),
+                                width: 4.0,
+                                height: PortView.bigTextSize(
+                                  MediaQuery.widthOf(context),
+                                ),
+                                borderRadius: 4.0,
+                              ),
+                            titlePadding: const EdgeInsets.only(
+                                top: 10.0,
+                                left: 10.0,
+                                bottom: 10.0,
+                              ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(left: 6.0),
+                              child: Text(
+                                style: TextStyle(
+                                  color: appState.onLightBackgroundColor(),
+                                  fontSize: PortView.mediumTextSize(
+                                    MediaQuery.sizeOf(context).width,
+                                  ),
+                                ),
+                                "Catégories",
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                ...categories.map(
+                                  (c) => CategoryWidget(
+                                    category: c,
+                                    onDeleteCallBack: () {
+                                      deleteCategory(record, categories, c);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: Column(
-                            children: [
-                              ...categories.map(
-                                (e) => Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CategoryWidget(
-                                          category: e,
-                                          categoryType: categoryType,
-                                          tail: IconButton(
-                                            onPressed: () {
-                                              deleteCategory(
-                                                record,
-                                                categories,
-                                                e,
-                                              );
-                                            },
-                                            icon: Transform.rotate(
-                                              angle: pi/4,
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                        ],
+                      )
                     : Padding(
-                      padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
-                      child: DefaultText(
-                        missing: "catégorie",
-                        textColor: appState.onLessContrastBackgroundColor(),
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+                        child: DefaultText(
+                          missing: "catégorie",
+                          textColor: appState.onLessContrastBackgroundColor(),
+                        ),
                       ),
-                    ),
 
                 Padding(
                   padding: const EdgeInsets.all(18.0),
@@ -191,11 +191,10 @@ class CategoriesWidget extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder:
-                              (context) => AddCategoryWidget(
-                                categories: categories,
-                                record: record,
-                              ),
+                          builder: (context) => AddCategoryWidget(
+                            categories: categories,
+                            record: record,
+                          ),
                         );
                       },
                       text: "Catégorie",
@@ -315,9 +314,11 @@ class CategoryWidget extends StatelessWidget {
   final Category category;
   final Widget? tail;
   final CategoryType categoryType;
+  final void Function() onDeleteCallBack;
   const CategoryWidget({
     super.key,
     required this.category,
+    required this.onDeleteCallBack,
     this.tail,
     this.categoryType = CategoryType.income,
   });
@@ -333,18 +334,34 @@ class CategoryWidget extends StatelessWidget {
       category.label,
     );
 
-    return Material(
-      color: appState.lessContrastBackgroundColor(),
-      elevation: 8.0,
-      borderRadius: BorderRadius.circular(8.0),
-      child: Accordion(
-        header: header,
-        tail: tail,
-        child: SourcesWidget(
-          sources: category.sources,
-          categoryType: categoryType,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: appState.lessContrastBackgroundColor(),
+              elevation: 8.0,
+              borderRadius: BorderRadius.circular(8.0),
+              child: Accordion(
+                header: header,
+                tail: IconButton(
+                  onPressed: onDeleteCallBack,
+                  icon: Transform.rotate(
+                    angle: pi / 4,
+                    child: Icon(Icons.add, color: Colors.red),
+                  ),
+                ),
+                child: SourcesWidget(
+                  sources: category.sources,
+                  categoryType: categoryType,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

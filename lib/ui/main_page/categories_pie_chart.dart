@@ -16,7 +16,7 @@ class CategoriesPieChart extends StatelessWidget {
     required this.categories,
   });
 
-  final double total;
+  final int total;
   final List<Category> categories;
 
   @override
@@ -127,7 +127,7 @@ class RawCatPieChart extends StatelessWidget {
     required this.total,
   });
   final double boxWidth;
-  final double total;
+  final int total;
   final List<Category> categories;
 
   PieChartData constructPieChartData(
@@ -146,16 +146,53 @@ class RawCatPieChart extends StatelessWidget {
     Color pieBaseColor,
     Color textColor
   ) {
-    return categories.mapIndexed((i, c) {
-      final sum = c.sourceSum();
-      return PieChartSectionData(
-        radius: boxWidth / 2 - 20.0 - boxWidth / 6,
+
+    int others = 0;
+    final sections = <PieChartSectionData>[];
+
+    for (int i = 0 ; i < categories.length ; i++) {
+      final currentCat = categories.elementAt(i);
+      final sum = currentCat.sourceSum();
+      final percent = sum / total;
+
+      if (percent < 0.05) {
+        others += sum;
+      }
+
+      else {
+        final data = PieChartSectionData(
+          radius: boxWidth / 2 - 20.0 - boxWidth / 6,
         color: colorShade(pieBaseColor, i, categories.length),
-        title: "${c.label}\n${(sum / total).toPercentage(2)}",
-        value: sum,
+        title: "${currentCat.label}\n${(sum / total).toPercentage(2)}",
+        value: sum.toDouble(),
         titleStyle: TextStyle(color: textColor)
-      );
-    }).toList();
+        );
+
+        sections.add(data);
+      }
+
+    }
+
+
+    if (others > 0.0) {
+      sections.add(PieChartSectionData(radius: boxWidth / 2 - 20.0 - boxWidth / 6,
+        color: Colors.grey,
+        title: "Autres\n${(others/total).toPercentage(2)}",
+        value: others.toDouble(),
+        titleStyle: TextStyle(color: textColor)));
+    }
+
+    return sections;
+    // return categories.mapIndexed((i, c) {
+    //   final sum = c.sourceSum();
+    //   return PieChartSectionData(
+    //     radius: boxWidth / 2 - 20.0 - boxWidth / 6,
+    //     color: colorShade(pieBaseColor, i, categories.length),
+    //     title: "${c.label}\n${(sum / total).toPercentage(2)}",
+    //     value: sum,
+    //     titleStyle: TextStyle(color: textColor)
+    //   );
+    // }).toList();
   }
 
   @override
