@@ -1,6 +1,4 @@
 import 'dart:math';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
