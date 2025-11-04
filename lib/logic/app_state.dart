@@ -29,9 +29,9 @@ class AppState extends ChangeNotifier {
   String formatWithCurrency(int amount) {
     switch (currency) {
       case '€':
-        return "${amount.prettyToString().replaceAll(".", ",")} €";
+        return "${amount.prettyCentsToWhole().replaceAll(".", ",")} €";
       default:
-        return "$currency ${amount.prettyToString()}";
+        return "$currency ${amount.prettyCentsToWhole()}";
     }
   }
 

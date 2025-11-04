@@ -16,7 +16,7 @@ Color gradientPairColor(Color color) {
 }
 
 extension IntUtils on int {
-  (String, String) splitFrac() {
+  (String, String) centsToWhole() {
     final asString = toString();
 
     if (asString.isEmpty) {
@@ -36,8 +36,8 @@ extension IntUtils on int {
     return (whole, dec);
   }
 
-  String prettyToString() {
-    final (String whole, String decimal) = splitFrac();
+  String prettyCentsToWhole() {
+    final (String whole, String decimal) = centsToWhole();
     final res = StringBuffer();
     for (int i = 0; i < whole.length; i++) {
       if ((whole.length - i) % 3 == 0 && whole.length - i != 0) {
