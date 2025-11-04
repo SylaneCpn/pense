@@ -15,6 +15,13 @@ class _PageSwitcherState extends State<PageSwitcher> {
   Month month = DateTime.now().month.toMonth();
   int year = DateTime.now().year;
 
+  void setDate(Month month , int year ) {
+    setState(() {
+      this.month = month;
+      this.year = year;
+    });
+  }
+
   void toPrevMonth() {
     setState(() {
       final (Month m, int y) = month.prev(year);
@@ -62,16 +69,18 @@ class _PageSwitcherState extends State<PageSwitcher> {
       ),
 
       body:
-          [
+      [
             MainPage(
               month: month,
               year: year,
               toPrevMonth: toPrevMonth,
               toNextMonth: provideToNextMonth() ? toNextMonth : null,
+              setDateCallBack : setDate,
             ),
             Placeholder(),
             Placeholder(),
-          ][currentPageIndex],
+          ][currentPageIndex]
+          
     );
   }
 }

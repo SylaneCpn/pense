@@ -85,7 +85,7 @@ class CategoryChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(bRadius),
           border: Border.all(color: appState.primaryColor(context)),
         ),
-      
+
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -102,7 +102,7 @@ class CategoryChip extends StatelessWidget {
                 ),
               ),
             ),
-      
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -132,52 +132,66 @@ class RawCatPieChart extends StatelessWidget {
     Iterable<Category> categories,
     double boxWidth,
     Color pieBaseColor,
-    Color textColor
+    Color textColor,
   ) => PieChartData(
-    centerSpaceRadius: boxWidth / 6 ,
-    sections: constructSections(categories, boxWidth, pieBaseColor,textColor),
+    centerSpaceRadius: boxWidth / 6,
+    sections: constructSections(categories, boxWidth, pieBaseColor, textColor),
   );
 
   List<PieChartSectionData> constructSections(
     Iterable<Category> categories,
     double boxWidth,
     Color pieBaseColor,
-    Color textColor
+    Color textColor,
   ) {
-
-    int others = 0;
     final sections = <PieChartSectionData>[];
+    final sortedCategories = List<Category>.from(categories)
+      ..sort((a, b) => Comparable.compare(b.sourceSum(), a.sourceSum()));
 
-    for (int i = 0 ; i < categories.length ; i++) {
-      final currentCat = categories.elementAt(i);
+    //Max 5 + 1 secontions on the pieChart
+    int mainLoopLen = 5;
+    int secondLoopLen = 0;
+
+    if (sortedCategories.length < mainLoopLen) {
+      mainLoopLen = sortedCategories.length;
+    }
+
+    if (sortedCategories.length > mainLoopLen) {
+      secondLoopLen = sortedCategories.length - mainLoopLen;
+    }
+
+    for (int i = 0; i < mainLoopLen; i++) {
+      final currentCat = sortedCategories.elementAt(i);
       final sum = currentCat.sourceSum();
       final percent = sum / total;
 
-      if (percent < 0.05) {
-        others += sum;
-      }
-
-      else {
-        final data = PieChartSectionData(
-          radius: boxWidth / 2 - 20.0 - boxWidth / 6,
-        color: colorShade(pieBaseColor, i, categories.length),
-        title: "${currentCat.label}\n${(sum / total).toPercentage(2)}",
+      final data = PieChartSectionData(
+        radius: boxWidth / 2 - 20.0 - boxWidth / 6,
+        color: colorShade(pieBaseColor, i, mainLoopLen),
+        title: "${currentCat.label}\n${percent.toPercentage(2)}",
         value: sum.toDouble(),
-        titleStyle: TextStyle(color: textColor)
-        );
+        titleStyle: TextStyle(color: textColor),
+      );
 
-        sections.add(data);
-      }
-
+      sections.add(data);
     }
 
+    int othersSum = 0;
+    for (int i = 0; i < secondLoopLen; i++) {
+      final currentCat = sortedCategories.elementAt(mainLoopLen + i);
+      othersSum = othersSum + currentCat.sourceSum();
+    }
 
-    if (others > 0.0) {
-      sections.add(PieChartSectionData(radius: boxWidth / 2 - 20.0 - boxWidth / 6,
-        color: Colors.grey,
-        title: "Autres\n${(others/total).toPercentage(2)}",
-        value: others.toDouble(),
-        titleStyle: TextStyle(color: textColor)));
+    if (othersSum > 0) {
+      sections.add(
+        PieChartSectionData(
+          radius: boxWidth / 2 - 20.0 - boxWidth / 6,
+          color: Colors.grey,
+          title: "Autres\n${(othersSum / total).toPercentage(2)}",
+          value: othersSum.toDouble(),
+          titleStyle: TextStyle(color: textColor),
+        ),
+      );
     }
 
     return sections;
