@@ -29,7 +29,9 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
     if (value.contains(".")) {
       final [whole, decimal] = value.split(".");
       return (int.tryParse(whole) ?? 0) * 100 +
-          (int.tryParse(decimal.substring(0, 2)) ?? 0);
+          (decimal.length < 2
+              ? int.tryParse("${decimal}0") ?? 0
+              : int.tryParse(decimal.substring(0, 2)) ?? 0);
     }
 
     return (int.tryParse(value) ?? 0) * 100;
