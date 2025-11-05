@@ -8,6 +8,7 @@ import 'package:pense/logic/record.dart';
 import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
 import 'package:pense/ui/main_page/categories_pie_chart.dart';
+import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradientify.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/main_page/sources_widget.dart';
@@ -54,99 +55,65 @@ class CategoriesWidget extends StatelessWidget {
     final labelColor = appState.primaryColor(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: appState.lightBackgroundColor(),
+      child: ElevatedContainer(
         borderRadius: BorderRadius.circular(8.0),
         elevation: 8.0,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            gradient: LinearGradient(
-              begin: AlignmentGeometry.topRight,
-              end: AlignmentGeometry.bottomLeft,
-              colors: [
-                appState.primaryContainer(context),
-                appState.lightBackgroundColor(),
-                appState.lightBackgroundColor(),
-                appState.primaryContainer(context),
-              ],
-              stops: [0, 0.2, 0.8, 1],
-              transform: GradientRotation(12.0),
-            ),
+        decoration: BoxDecoration(
+          color: appState.lightBackgroundColor(),
+          gradient: LinearGradient(
+            begin: AlignmentGeometry.topRight,
+            end: AlignmentGeometry.bottomLeft,
+            colors: [
+              appState.primaryContainer(context),
+              appState.lightBackgroundColor(),
+              appState.lightBackgroundColor(),
+              appState.primaryContainer(context),
+            ],
+            stops: [0, 0.2, 0.8, 1],
+            transform: GradientRotation(12.0),
           ),
-          child: WithTitle(
-            title: Padding(
-              padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
-              child: Gradientify(
-                gradient: LinearGradient(
-                  colors: [labelColor, gradientPairColor(labelColor)],
-                ),
-                child: Text(
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: PortView.doubleRegularTextSize(
-                      MediaQuery.sizeOf(context).width,
-                    ),
+        ),
+        child: WithTitle(
+          title: Padding(
+            padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
+            child: Gradientify(
+              gradient: LinearGradient(
+                colors: [labelColor, gradientPairColor(labelColor)],
+              ),
+              child: Text(
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: PortView.doubleRegularTextSize(
+                    MediaQuery.sizeOf(context).width,
                   ),
-                  label,
                 ),
+                label,
               ),
             ),
+          ),
 
-            child: Column(
-              children: [
-                categories.isNotEmpty
-                    ? Column(
-                        children: [
-                          if (total > 0.0)
-                            WithTitle(
-                              leading: GradientChip(
-                                start: labelColor,
-                                end: gradientPairColor(labelColor),
-                                width: 4.0,
-                                height: PortView.bigTextSize(
-                                  MediaQuery.widthOf(context),
-                                ),
-                                borderRadius: 4.0,
-                              ),
-                              titlePadding: const EdgeInsets.only(
-                                top: 10.0,
-                                left: 10.0,
-                                bottom: 10.0,
-                              ),
-                              title: Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text(
-                                  style: TextStyle(
-                                    color: appState.onLightBackgroundColor(),
-                                    fontSize: PortView.mediumTextSize(
-                                      MediaQuery.sizeOf(context).width,
-                                    ),
-                                  ),
-                                  "Vue d'ensemble",
-                                ),
-                              ),
-                              child: CategoriesPieChart(
-                                total: total,
-                                categories: categories,
-                              ),
-                            ),
+          child: Column(
+            children: [
+              categories.isNotEmpty
+                  ? Column(
+                      children: [
+                        if (total > 0.0)
                           WithTitle(
                             leading: GradientChip(
-                                start: labelColor,
-                                end: gradientPairColor(labelColor),
-                                width: 4.0,
-                                height: PortView.bigTextSize(
-                                  MediaQuery.widthOf(context),
-                                ),
-                                borderRadius: 4.0,
+                              start: labelColor,
+                              end: gradientPairColor(labelColor),
+                              width: 4.0,
+                              height: PortView.bigTextSize(
+                                MediaQuery.widthOf(context),
                               ),
+                              borderRadius: 4.0,
+                            ),
                             titlePadding: const EdgeInsets.only(
-                                top: 10.0,
-                                left: 10.0,
-                                bottom: 10.0,
-                              ),
+                              top: 10.0,
+                              left: 10.0,
+                              bottom: 10.0,
+                            ),
                             title: Padding(
                               padding: const EdgeInsets.only(left: 6.0),
                               child: Text(
@@ -156,53 +123,84 @@ class CategoriesWidget extends StatelessWidget {
                                     MediaQuery.sizeOf(context).width,
                                   ),
                                 ),
-                                "Catégories",
+                                "Vue d'ensemble",
                               ),
                             ),
-                            child: Column(
-                              children: [
-                                ...categories.map(
-                                  (c) => CategoryWidget(
-                                    category: c,
-                                    onDeleteCallBack: () {
-                                      deleteCategory(record, categories, c);
-                                    },
-                                  ),
-                                ),
-                              ],
+                            child: CategoriesPieChart(
+                              total: total,
+                              categories: categories,
                             ),
                           ),
-                        ],
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
-                        child: DefaultText(
-                          missing: "catégorie",
-                          textColor: appState.onLessContrastBackgroundColor(),
-                        ),
-                      ),
-
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Center(
-                    child: TextAddButton(
-                      textColor: appState.onBackgroundColor(),
-                      backgroundColor: appState.inversePrimary(context),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AddCategoryWidget(
-                            categories: categories,
-                            record: record,
+                        WithTitle(
+                          leading: GradientChip(
+                            start: labelColor,
+                            end: gradientPairColor(labelColor),
+                            width: 4.0,
+                            height: PortView.bigTextSize(
+                              MediaQuery.widthOf(context),
+                            ),
+                            borderRadius: 4.0,
                           ),
-                        );
-                      },
-                      text: "Catégorie",
+                          titlePadding: const EdgeInsets.only(
+                            top: 10.0,
+                            left: 10.0,
+                            bottom: 10.0,
+                          ),
+                          title: Padding(
+                            padding: const EdgeInsets.only(left: 6.0),
+                            child: Text(
+                              style: TextStyle(
+                                color: appState.onLightBackgroundColor(),
+                                fontSize: PortView.mediumTextSize(
+                                  MediaQuery.sizeOf(context).width,
+                                ),
+                              ),
+                              "Catégories",
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              ...categories.map(
+                                (c) => CategoryWidget(
+                                  category: c,
+                                  onDeleteCallBack: () {
+                                    deleteCategory(record, categories, c);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+                      child: DefaultText(
+                        missing: "catégorie",
+                        textColor: appState.onLessContrastBackgroundColor(),
+                      ),
                     ),
+
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Center(
+                  child: TextAddButton(
+                    textColor: appState.onBackgroundColor(),
+                    backgroundColor: appState.inversePrimary(context),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddCategoryWidget(
+                          categories: categories,
+                          record: record,
+                        ),
+                      );
+                    },
+                    text: "Catégorie",
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

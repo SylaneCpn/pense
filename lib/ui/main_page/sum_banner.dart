@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class SumBanner extends StatelessWidget {
     required this.width,
   });
 
-  Decoration containerDecoration(BuildContext context, AppState appState) {
+  BoxDecoration containerDecoration(BuildContext context, AppState appState) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(bRadius),
       gradient: LinearGradient(
@@ -48,10 +49,9 @@ class SumBanner extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
+      child: ElevatedContainer(
         elevation: 8.0,
         borderRadius: BorderRadius.circular(bRadius),
-        child: Container(
           decoration: containerDecoration(context, appState),
           child: Column(
             children: [
@@ -94,7 +94,6 @@ class SumBanner extends StatelessWidget {
               ),
             ],
           ),
-        ),
       ),
     );
   }
@@ -191,7 +190,6 @@ class TopSources extends StatelessWidget {
 
     final sourceWidgets = sortedSources.map((s) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Text(
@@ -213,18 +211,16 @@ class TopSources extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 20.0,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: Text(
-            style: TextStyle(
-              color: appState.onLightBackgroundColor(),
-              fontSize: PortView.mediumTextSize(
-                MediaQuery.sizeOf(context).width,
-              ),
+        Text(
+          style: TextStyle(
+            color: appState.onLightBackgroundColor(),
+            fontSize: PortView.mediumTextSize(
+              MediaQuery.sizeOf(context).width,
             ),
-            label,
           ),
+          label,
         ),
         Column(spacing: 18.0, children: sourceWidgets.toList()),
       ],

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/utils.dart';
+import 'package:pense/ui/utils/dialog_box.dart';
 import 'package:pense/ui/utils/gradientify.dart';
 import 'package:pense/ui/utils/port_view.dart';
+import 'package:pense/ui/utils/actions.dart' as actions;
 import 'package:provider/provider.dart';
 
 class DateSelector extends StatefulWidget {
@@ -33,13 +35,18 @@ class _DateSelectorState extends State<DateSelector> {
     });
   }
 
+  void setSelection(BuildContext context) {
+    widget.setDateCallBack?.call(month, year);
+    Navigator.pop(context);
+  }
+
   void setMonth(Month month) {
     setState(() {
       this.month = month;
     });
   }
 
-  void setYear(Month month) {
+  void setYear(int year) {
     setState(() {
       this.year = year;
     });
@@ -47,20 +54,31 @@ class _DateSelectorState extends State<DateSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    return AlertDialog(
-      backgroundColor: appState.lessContrastBackgroundColor(),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          BigDate(month: month, year: year),
-          DateTypeSelector(
-            isMonthSelected: isMonthSelected,
-            setIsMonthSelectedCallBack: setIsMonthSelected,
-          ),
-          isMonthSelected ? MonthBox(month: month) : YearSelect(year: year),
-        ],
-      ),
+    return DialogBox(
+      child: Column(
+          spacing: 16.0,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BigDate(month: month, year: year),
+            DateTypeSelector(
+              isMonthSelected: isMonthSelected,
+              setIsMonthSelectedCallBack: setIsMonthSelected,
+            ),
+            Expanded(
+              child: isMonthSelected
+                  ? MonthSelect(month: month, setMonthCallBack: setMonth)
+                  : YearSelect(year: year),
+            ),
+      
+            actions.Actions(
+              actions: ["Retour", "Sélectionner"],
+              actionsCallBacks: [
+                () => Navigator.pop(context),
+                () => setSelection(context),
+              ],
+            ),
+          ],
+        ),
     );
   }
 }
@@ -169,18 +187,27 @@ class DateTypeSelector extends StatelessWidget {
 
 class MonthSelect extends StatelessWidget {
   final Month month;
-  const MonthSelect({super.key, required this.month});
+  final void Function(Month) setMonthCallBack;
+  const MonthSelect({
+    super.key,
+    required this.month,
+    required this.setMonthCallBack,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return GridView.count(
-      crossAxisCount: 4,
+      mainAxisSpacing: 8.0,
+      crossAxisSpacing: 8.0,
+      crossAxisCount: 3,
       children: List.generate(
         12,
-        (index) => MonthBox(
-          month: Month.values[index],
-          isSelected: Month.values[index] == month,
+        (index) => GestureDetector(
+          onTap: () => setMonthCallBack(Month.values[index]),
+          child: MonthBox(
+            month: Month.values[index],
+            isSelected: Month.values[index] == month,
+          ),
         ),
       ),
     );
@@ -214,9 +241,11 @@ class MonthBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.0),
       ),
 
-      child: Text(
-        style: style(context, appState, isSelected),
-        month.toStringFr(),
+      child: Center(
+        child: Text(
+          style: style(context, appState, isSelected),
+          month.toStringFr(),
+        ),
       ),
     );
   }
@@ -232,3 +261,5 @@ class YearSelect extends StatelessWidget {
     return Placeholder();
   }
 }
+
+

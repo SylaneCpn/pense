@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
+import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 import 'package:pense/logic/record.dart';
@@ -76,13 +77,11 @@ class CategoryChip extends StatelessWidget {
       // overflow: TextOverflow.ellipsis
     );
 
-    return Material(
+    return ElevatedContainer(
       elevation: 4.0,
       borderRadius: BorderRadius.circular(bRadius),
-      child: Container(
         decoration: BoxDecoration(
           color: appState.backgroundColor(),
-          borderRadius: BorderRadius.circular(bRadius),
           border: Border.all(color: appState.primaryColor(context)),
         ),
 
@@ -112,7 +111,6 @@ class CategoryChip extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
