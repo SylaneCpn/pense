@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 class LabeledBox extends StatelessWidget {
   final bool isSelected;
   final EdgeInsetsGeometry? padding;
+  final double? fontSize;
   final bool isDesactivated;
   final String label;
   const LabeledBox({
@@ -13,7 +14,8 @@ class LabeledBox extends StatelessWidget {
     required this.label,
     this.isSelected = false,
     this.isDesactivated = false,
-    this.padding
+    this.padding,
+    this.fontSize
   });
 
   TextStyle style(BuildContext context, AppState appState, bool isSelected) {
@@ -23,7 +25,7 @@ class LabeledBox extends StatelessWidget {
           : isSelected
           ? appState.onPrimaryContainer(context)
           : appState.onLessContrastBackgroundColor(),
-      fontSize: PortView.slightlyBiggerRegularTextSize(
+      fontSize: fontSize ?? PortView.slightlyBiggerRegularTextSize(
         MediaQuery.widthOf(context),
       ),
     );

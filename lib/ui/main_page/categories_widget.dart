@@ -9,7 +9,7 @@ import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
 import 'package:pense/ui/main_page/categories_pie_chart.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
-import 'package:pense/ui/utils/gradientify.dart';
+import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
@@ -76,21 +76,7 @@ class CategoriesWidget extends StatelessWidget {
         child: WithTitle(
           title: Padding(
             padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
-            child: Gradientify(
-              gradient: LinearGradient(
-                colors: [labelColor, gradientPairColor(labelColor)],
-              ),
-              child: Text(
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: PortView.doubleRegularTextSize(
-                    MediaQuery.sizeOf(context).width,
-                  ),
-                ),
-                label,
-              ),
-            ),
+            child: GradientTitle(label: label),
           ),
 
           child: Column(
