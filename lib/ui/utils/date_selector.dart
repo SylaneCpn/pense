@@ -4,6 +4,7 @@ import 'package:pense/logic/month.dart';
 import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/utils/dialog_box.dart';
 import 'package:pense/ui/utils/gradientify.dart';
+import 'package:pense/ui/utils/labeled_box.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/actions.dart' as actions;
 import 'package:provider/provider.dart';
@@ -66,8 +67,12 @@ class _DateSelectorState extends State<DateSelector> {
           ),
           Expanded(
             child: isMonthSelected
-                ? MonthSelect(selectedMonth: month, selectedYear: year , setMonthCallBack: setMonth)
-                : YearSelect(selectedYear: year , setYearCallBack: setYear,),
+                ? MonthSelect(
+                    selectedMonth: month,
+                    selectedYear: year,
+                    setMonthCallBack: setMonth,
+                  )
+                : YearSelect(selectedYear: year, setYearCallBack: setYear),
           ),
 
           actions.Actions(
@@ -242,7 +247,7 @@ class YearSelect extends StatelessWidget {
     super.key,
     required this.selectedYear,
     required this.setYearCallBack,
-    this.begin = 1970
+    this.begin = 1970,
   });
 
   @override
@@ -274,53 +279,6 @@ class YearSelect extends StatelessWidget {
           }),
         );
       },
-    );
-  }
-}
-
-class LabeledBox extends StatelessWidget {
-  final bool isSelected;
-  final bool isDesactivated;
-  final String label;
-  const LabeledBox({
-    super.key,
-    required this.label,
-    this.isSelected = false,
-    this.isDesactivated = false,
-  });
-
-  TextStyle style(BuildContext context, AppState appState, bool isSelected) {
-    return TextStyle(
-      color: isDesactivated
-          ? Colors.grey[300]
-          : isSelected
-          ? appState.onPrimaryContainer(context)
-          : appState.onLessContrastBackgroundColor(),
-      fontSize: PortView.slightlyBiggerRegularTextSize(
-        MediaQuery.widthOf(context),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.0),
-        color: isDesactivated
-            ? Colors.grey
-            : isSelected
-            ? appState.primaryContainer(context)
-            : appState.lessContrastBackgroundColor(),
-        border: isDesactivated
-            ? null
-            : Border.all(color: appState.primaryColor(context)),
-      ),
-
-      child: Center(
-        child: Text(style: style(context, appState, isSelected), label),
-      ),
     );
   }
 }
