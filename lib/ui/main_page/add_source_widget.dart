@@ -41,7 +41,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
     return AlertDialog(
-      backgroundColor: appState.lessContrastBackgroundColor(),
+      backgroundColor: appState.lightBackgroundColor(),
       title: Text("Ajouter une source."),
       actions: [
         TextButton(

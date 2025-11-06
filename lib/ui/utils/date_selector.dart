@@ -56,29 +56,29 @@ class _DateSelectorState extends State<DateSelector> {
   Widget build(BuildContext context) {
     return DialogBox(
       child: Column(
-          spacing: 16.0,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            BigDate(month: month, year: year),
-            DateTypeSelector(
-              isMonthSelected: isMonthSelected,
-              setIsMonthSelectedCallBack: setIsMonthSelected,
-            ),
-            Expanded(
-              child: isMonthSelected
-                  ? MonthSelect(month: month, setMonthCallBack: setMonth)
-                  : YearSelect(year: year),
-            ),
-      
-            actions.Actions(
-              actions: ["Retour", "Sélectionner"],
-              actionsCallBacks: [
-                () => Navigator.pop(context),
-                () => setSelection(context),
-              ],
-            ),
-          ],
-        ),
+        spacing: 16.0,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          BigDate(month: month, year: year),
+          DateTypeSelector(
+            isMonthSelected: isMonthSelected,
+            setIsMonthSelectedCallBack: setIsMonthSelected,
+          ),
+          Expanded(
+            child: isMonthSelected
+                ? MonthSelect(selectedMonth: month, selectedYear: year , setMonthCallBack: setMonth)
+                : YearSelect(selectedYear: year , setYearCallBack: setYear,),
+          ),
+
+          actions.Actions(
+            actions: ["Retour", "Sélectionner"],
+            actionsCallBacks: [
+              () => Navigator.pop(context),
+              () => setSelection(context),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -186,45 +186,119 @@ class DateTypeSelector extends StatelessWidget {
 }
 
 class MonthSelect extends StatelessWidget {
-  final Month month;
+  final Month selectedMonth;
+  final int selectedYear;
   final void Function(Month) setMonthCallBack;
   const MonthSelect({
     super.key,
-    required this.month,
+    required this.selectedMonth,
+    required this.selectedYear,
     required this.setMonthCallBack,
   });
 
+  bool isDesactivated(Month month) {
+    return month.isFuture(selectedYear);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
-      crossAxisCount: 3,
-      children: List.generate(
-        12,
-        (index) => GestureDetector(
-          onTap: () => setMonthCallBack(Month.values[index]),
-          child: MonthBox(
-            month: Month.values[index],
-            isSelected: Month.values[index] == month,
-          ),
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final spacing = 8.0;
+        final count = switch (constraints.maxWidth) {
+          < 150 => 1,
+          < 200 => 2,
+          < 400 => 3,
+          < 1000 => 4,
+          _ => 5,
+        };
+        return GridView.count(
+          mainAxisSpacing: spacing,
+          crossAxisSpacing: spacing,
+          crossAxisCount: count,
+          children: Month.values
+              .map(
+                (m) => GestureDetector(
+                  onTap: isDesactivated(m) ? null : () => setMonthCallBack(m),
+                  child: LabeledBox(
+                    label: m.toStringFr(),
+                    isSelected: m == selectedMonth,
+                    isDesactivated: isDesactivated(m),
+                  ),
+                ),
+              )
+              .toList(),
+        );
+      },
     );
   }
 }
 
-class MonthBox extends StatelessWidget {
+class YearSelect extends StatelessWidget {
+  final int selectedYear;
+  final int begin;
+  final void Function(int) setYearCallBack;
+  const YearSelect({
+    super.key,
+    required this.selectedYear,
+    required this.setYearCallBack,
+    this.begin = 1970
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final spacing = 8.0;
+        final count = switch (constraints.maxWidth) {
+          < 150 => 1,
+          < 200 => 2,
+          < 400 => 3,
+          < 1000 => 4,
+          _ => 5,
+        };
+        final currentYear = DateTime.now().year;
+        return GridView.count(
+          mainAxisSpacing: spacing,
+          crossAxisSpacing: spacing,
+          crossAxisCount: count,
+          children: List<Widget>.generate(currentYear - begin + 1, (index) {
+            final year = currentYear - index;
+            return GestureDetector(
+              onTap: () => setYearCallBack(year),
+              child: LabeledBox(
+                label: year.toString(),
+                isSelected: year == selectedYear,
+              ),
+            );
+          }),
+        );
+      },
+    );
+  }
+}
+
+class LabeledBox extends StatelessWidget {
   final bool isSelected;
-  final Month month;
-  const MonthBox({super.key, required this.month, this.isSelected = false});
+  final bool isDesactivated;
+  final String label;
+  const LabeledBox({
+    super.key,
+    required this.label,
+    this.isSelected = false,
+    this.isDesactivated = false,
+  });
 
   TextStyle style(BuildContext context, AppState appState, bool isSelected) {
     return TextStyle(
-      color: isSelected
+      color: isDesactivated
+          ? Colors.grey[300]
+          : isSelected
           ? appState.onPrimaryContainer(context)
           : appState.onLessContrastBackgroundColor(),
-      fontSize: PortView.biggerRegularTextSize(MediaQuery.widthOf(context)),
+      fontSize: PortView.slightlyBiggerRegularTextSize(
+        MediaQuery.widthOf(context),
+      ),
     );
   }
 
@@ -232,34 +306,21 @@ class MonthBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     return Container(
-      padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: isSelected
+        borderRadius: BorderRadius.circular(24.0),
+        color: isDesactivated
+            ? Colors.grey
+            : isSelected
             ? appState.primaryContainer(context)
             : appState.lessContrastBackgroundColor(),
-        border: Border.all(color: appState.primaryColor(context)),
-        borderRadius: BorderRadius.circular(24.0),
+        border: isDesactivated
+            ? null
+            : Border.all(color: appState.primaryColor(context)),
       ),
 
       child: Center(
-        child: Text(
-          style: style(context, appState, isSelected),
-          month.toStringFr(),
-        ),
+        child: Text(style: style(context, appState, isSelected), label),
       ),
     );
   }
 }
-
-class YearSelect extends StatelessWidget {
-  final int year;
-  const YearSelect({super.key, required this.year});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Placeholder();
-  }
-}
-
-

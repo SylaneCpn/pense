@@ -24,7 +24,7 @@ class DialogBox extends StatelessWidget{
           child: Container(
             padding: EdgeInsets.only(left : verticalPadding, right: verticalPadding , top:  horizontalPadding , bottom: horizontalPadding ),
             decoration: BoxDecoration(
-              color: appState.lessContrastBackgroundColor(),
+              color: appState.lightBackgroundColor(),
               borderRadius: BorderRadius.circular(24.0),
             ),
             child: child,
