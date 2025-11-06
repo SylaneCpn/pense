@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/ui/data_page/data_page.dart';
 import 'package:pense/ui/main_page/main_page.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
   Month month = DateTime.now().month.toMonth();
   int year = DateTime.now().year;
 
-  void setDate(Month month , int year ) {
+  void setDate(Month month, int year) {
     setState(() {
       this.month = month;
       this.year = year;
@@ -48,16 +49,15 @@ class _PageSwitcherState extends State<PageSwitcher> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     return Scaffold(
-      backgroundColor: appState.lightBackgroundColor() ,
+      backgroundColor: appState.lightBackgroundColor(),
       bottomNavigationBar: NavigationBar(
-        backgroundColor: appState.lightBackgroundColor() ,
+        backgroundColor: appState.lightBackgroundColor(),
         height: 65,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         selectedIndex: currentPageIndex,
-        onDestinationSelected:
-            (index) => setState(() {
-              currentPageIndex = index;
-            }),
+        onDestinationSelected: (index) => setState(() {
+          currentPageIndex = index;
+        }),
         destinations: [
           NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
           NavigationDestination(
@@ -68,19 +68,17 @@ class _PageSwitcherState extends State<PageSwitcher> {
         ],
       ),
 
-      body:
-      [
-            MainPage(
-              month: month,
-              year: year,
-              toPrevMonth: toPrevMonth,
-              toNextMonth: provideToNextMonth() ? toNextMonth : null,
-              setDateCallBack : setDate,
-            ),
-            Placeholder(),
-            Placeholder(),
-          ][currentPageIndex]
-          
+      body: [
+        MainPage(
+          month: month,
+          year: year,
+          toPrevMonth: toPrevMonth,
+          toNextMonth: provideToNextMonth() ? toNextMonth : null,
+          setDateCallBack: setDate,
+        ),
+        DataPage(month: month, year: year, setMonthCallBack: setDate),
+        Placeholder(),
+      ][currentPageIndex],
     );
   }
 }

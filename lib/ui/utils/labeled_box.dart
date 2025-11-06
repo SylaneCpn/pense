@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class LabeledBox extends StatelessWidget {
   final bool isSelected;
+  final EdgeInsetsGeometry? padding;
   final bool isDesactivated;
   final String label;
   const LabeledBox({
@@ -12,6 +13,7 @@ class LabeledBox extends StatelessWidget {
     required this.label,
     this.isSelected = false,
     this.isDesactivated = false,
+    this.padding
   });
 
   TextStyle style(BuildContext context, AppState appState, bool isSelected) {
@@ -31,6 +33,7 @@ class LabeledBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     return Container(
+      padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.0),
         color: isDesactivated

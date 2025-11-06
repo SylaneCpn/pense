@@ -18,21 +18,17 @@ Color gradientPairColor(Color color) {
 extension IntUtils on int {
   (String, String) centsToWhole() {
     final asString = toString();
-
     if (asString.isEmpty) {
       return ("0", "0");
     }
-
     if (asString.length == 1) {
       return ("0", "0$asString");
     }
-
     if (asString.length == 2) {
       return ("0", asString);
     }
     final whole = asString.substring(0, asString.length - 2);
     final dec = asString.substring(asString.length - 2);
-
     return (whole, dec);
   }
 
