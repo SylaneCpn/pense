@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/logic/record.dart';
 import 'package:pense/ui/utils/date_selector.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
@@ -44,6 +45,7 @@ class _RetrospectState extends State<Retrospect> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final record = context.watch<Record>();
     const hPadding = 32.0;
     const vPadding = 12.0;
     return Column(
@@ -73,6 +75,8 @@ class _RetrospectState extends State<Retrospect> {
             ),
           ),
         ),
+        ...record.elementsRange(startMonth: beginMonth, startYear: beginYear, endMonth: endMonth, endYear: endYear).map((e) => Text("${e.month.toStringFr()} ${e.year}"))
+
       ],
     );
   }

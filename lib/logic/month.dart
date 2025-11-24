@@ -101,3 +101,26 @@ extension ToMonth on int {
     };
   }
 }
+
+int compareDates({
+  required Month thisMonth,
+  required int thisYear,
+  required Month otherMonth,
+  required int otherYear,
+}) {
+  if (thisYear < otherYear) {
+    return -1;
+  } else if (thisYear > otherYear) {
+    return 1;
+  }
+  //sma year at this point
+  if (thisMonth.toInt() < otherMonth.toInt()) {
+    return -1;
+  }
+
+  if (thisMonth.toInt() > otherMonth.toInt()) {
+    return 1;
+  }
+
+  return 0;
+}

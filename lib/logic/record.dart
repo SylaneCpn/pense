@@ -11,25 +11,40 @@ class Record extends ChangeNotifier {
 
   static const path = "record.json";
 
+  List<RecordElement> sortedElements() {
+    final copy = List.of(_elements);
+    return copy..sort();
+  }
+
+  List<RecordElement> elementsRange({
+    required Month startMonth,
+    required int startYear,
+    required Month endMonth,
+    required int endYear,
+  }) {
+    return sortedElements()
+        .where(
+          (element) => element.isInDateRange(
+            startMonth: startMonth,
+            startYear: startYear,
+            endMonth: endMonth,
+            endYear: endYear,
+          ),
+        )
+        .toList();
+  }
+
   UnmodifiableListView get elements => UnmodifiableListView(_elements);
 
   Record({required List<RecordElement> elements}) : _elements = elements;
   factory Record.fromJson(List<dynamic> json) {
-    try {
       final elements = json.map(RecordElement.fromJson).toList();
       return Record(elements: elements);
-    } catch (e) {
-      rethrow;
-    }
+
   }
 
-  List<Map<String, dynamic>> toJson() {
-    try {
-      return _elements.map((element) => element.toJson()).toList();
-    } catch (e) {
-      rethrow;
-    }
-  }
+  List<Map<String, dynamic>> toJson() => _elements.map((element) => element.toJson()).toList();
+  
 
   // expose notifyListeners to watchers
   void notify() {
@@ -67,7 +82,7 @@ class Record extends ChangeNotifier {
   }
 }
 
-class RecordElement {
+class RecordElement implements Comparable<RecordElement> {
   final Month month;
   final int year;
   List<Category> expenses;
@@ -84,7 +99,6 @@ class RecordElement {
       incomes = [];
 
   factory RecordElement.fromJson(dynamic json) {
-    try {
       return switch (json) {
         {
           'month': String month,
@@ -100,9 +114,6 @@ class RecordElement {
           ),
         _ => throw const FormatException('Failed to load record element.'),
       };
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -112,6 +123,35 @@ class RecordElement {
       'expenses': expenses.map((expense) => expense.toJson()).toList(),
       'incomes': incomes.map((income) => income.toJson()).toList(),
     };
+  }
+
+  bool isInDateRange({
+    required Month startMonth,
+    required int startYear,
+    required Month endMonth,
+    required int endYear,
+  }) {
+    final isBeforeEnd = switch (compareDates(
+      thisMonth: month,
+      thisYear: year,
+      otherMonth: endMonth,
+      otherYear: endYear,
+    )) {
+      1 => false,
+      _ => true,
+    };
+
+    final isAfterBegin = switch (compareDates(
+      thisMonth: month,
+      thisYear: year,
+      otherMonth: startMonth,
+      otherYear: startYear,
+    )) {
+      -1 => false,
+      _ => true,
+    };
+
+    return isAfterBegin && isBeforeEnd;
   }
 
   int totalIncome() {
@@ -129,6 +169,15 @@ class RecordElement {
   int totalElement() {
     return totalIncome() - totalExpense();
   }
+
+  //By chronological order
+  @override
+  int compareTo(RecordElement other) => compareDates(
+    thisMonth: month,
+    thisYear: year,
+    otherMonth: other.month,
+    otherYear: other.year,
+  );
 }
 
 class Category {
@@ -139,7 +188,6 @@ class Category {
   Category.empty({required this.label}) : sources = [];
 
   factory Category.fromJson(dynamic json) {
-    try {
       return switch (json) {
         {'label': String label, 'sources': List<dynamic> sources} => Category(
           label: label,
@@ -147,9 +195,7 @@ class Category {
         ),
         _ => throw const FormatException('Failed to load category.'),
       };
-    } catch (e) {
-      rethrow;
-    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -165,19 +211,22 @@ class Category {
         .fold(0, (value, element) => value + element);
   }
 
-
   Iterable<Source> getTopSources(int count) {
-    final  List<Source> sortedSources = List.from(sources);
-    sortedSources.sort((a,b) => Comparable.compare(b.value, a.value));
+    final List<Source> sortedSources = List.from(sources);
+    sortedSources.sort((a, b) => Comparable.compare(b.value, a.value));
     return sortedSources.take(count);
   }
 
-
-  static Iterable<Source> getTopSourcesInAllCategory(Iterable<Category> categories , int count) {
-    final top = categories.map((e) => e.getTopSources(count)).expand((e) => e).toList();
-    top.sort((a,b) => Comparable.compare(b.value, a.value));
+  static Iterable<Source> getTopSourcesInAllCategory(
+    Iterable<Category> categories,
+    int count,
+  ) {
+    final top = categories
+        .map((e) => e.getTopSources(count))
+        .expand((e) => e)
+        .toList();
+    top.sort((a, b) => Comparable.compare(b.value, a.value));
     return top.take(count);
-
   }
 }
 
