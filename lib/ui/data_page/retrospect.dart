@@ -5,34 +5,43 @@ import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
+import 'package:pense/ui/processing_placeholder.dart';
 import 'package:pense/ui/utils/date_selector.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 
-class Retrospect extends StatefulWidget {
+
+
+class RetrospectWrapper extends StatefulWidget {
 
   final Month initMonth;
   final int initYear;
+  final Record record;
 
-  const Retrospect({
+
+  const RetrospectWrapper({
     super.key,
     required this.initMonth,
     required this.initYear,
+    required this.record
   });
 
   @override
-  State<Retrospect> createState() => _RetrospectState();
+  State<RetrospectWrapper> createState() => _RetrospectWrapperState();
 }
 
-class _RetrospectState extends State<Retrospect> {
+class _RetrospectWrapperState extends State<RetrospectWrapper> {
+
   late DateRange dateRange = DateRange(
     beginMonth: widget.initMonth,
     beginYear: widget.initYear - 1,
     endMonth: widget.initMonth,
     endYear: widget.initYear,
   );
+
+  List<RecordElement?>? data;
 
   void setBeginDate(Month month, int year) {
     setState(() {
@@ -49,9 +58,47 @@ class _RetrospectState extends State<Retrospect> {
   }
 
   @override
+  void initState() {
+    computeMaybeElementsRange(widget.record.elements, dateRange).then((value) {
+      setState(() {
+        data = value;
+      });
+    });
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if (data == null) {
+      return ProcessingPlaceholder();
+    }
+
+    else {
+      return Retrospect(dateRange: dateRange, setBeginDate: setBeginDate, setEndDate: setEndDate , data : data!);
+    }
+  }
+}
+
+class Retrospect extends StatelessWidget {
+
+  final DateRange dateRange;
+  final void Function(Month,int) setBeginDate;
+  final void Function(Month,int) setEndDate;
+  final List<RecordElement?> data;
+
+
+  const Retrospect({
+    super.key,
+    required this.dateRange,
+    required this.setBeginDate,
+    required this.setEndDate,
+    required this.data
+  });
+
+  @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final record = context.watch<Record>();
     const hPadding = 32.0;
     const vPadding = 12.0;
     return Column(
@@ -80,7 +127,7 @@ class _RetrospectState extends State<Retrospect> {
           ),
         ),
         RetrospectLineChart(
-          data: record.maybeElementsRange(dateRange),
+          data: data,
           dateRange: dateRange,
           categoryType: CategoryType.income,
         ),
@@ -88,7 +135,6 @@ class _RetrospectState extends State<Retrospect> {
     );
   }
 }
-
 
 class DateRangeElement extends StatelessWidget {
   final bool isBegin;

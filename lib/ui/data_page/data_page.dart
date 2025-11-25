@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect.dart';
 import 'package:pense/ui/utils/chip_selector.dart';
 
 class DataPage extends StatefulWidget {
   final Month month;
   final int year;
+  final Record record;
   final void Function(Month, int)? setMonthCallBack;
   const DataPage({
     super.key,
     required this.month,
     required this.year,
+    required this.record,
     this.setMonthCallBack,
   });
 
@@ -20,7 +23,7 @@ class DataPage extends StatefulWidget {
 
 class _DataPageState extends State<DataPage> {
   late List<(String, Widget)> modes = [
-    ("Rétrospective", Retrospect(initMonth: widget.month, initYear: widget.year)),
+    ("Rétrospective", RetrospectWrapper(initMonth: widget.month, initYear: widget.year, record: widget.record,)),
   ];
   int _selectedIndex = 0;
 

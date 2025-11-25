@@ -1,4 +1,4 @@
-import 'dart:collection';
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
@@ -34,19 +34,8 @@ class Record extends ChangeNotifier {
     return DateRange.generateDates(range).map((date) => whereOrNull(date.$1, date.$2)).toList();
   }
 
-  static List<RecordElement?> staticMaybeElementsRange(Record record, DateRange range) {
-    return DateRange.generateDates(range).map((date) => record.whereOrNull(date.$1, date.$2)).toList();
-  }
 
-  //TODO TRY IF IT WORKS AS INTENDED
-  static Future<List<RecordElement?>> computeMaybeElementsRange(Record record, DateRange range) async {
-    return await Isolate.run(() => staticMaybeElementsRange(record, range));
-  }
-
-  
-
-
-  UnmodifiableListView get elements => UnmodifiableListView(_elements);
+  List<RecordElement> get elements => List.of(_elements);
 
   Record({required List<RecordElement> elements})
     : _elements = List.of(elements);
@@ -101,6 +90,23 @@ class Record extends ChangeNotifier {
     }
   }
 }
+
+RecordElement? whereOrNull(List<RecordElement> elements , Month month , int year) {
+  try {
+      return elements.firstWhere((e) => e.month == month && e.year == year);
+    } on StateError catch (_) {
+      return null;
+    }
+}
+
+// Get all the elements in the given range and return null if the element isn't defined for this date
+  List<RecordElement?> maybeElementsRange(List<RecordElement> elements, DateRange range){
+    return DateRange.generateDates(range).map((date) => whereOrNull(elements, date.$1, date.$2)).toList();
+  }
+
+  Future<List<RecordElement?>> computeMaybeElementsRange(List<RecordElement> elements, DateRange range) async  {
+    return await Isolate.run(() => maybeElementsRange(elements, range));
+  }
 
 class RecordElement implements Comparable<RecordElement> {
   final Month month;

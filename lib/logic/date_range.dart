@@ -16,15 +16,15 @@ class DateRange {
   DateRange copy() => DateRange(beginMonth: beginMonth, beginYear: beginYear, endMonth: endMonth, endYear: endYear);
 
 
-  Iterable<(Month, int)> generateDates() sync* {
+  static Iterable<(Month, int)> generateDates(DateRange range) sync* {
   
-  for (int y = beginYear; y <= endYear; y++) {
-    if (y == beginYear) {
-      for (int m = beginMonth.toInt(); m <= 12; m++) {
+  for (int y = range.beginYear; y <= range.endYear; y++) {
+    if (y == range.beginYear) {
+      for (int m = range.beginMonth.toInt(); m <= 12; m++) {
         yield (m.toMonth(), y);
       }
-    } else if (y == endYear) {
-      for (int m = 1; m <= endMonth.toInt(); m++) {
+    } else if (y == range.endYear) {
+      for (int m = 1; m <= range.endMonth.toInt(); m++) {
         yield (m.toMonth(), y);
       }
     } else {

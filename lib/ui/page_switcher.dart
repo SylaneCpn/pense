@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
+import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/data_page.dart';
 import 'package:pense/ui/main_page/main_page.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final record = context.watch<Record>();
     return Scaffold(
       backgroundColor: appState.lightBackgroundColor(),
       bottomNavigationBar: NavigationBar(
@@ -76,7 +78,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
           toNextMonth: provideToNextMonth() ? toNextMonth : null,
           setDateCallBack: setDate,
         ),
-        DataPage(month: month, year: year, setMonthCallBack: setDate),
+        DataPage(month: month, year: year, setMonthCallBack: setDate , record: record,),
         Placeholder(),
       ][currentPageIndex],
     );
