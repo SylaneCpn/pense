@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
-import 'package:pense/logic/month.dart';
+import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
@@ -13,19 +13,13 @@ import 'package:collection/collection.dart';
 
 class RetrospectLineChart extends StatelessWidget {
   final List<RecordElement?> data;
-  final Month beginMonth;
-  final int beginYear;
-  final Month endMonth;
-  final int endYear;
+  final DateRange dateRange;
   final CategoryType categoryType;
 
   const RetrospectLineChart({
     super.key,
     required this.data,
-    required this.beginMonth,
-    required this.beginYear,
-    required this.endMonth,
-    required this.endYear,
+    required this.dateRange,
     required this.categoryType,
   });
 
@@ -100,7 +94,7 @@ Widget bottomTitleWidgets(double value, TitleMeta meta) {
   }
 
   LineChartData buildLineChartDate(BuildContext context, AppState appState) {
-    final gradientMainColor = Colors.purpleAccent;
+    final gradientMainColor = appState.primaryColor(context);
     final gradientColors=  [gradientMainColor, gradientPairColor(gradientMainColor)];
     return LineChartData(
       lineTouchData: LineTouchData(

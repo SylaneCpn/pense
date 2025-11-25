@@ -1,9 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 
 class Record extends ChangeNotifier {
@@ -17,38 +19,32 @@ class Record extends ChangeNotifier {
   }
 
   // Get all the existing elments in the given range
-  List<RecordElement> existingElementsRange({
-    required Month beginMonth,
-    required int beginYear,
-    required Month endMonth,
-    required int endYear,
-  }) {
+  List<RecordElement> existingElementsRange(DateRange range) {
     return sortedElements()
         .where(
           (element) => element.isInDateRange(
-            startMonth: beginMonth,
-            startYear: beginYear,
-            endMonth: endMonth,
-            endYear: endYear,
+            range
           ),
         )
         .toList();
   }
 
   // Get all the elements in the given range and return null if the element isn't defined for this date
-  List<RecordElement?> maybeElementsRange({
-    required Month beginMonth,
-    required int beginYear,
-    required Month endMonth,
-    required int endYear,
-  }) {
-    return generateDates(
-      beginMonth: beginMonth,
-      beginYear: beginYear,
-      endMonth: endMonth,
-      endYear: endYear,
-    ).map((date) => whereOrNull(date.$1, date.$2)).toList();
+  List<RecordElement?> maybeElementsRange(DateRange range){
+    return DateRange.generateDates(range).map((date) => whereOrNull(date.$1, date.$2)).toList();
   }
+
+  static List<RecordElement?> staticMaybeElementsRange(Record record, DateRange range) {
+    return DateRange.generateDates(range).map((date) => record.whereOrNull(date.$1, date.$2)).toList();
+  }
+
+  //TODO TRY IF IT WORKS AS INTENDED
+  static Future<List<RecordElement?>> computeMaybeElementsRange(Record record, DateRange range) async {
+    return await Isolate.run(() => staticMaybeElementsRange(record, range));
+  }
+
+  
+
 
   UnmodifiableListView get elements => UnmodifiableListView(_elements);
 
@@ -149,17 +145,12 @@ class RecordElement implements Comparable<RecordElement> {
     };
   }
 
-  bool isInDateRange({
-    required Month startMonth,
-    required int startYear,
-    required Month endMonth,
-    required int endYear,
-  }) {
+  bool isInDateRange(DateRange range) {
     final isBeforeEnd = switch (compareDates(
       thisMonth: month,
       thisYear: year,
-      otherMonth: endMonth,
-      otherYear: endYear,
+      otherMonth: range.endMonth,
+      otherYear: range.endYear,
     )) {
       1 => false,
       _ => true,
@@ -168,8 +159,8 @@ class RecordElement implements Comparable<RecordElement> {
     final isAfterBegin = switch (compareDates(
       thisMonth: month,
       thisYear: year,
-      otherMonth: startMonth,
-      otherYear: startYear,
+      otherMonth: range.beginMonth,
+      otherYear: range.beginYear,
     )) {
       -1 => false,
       _ => true,

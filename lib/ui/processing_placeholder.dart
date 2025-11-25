@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ProcessingRecord extends StatelessWidget {
-  const ProcessingRecord({super.key});
+class ProcessingPlaceholder extends StatelessWidget {
+  const ProcessingPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {

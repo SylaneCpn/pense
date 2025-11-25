@@ -125,26 +125,4 @@ int compareDates({
   return 0;
 }
 
-Iterable<(Month, int)> generateDates({
-  required Month beginMonth,
-  required int beginYear,
-  required Month endMonth,
-  required int endYear,
-}) sync* {
-  
-  for (int y = beginYear; y <= endYear; y++) {
-    if (y == beginYear) {
-      for (int m = beginMonth.toInt(); m <= 12; m++) {
-        yield (m.toMonth(), y);
-      }
-    } else if (y == endYear) {
-      for (int m = 1; m <= endMonth.toInt(); m++) {
-        yield (m.toMonth(), y);
-      }
-    } else {
-      for (int m = 1; m <= 12; m++) {
-        yield (m.toMonth(), y);
-      }
-    }
-  }
-}
+

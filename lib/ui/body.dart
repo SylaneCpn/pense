@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/page_switcher.dart';
-import 'package:pense/ui/processing_record.dart';
+import 'package:pense/ui/processing_placeholder.dart';
 import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
@@ -48,7 +48,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
               create: (context) => record!,
               child: PageSwitcher(),
             )
-            : ProcessingRecord();
+            : ProcessingPlaceholder();
 
     return SafeArea(child: Scaffold(body: body));
   }

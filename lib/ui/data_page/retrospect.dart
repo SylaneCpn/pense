@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
+import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
@@ -11,8 +12,10 @@ import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 
 class Retrospect extends StatefulWidget {
+
   final Month initMonth;
   final int initYear;
+
   const Retrospect({
     super.key,
     required this.initMonth,
@@ -24,22 +27,24 @@ class Retrospect extends StatefulWidget {
 }
 
 class _RetrospectState extends State<Retrospect> {
-  late Month beginMonth = widget.initMonth;
-  late int beginYear = widget.initYear - 1;
-  late Month endMonth = widget.initMonth;
-  late int endYear = widget.initYear;
+  late DateRange dateRange = DateRange(
+    beginMonth: widget.initMonth,
+    beginYear: widget.initYear - 1,
+    endMonth: widget.initMonth,
+    endYear: widget.initYear,
+  );
 
   void setBeginDate(Month month, int year) {
     setState(() {
-      beginMonth = month;
-      beginYear = year;
+      dateRange.beginMonth = month;
+      dateRange.beginYear = year;
     });
   }
 
   void setEndDate(Month month, int year) {
     setState(() {
-      endMonth = month;
-      endYear = year;
+      dateRange.endMonth = month;
+      dateRange.endYear = year;
     });
   }
 
@@ -66,11 +71,8 @@ class _RetrospectState extends State<Retrospect> {
                 top: hPadding,
                 bottom: hPadding,
               ),
-              child: DateRange(
-                beginMonth: beginMonth,
-                beginYear: beginYear,
-                endMonth: endMonth,
-                endYear: endYear,
+              child: DateRangeSelector(
+                dateRange: dateRange,
                 setBeginDateCallBack: setBeginDate,
                 setEndDateCallBack: setEndDate,
               ),
@@ -78,16 +80,8 @@ class _RetrospectState extends State<Retrospect> {
           ),
         ),
         RetrospectLineChart(
-          data: record.maybeElementsRange(
-            beginMonth: beginMonth,
-            beginYear: beginYear,
-            endMonth: endMonth,
-            endYear: endYear,
-          ),
-          beginMonth: beginMonth,
-          beginYear: beginYear,
-          endMonth: endMonth,
-          endYear: endYear,
+          data: record.maybeElementsRange(dateRange),
+          dateRange: dateRange,
           categoryType: CategoryType.income,
         ),
       ],
@@ -95,78 +89,6 @@ class _RetrospectState extends State<Retrospect> {
   }
 }
 
-class DateRange extends StatelessWidget {
-  final Month beginMonth;
-  final int beginYear;
-  final Month endMonth;
-  final int endYear;
-  final void Function(Month, int) setBeginDateCallBack;
-  final void Function(Month, int) setEndDateCallBack;
-
-  const DateRange({
-    super.key,
-    required this.beginMonth,
-    required this.beginYear,
-    required this.endMonth,
-    required this.endYear,
-    required this.setBeginDateCallBack,
-    required this.setEndDateCallBack,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isLayoutVertical = constraints.maxWidth < 450;
-        final children = [
-          isLayoutVertical
-              ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: DateRangeElement(
-                    alignment: Alignment.centerLeft,
-                    selectedMonth: beginMonth,
-                    selectedYear: beginYear,
-                    setDateCallBack: setBeginDateCallBack,
-                    isBegin: true,
-                  ),
-                )
-              : DateRangeElement(
-                  selectedMonth: beginMonth,
-                  selectedYear: beginYear,
-                  setDateCallBack: setBeginDateCallBack,
-                  isBegin: true,
-                ),
-          isLayoutVertical
-              ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: DateRangeElement(
-                    alignment: isLayoutVertical
-                        ? Alignment.centerLeft
-                        : Alignment.center,
-                    selectedMonth: endMonth,
-                    selectedYear: endYear,
-                    setDateCallBack: setEndDateCallBack,
-                    isBegin: false,
-                  ),
-                )
-              : DateRangeElement(
-                  alignment: Alignment.centerLeft,
-                  selectedMonth: endMonth,
-                  selectedYear: endYear,
-                  setDateCallBack: setEndDateCallBack,
-                  isBegin: false,
-                ),
-        ];
-        return isLayoutVertical
-            ? Column(spacing: 20.0, children: children)
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: children,
-              );
-      },
-    );
-  }
-}
 
 class DateRangeElement extends StatelessWidget {
   final bool isBegin;
@@ -219,6 +141,75 @@ class DateRangeElement extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+
+class DateRangeSelector extends StatelessWidget {
+  final DateRange dateRange;
+  final void Function(Month, int) setBeginDateCallBack;
+  final void Function(Month, int) setEndDateCallBack;
+
+  const DateRangeSelector({
+    super.key,
+    required this.dateRange,
+    required this.setBeginDateCallBack,
+    required this.setEndDateCallBack,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isLayoutVertical = constraints.maxWidth < 450;
+        final children = [
+          isLayoutVertical
+              ? Align(
+                  alignment: Alignment.centerLeft,
+                  child: DateRangeElement(
+                    alignment: Alignment.centerLeft,
+                    selectedMonth: dateRange.beginMonth,
+                    selectedYear: dateRange.beginYear,
+                    setDateCallBack: setBeginDateCallBack,
+                    isBegin: true,
+                  ),
+                )
+              : DateRangeElement(
+                  selectedMonth: dateRange.beginMonth,
+                  selectedYear: dateRange.beginYear,
+                  setDateCallBack: setBeginDateCallBack,
+                  isBegin: true,
+                ),
+          isLayoutVertical
+              ? Align(
+                  alignment: Alignment.centerLeft,
+                  child: DateRangeElement(
+                    alignment: isLayoutVertical
+                        ? Alignment.centerLeft
+                        : Alignment.center,
+                    selectedMonth: dateRange.endMonth,
+                    selectedYear: dateRange.endYear,
+                    setDateCallBack: setEndDateCallBack,
+                    isBegin: false,
+                  ),
+                )
+              : DateRangeElement(
+                  alignment: Alignment.centerLeft,
+                  selectedMonth: dateRange.endMonth,
+                  selectedYear: dateRange.endYear,
+                  setDateCallBack: setEndDateCallBack,
+                  isBegin: false,
+                ),
+        ];
+        return isLayoutVertical
+            ? Column(spacing: 20.0, children: children)
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: children,
+              );
+      },
     );
   }
 }
