@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
+import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
+import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
 import 'package:pense/ui/utils/date_selector.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
@@ -48,6 +50,7 @@ class _RetrospectState extends State<Retrospect> {
     const hPadding = 32.0;
     const vPadding = 12.0;
     return Column(
+      spacing: 10.0,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -74,20 +77,19 @@ class _RetrospectState extends State<Retrospect> {
             ),
           ),
         ),
-        ...record
-            .maybeElementsRange(
-              beginMonth: beginMonth,
-              beginYear: beginYear,
-              endMonth: endMonth,
-              endYear: endYear,
-            )
-            .map((e) {
-              if (e == null) {
-                return Text("Not defined Date");
-              } else {
-                return Text("${e.month.toStringFr()} ${e.year}");
-              }
-            }),
+        RetrospectLineChart(
+          data: record.maybeElementsRange(
+            beginMonth: beginMonth,
+            beginYear: beginYear,
+            endMonth: endMonth,
+            endYear: endYear,
+          ),
+          beginMonth: beginMonth,
+          beginYear: beginYear,
+          endMonth: endMonth,
+          endYear: endYear,
+          categoryType: CategoryType.income,
+        ),
       ],
     );
   }
