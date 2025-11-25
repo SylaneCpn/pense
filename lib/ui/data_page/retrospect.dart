@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
@@ -75,8 +74,20 @@ class _RetrospectState extends State<Retrospect> {
             ),
           ),
         ),
-        ...record.elementsRange(startMonth: beginMonth, startYear: beginYear, endMonth: endMonth, endYear: endYear).map((e) => Text("${e.month.toStringFr()} ${e.year}"))
-
+        ...record
+            .maybeElementsRange(
+              beginMonth: beginMonth,
+              beginYear: beginYear,
+              endMonth: endMonth,
+              endYear: endYear,
+            )
+            .map((e) {
+              if (e == null) {
+                return Text("Not defined Date");
+              } else {
+                return Text("${e.month.toStringFr()} ${e.year}");
+              }
+            }),
       ],
     );
   }

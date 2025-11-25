@@ -72,7 +72,7 @@ class _DateSelectorState extends State<DateSelector> {
                     selectedYear: year,
                     setMonthCallBack: setMonth,
                   )
-                : YearSelect(selectedYear: year, setYearCallBack: setYear),
+                : YearSelect(selectedYear: year, selectedMonth: month, setYearCallBack: setYear),
           ),
 
           actions.Actions(
@@ -242,13 +242,19 @@ class MonthSelect extends StatelessWidget {
 class YearSelect extends StatelessWidget {
   final int selectedYear;
   final int begin;
+  final Month selectedMonth;
   final void Function(int) setYearCallBack;
   const YearSelect({
     super.key,
     required this.selectedYear,
+    required this.selectedMonth,
     required this.setYearCallBack,
     this.begin = 1970,
   });
+
+  bool isDesactivated(int year) {
+    return selectedMonth.isFuture(year);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,10 +276,11 @@ class YearSelect extends StatelessWidget {
           children: List<Widget>.generate(currentYear - begin + 1, (index) {
             final year = currentYear - index;
             return GestureDetector(
-              onTap: () => setYearCallBack(year),
+              onTap: isDesactivated(year) ? null : () => setYearCallBack(year),
               child: LabeledBox(
                 label: year.toString(),
                 isSelected: year == selectedYear,
+                isDesactivated: isDesactivated(year),
               ),
             );
           }),

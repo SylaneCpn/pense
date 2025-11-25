@@ -16,17 +16,18 @@ class Record extends ChangeNotifier {
     return copy..sort();
   }
 
-  List<RecordElement> elementsRange({
-    required Month startMonth,
-    required int startYear,
+  // Get all the existing elments in the given range
+  List<RecordElement> existingElementsRange({
+    required Month beginMonth,
+    required int beginYear,
     required Month endMonth,
     required int endYear,
   }) {
     return sortedElements()
         .where(
           (element) => element.isInDateRange(
-            startMonth: startMonth,
-            startYear: startYear,
+            startMonth: beginMonth,
+            startYear: beginYear,
             endMonth: endMonth,
             endYear: endYear,
           ),
@@ -34,17 +35,32 @@ class Record extends ChangeNotifier {
         .toList();
   }
 
-  UnmodifiableListView get elements => UnmodifiableListView(_elements);
-
-  Record({required List<RecordElement> elements}) : _elements = elements;
-  factory Record.fromJson(List<dynamic> json) {
-      final elements = json.map(RecordElement.fromJson).toList();
-      return Record(elements: elements);
-
+  // Get all the elements in the given range and return null if the element isn't defined for this date
+  List<RecordElement?> maybeElementsRange({
+    required Month beginMonth,
+    required int beginYear,
+    required Month endMonth,
+    required int endYear,
+  }) {
+    return generateDates(
+      beginMonth: beginMonth,
+      beginYear: beginYear,
+      endMonth: endMonth,
+      endYear: endYear,
+    ).map((date) => whereOrNull(date.$1, date.$2)).toList();
   }
 
-  List<Map<String, dynamic>> toJson() => _elements.map((element) => element.toJson()).toList();
-  
+  UnmodifiableListView get elements => UnmodifiableListView(_elements);
+
+  Record({required List<RecordElement> elements})
+    : _elements = List.of(elements);
+  factory Record.fromJson(List<dynamic> json) {
+    final elements = json.map(RecordElement.fromJson).toList();
+    return Record(elements: elements);
+  }
+
+  List<Map<String, dynamic>> toJson() =>
+      _elements.map((element) => element.toJson()).toList();
 
   // expose notifyListeners to watchers
   void notify() {
@@ -80,6 +96,14 @@ class Record extends ChangeNotifier {
       return newElem;
     }
   }
+
+  RecordElement? whereOrNull(Month month, int year) {
+    try {
+      return _elements.firstWhere((e) => e.month == month && e.year == year);
+    } on StateError catch (_) {
+      return null;
+    }
+  }
 }
 
 class RecordElement implements Comparable<RecordElement> {
@@ -99,21 +123,21 @@ class RecordElement implements Comparable<RecordElement> {
       incomes = [];
 
   factory RecordElement.fromJson(dynamic json) {
-      return switch (json) {
-        {
-          'month': String month,
-          'year': int year,
-          'expenses': List<dynamic> expenses,
-          'incomes': List<dynamic> incomes,
-        } =>
-          RecordElement(
-            month: Month.values.byName(month),
-            year: year,
-            expenses: expenses.map(Category.fromJson).toList(),
-            incomes: incomes.map(Category.fromJson).toList(),
-          ),
-        _ => throw const FormatException('Failed to load record element.'),
-      };
+    return switch (json) {
+      {
+        'month': String month,
+        'year': int year,
+        'expenses': List<dynamic> expenses,
+        'incomes': List<dynamic> incomes,
+      } =>
+        RecordElement(
+          month: Month.values.byName(month),
+          year: year,
+          expenses: expenses.map(Category.fromJson).toList(),
+          incomes: incomes.map(Category.fromJson).toList(),
+        ),
+      _ => throw const FormatException('Failed to load record element.'),
+    };
   }
 
   Map<String, dynamic> toJson() {
@@ -188,14 +212,13 @@ class Category {
   Category.empty({required this.label}) : sources = [];
 
   factory Category.fromJson(dynamic json) {
-      return switch (json) {
-        {'label': String label, 'sources': List<dynamic> sources} => Category(
-          label: label,
-          sources: sources.map(Source.fromJson).toList(),
-        ),
-        _ => throw const FormatException('Failed to load category.'),
-      };
-
+    return switch (json) {
+      {'label': String label, 'sources': List<dynamic> sources} => Category(
+        label: label,
+        sources: sources.map(Source.fromJson).toList(),
+      ),
+      _ => throw const FormatException('Failed to load category.'),
+    };
   }
 
   Map<String, dynamic> toJson() {
