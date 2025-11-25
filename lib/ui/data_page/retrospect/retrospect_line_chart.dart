@@ -100,7 +100,7 @@ Widget bottomTitleWidgets(double value, TitleMeta meta) {
   }
 
   LineChartData buildLineChartDate(BuildContext context, AppState appState) {
-    final gradientMainColor = appState.primaryColor(context);
+    final gradientMainColor = Colors.purpleAccent;
     final gradientColors=  [gradientMainColor, gradientPairColor(gradientMainColor)];
     return LineChartData(
       lineTouchData: LineTouchData(
@@ -115,13 +115,13 @@ Widget bottomTitleWidgets(double value, TitleMeta meta) {
         // verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: appState.primaryColor(context) ,
+            color: gradientMainColor ,
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: appState.primaryColor(context),
+            color: gradientMainColor,
             strokeWidth: 1,
           );
         },
