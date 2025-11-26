@@ -1,10 +1,11 @@
-
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 
@@ -21,21 +22,20 @@ class Record extends ChangeNotifier {
   // Get all the existing elments in the given range
   List<RecordElement> existingElementsRange(DateRange range) {
     return sortedElements()
-        .where(
-          (element) => element.isInDateRange(
-            range
-          ),
-        )
+        .where((element) => element.isInDateRange(range))
         .toList();
   }
 
   // Get all the elements in the given range and return null if the element isn't defined for this date
-  List<RecordElement?> maybeElementsRange(DateRange range){
-    return DateRange.generateDates(range).map((date) => whereOrNull(date.$1, date.$2)).toList();
+  List<RecordElement?> maybeElementsRange(DateRange range) {
+    return range
+        .generateDates()
+        .map((date) => whereOrNull(date.$1, date.$2))
+        .toList();
   }
 
-
-  List<RecordElement> get elements => List.of(_elements);
+  UnmodifiableListView<RecordElement> get elements =>
+      UnmodifiableListView(_elements);
 
   Record({required List<RecordElement> elements})
     : _elements = List.of(elements);
@@ -91,22 +91,35 @@ class Record extends ChangeNotifier {
   }
 }
 
-RecordElement? whereOrNull(List<RecordElement> elements , Month month , int year) {
+RecordElement? whereOrNull(
+  List<RecordElement> elements,
+  Month month,
+  int year,
+) {
   try {
-      return elements.firstWhere((e) => e.month == month && e.year == year);
-    } on StateError catch (_) {
-      return null;
-    }
+    return elements.firstWhere((e) => e.month == month && e.year == year);
+  } on StateError catch (_) {
+    return null;
+  }
 }
 
 // Get all the elements in the given range and return null if the element isn't defined for this date
-  List<RecordElement?> maybeElementsRange(List<RecordElement> elements, DateRange range){
-    return DateRange.generateDates(range).map((date) => whereOrNull(elements, date.$1, date.$2)).toList();
-  }
+List<RecordElement?> maybeRecordElementsRange(
+  UnmodifiableListView<RecordElement> elements,
+  DateRange range,
+) {
+  return range
+      .generateDates()
+      .map((date) => whereOrNull(elements, date.$1, date.$2))
+      .toList();
+}
 
-  Future<List<RecordElement?>> computeMaybeElementsRange(List<RecordElement> elements, DateRange range) async  {
-    return await Isolate.run(() => maybeElementsRange(elements, range));
-  }
+Future<List<RecordElement?>> computeMaybeRecordElementsRange(
+  UnmodifiableListView<RecordElement> elements,
+  DateRange range,
+) async {
+  return await Isolate.run(() => maybeRecordElementsRange(elements, range));
+}
 
 class RecordElement implements Comparable<RecordElement> {
   final Month month;
@@ -185,6 +198,13 @@ class RecordElement implements Comparable<RecordElement> {
     return expenses
         .map((e) => e.sourceSum())
         .fold(0, (value, element) => value + element);
+  }
+
+  int totalFromCategoryType(CategoryType type) {
+    return switch (type) {
+      CategoryType.expense => totalExpense(),
+      CategoryType.income => totalIncome(),
+    };
   }
 
   int totalElement() {

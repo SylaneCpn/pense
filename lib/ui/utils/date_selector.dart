@@ -37,8 +37,8 @@ class _DateSelectorState extends State<DateSelector> {
   }
 
   void setSelection(BuildContext context) {
-    widget.setDateCallBack?.call(month, year);
     Navigator.pop(context);
+    widget.setDateCallBack?.call(month, year);
   }
 
   void setMonth(Month month) {

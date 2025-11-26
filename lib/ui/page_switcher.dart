@@ -78,7 +78,12 @@ class _PageSwitcherState extends State<PageSwitcher> {
           toNextMonth: provideToNextMonth() ? toNextMonth : null,
           setDateCallBack: setDate,
         ),
-        DataPage(month: month, year: year, setMonthCallBack: setDate , record: record,),
+        DataPage(
+          month: month,
+          year: year,
+          setMonthCallBack: setDate,
+          recordElements: record.elements,
+        ),
         Placeholder(),
       ][currentPageIndex],
     );

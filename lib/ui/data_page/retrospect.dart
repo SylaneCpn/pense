@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
@@ -12,28 +14,26 @@ import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 
-
-
-class RetrospectWrapper extends StatefulWidget {
-
+// Sorting the List may be a long computation depending on
+// the lenght of the list.
+// The computation is moved to an isolate to prevent the ui to freeze.
+class Retrospect extends StatefulWidget {
   final Month initMonth;
   final int initYear;
-  final Record record;
+  final UnmodifiableListView<RecordElement> recordElements;
 
-
-  const RetrospectWrapper({
+  const Retrospect({
     super.key,
     required this.initMonth,
     required this.initYear,
-    required this.record
+    required this.recordElements,
   });
 
   @override
-  State<RetrospectWrapper> createState() => _RetrospectWrapperState();
+  State<Retrospect> createState() => _RetrospectState();
 }
 
-class _RetrospectWrapperState extends State<RetrospectWrapper> {
-
+class _RetrospectState extends State<Retrospect> {
   late DateRange dateRange = DateRange(
     beginMonth: widget.initMonth,
     beginYear: widget.initYear - 1,
@@ -44,56 +44,66 @@ class _RetrospectWrapperState extends State<RetrospectWrapper> {
   List<RecordElement?>? data;
 
   void setBeginDate(Month month, int year) {
-    setState(() {
-      dateRange.beginMonth = month;
-      dateRange.beginYear = year;
-    });
+    dateRange.beginMonth = month;
+    dateRange.beginYear = year;
+    reloadData();
   }
 
   void setEndDate(Month month, int year) {
-    setState(() {
-      dateRange.endMonth = month;
-      dateRange.endYear = year;
-    });
+    dateRange.endMonth = month;
+    dateRange.endYear = year;
+    reloadData();
   }
 
-  @override
-  void initState() {
-    computeMaybeElementsRange(widget.record.elements, dateRange).then((value) {
+  void getData() {
+    computeMaybeRecordElementsRange(widget.recordElements, dateRange).then((value) {
       setState(() {
         data = value;
       });
     });
-    super.initState();
   }
 
+  void reloadData() {
+    setState(() {
+      data = null;
+    });
+
+    getData();
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     if (data == null) {
-      return ProcessingPlaceholder();
-    }
-
-    else {
-      return Retrospect(dateRange: dateRange, setBeginDate: setBeginDate, setEndDate: setEndDate , data : data!);
+      return ProcessingPlaceholder(viewPortHeighRatio: 0.66);
+    } else {
+      return RetrospectLoaded(
+        dateRange: dateRange,
+        setBeginDate: setBeginDate,
+        setEndDate: setEndDate,
+        data: data!,
+      );
     }
   }
 }
 
-class Retrospect extends StatelessWidget {
-
+class RetrospectLoaded extends StatelessWidget {
   final DateRange dateRange;
-  final void Function(Month,int) setBeginDate;
-  final void Function(Month,int) setEndDate;
+  final void Function(Month, int) setBeginDate;
+  final void Function(Month, int) setEndDate;
   final List<RecordElement?> data;
 
-
-  const Retrospect({
+  const RetrospectLoaded({
     super.key,
     required this.dateRange,
     required this.setBeginDate,
     required this.setEndDate,
-    required this.data
+    required this.data,
   });
 
   @override
@@ -130,6 +140,12 @@ class Retrospect extends StatelessWidget {
           data: data,
           dateRange: dateRange,
           categoryType: CategoryType.income,
+        ),
+
+        RetrospectLineChart(
+          data: data,
+          dateRange: dateRange,
+          categoryType: CategoryType.expense,
         ),
       ],
     );
@@ -190,8 +206,6 @@ class DateRangeElement extends StatelessWidget {
     );
   }
 }
-
-
 
 class DateRangeSelector extends StatelessWidget {
   final DateRange dateRange;

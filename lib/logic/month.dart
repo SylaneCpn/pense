@@ -80,6 +80,10 @@ enum Month {
     final currentYear = nextMonthAsInt == 1 ? year + 1 : year;
     return (nextMonthAsInt.toMonth(), currentYear);
   }
+
+  int toNumberOfMonths(int year) {
+    return toInt() -1 + year * 12;
+  }
 }
 
 extension ToMonth on int {
@@ -123,6 +127,12 @@ int compareDates({
   }
 
   return 0;
+}
+
+(Month,int) dateFromNumberOfMonths(int months) {
+  final month = ((months % 12) + 1).toMonth();
+  final years = months ~/ 12; 
+  return (month,years);
 }
 
 

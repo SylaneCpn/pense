@@ -66,4 +66,5 @@ extension DoubleUtils on double {
   String toPercentage(int decimals) {
     return "${(this * 100).truncateToDecimalPlaces(decimals)} %";
   }
+
 }
