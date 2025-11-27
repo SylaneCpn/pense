@@ -8,6 +8,7 @@ import 'package:pense/logic/record.dart';
 import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
+import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/with_title.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
@@ -23,7 +24,7 @@ class RetrospectLineChart extends StatelessWidget {
     required this.data,
     required this.dateRange,
     required this.categoryType,
-    this.aspectRatio = 1.7
+    this.aspectRatio = 1.7,
   });
 
   @override
@@ -62,53 +63,65 @@ class RetrospectLineChart extends StatelessWidget {
     );
   }
 
-  
-
-  LineChartData buildLineChartDate(BuildContext context, AppState appState,) {
-
+  LineChartData buildLineChartDate(BuildContext context, AppState appState) {
     Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(fontWeight: FontWeight.bold,);
-    final numberOfMonthBegin = dateRange.beginMonth.toNumberOfMonths(
-      dateRange.beginYear,
-    );
-    final (Month month, int year) = dateFromNumberOfMonths(
-      numberOfMonthBegin + value.toInt(),
-    );
+      const style = TextStyle(fontWeight: FontWeight.bold);
+      final numberOfMonthBegin = dateRange.beginMonth.toNumberOfMonths(
+        dateRange.beginYear,
+      );
+      final (Month month, int year) = dateFromNumberOfMonths(
+        numberOfMonthBegin + value.toInt(),
+      );
 
-    String text = "${month.toStringFr().substring(0,3).toUpperCase()}\n$year";
-    return SideTitleWidget(
-      meta: meta,
-      child: Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: FittedBox(child: Text(text, style: style)),
-      ),
-    );
-  }
+      String text =
+          "${month.toStringFr().substring(0, 3).toUpperCase()}\n$year";
+      return SideTitleWidget(
+        meta: meta,
+        child: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: FittedBox(child: Text(text, style: style)),
+        ),
+      );
+    }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    Widget leftTitleWidgets(double value, TitleMeta meta) {
+      const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 7.4);
 
-    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 7.4);
+      String text = switch (value / 100) {
+        < 10000.0 => (value / 100).toString(),
+        _ => (value / 100).toStringAsExponential(1),
+      };
 
-    String text = switch(value/100) {
-      <10000.0 => (value/100).toString(),
-      _ => (value/100).toStringAsExponential(1)
+      return Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text(text, style: style, textAlign: TextAlign.left),
+      );
+    }
 
-    };
+    List<LineTooltipItem?> getToolTipItems(List<LineBarSpot> spots) {
+      LineTooltipItem? transform(LineBarSpot spot) {
+        final textStyle = TextStyle(
+          fontSize: PortView.regularTextSize(MediaQuery.widthOf(context)),
+          color: appState.primaryColor(context),
+        );
+        final numberOfMonthBegin = dateRange.beginMonth.toNumberOfMonths(
+          dateRange.beginYear,
+        );
+        final (Month month, int year) = dateFromNumberOfMonths(
+          spot.x.toInt() + numberOfMonthBegin,
+        );
 
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Text(
-        text,
-        style: style,
-        textAlign: TextAlign.left,
-      ),
-    );
-  }
+        String text =
+            "${month.toStringFr()}\n$year\n\n${appState.formatWithCurrency(spot.y.toInt())}";
+        return LineTooltipItem(text, textStyle);
+      }
 
+      return spots.map(transform).toList();
+    }
 
-
-
-
+    Color getTooltipColor(LineBarSpot spot) {
+      return appState.lightBackgroundColor();
+    }
 
     final gradientMainColor = appState.primaryColor(context);
     final gradientColors = [
@@ -116,7 +129,12 @@ class RetrospectLineChart extends StatelessWidget {
       gradientPairColor(gradientMainColor),
     ];
     return LineChartData(
-      lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData()),
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipColor: getTooltipColor,
+          getTooltipItems: getToolTipItems,
+        ),
+      ),
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
@@ -160,15 +178,6 @@ class RetrospectLineChart extends StatelessWidget {
       // maxY: 6,
       lineBarsData: [
         LineChartBarData(
-          // spots: const [
-          //   FlSpot(0, 3),
-          //   FlSpot(2.6, 2),
-          //   FlSpot(4.9, 5),
-          //   FlSpot(6.8, 3.1),
-          //   FlSpot(8, 4),
-          //   FlSpot(9.5, 3),
-          //   FlSpot(11, 4),
-          // ],
           spots: data
               .mapIndexed(
                 (index, recordElement) => FlSpot(

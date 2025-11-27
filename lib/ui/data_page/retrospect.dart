@@ -6,6 +6,7 @@ import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
+import 'package:pense/ui/data_page/retrospect/invalid_range.dart';
 import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
 import 'package:pense/ui/processing_placeholder.dart';
 import 'package:pense/ui/utils/date_selector.dart';
@@ -56,7 +57,9 @@ class _RetrospectState extends State<Retrospect> {
   }
 
   void getData() {
-    computeMaybeRecordElementsRange(widget.recordElements, dateRange).then((value) {
+    computeMaybeRecordElementsRange(widget.recordElements, dateRange).then((
+      value,
+    ) {
       setState(() {
         data = value;
       });
@@ -136,17 +139,21 @@ class RetrospectLoaded extends StatelessWidget {
             ),
           ),
         ),
-        RetrospectLineChart(
-          data: data,
-          dateRange: dateRange,
-          categoryType: CategoryType.income,
-        ),
+        if (data.isNotEmpty) ...[
+          RetrospectLineChart(
+            data: data,
+            dateRange: dateRange,
+            categoryType: CategoryType.income,
+          ),
 
-        RetrospectLineChart(
-          data: data,
-          dateRange: dateRange,
-          categoryType: CategoryType.expense,
-        ),
+          RetrospectLineChart(
+            data: data,
+            dateRange: dateRange,
+            categoryType: CategoryType.expense,
+          ),
+        ],
+
+        if (data.isEmpty) InvalidRange(),
       ],
     );
   }
