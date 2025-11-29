@@ -59,19 +59,19 @@ class CategoriesWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
         elevation: 8.0,
         decoration: BoxDecoration(
-          color: appState.lightBackgroundColor(),
-          gradient: LinearGradient(
-            begin: AlignmentGeometry.topRight,
-            end: AlignmentGeometry.bottomLeft,
-            colors: [
-              appState.primaryContainer(context),
-              appState.lightBackgroundColor(),
-              appState.lightBackgroundColor(),
-              appState.primaryContainer(context),
-            ],
-            stops: [0, 0.2, 0.8, 1],
-            transform: GradientRotation(12.0),
-          ),
+          color: appState.lessContrastBackgroundColor(),
+          // gradient: LinearGradient(
+          //   begin: AlignmentGeometry.topRight,
+          //   end: AlignmentGeometry.bottomLeft,
+          //   colors: [
+          //     appState.primaryContainer(context),
+          //     appState.lightBackgroundColor(),
+          //     appState.lightBackgroundColor(),
+          //     appState.primaryContainer(context),
+          //   ],
+          //   stops: [0, 0.2, 0.8, 1],
+          //   transform: GradientRotation(12.0),
+          // ),
         ),
         child: WithTitle(
           title: Padding(
@@ -324,9 +324,8 @@ class CategoryWidget extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Material(
-              color: appState.lessContrastBackgroundColor(),
-              elevation: 8.0,
+            child: ElevatedContainer(
+              decoration: BoxDecoration(color: appState.lightBackgroundColor(),),
               borderRadius: BorderRadius.circular(8.0),
               child: Accordion(
                 header: header,

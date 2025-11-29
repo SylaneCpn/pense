@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 Color randomColor() {
-  var generatedColor = Random().nextInt(Colors.primaries.length);
+  final generatedColor = Random().nextInt(Colors.primaries.length);
   return Colors.primaries[generatedColor];
 }
 

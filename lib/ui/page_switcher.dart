@@ -13,7 +13,29 @@ class PageSwitcher extends StatefulWidget {
   State<PageSwitcher> createState() => _PageSwitcherState();
 }
 
-class _PageSwitcherState extends State<PageSwitcher> {
+class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMixin {
+
+  late final AnimationController _controller  = AnimationController( vsync: this , duration: Duration(milliseconds: 250));
+  late final CurvedAnimation _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+
+  @override
+  void initState() {
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void replay() {
+    _controller.reset();
+    _controller.forward();
+  }
+
   Month month = DateTime.now().month.toMonth();
   int year = DateTime.now().year;
 
@@ -59,6 +81,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
         selectedIndex: currentPageIndex,
         onDestinationSelected: (index) => setState(() {
           currentPageIndex = index;
+          replay();
         }),
         destinations: [
           NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
@@ -70,7 +93,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
         ],
       ),
 
-      body: [
+      body: FadeTransition(opacity: _animation , child :[
         MainPage(
           month: month,
           year: year,
@@ -85,7 +108,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
           recordElements: record.elements,
         ),
         Placeholder(),
-      ][currentPageIndex],
+      ][currentPageIndex]) ,
     );
   }
 }

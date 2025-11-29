@@ -49,7 +49,7 @@ class SourcesWidget extends StatelessWidget {
               padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
               child: DefaultText(
                 missing: "source",
-                textColor: appState.onPrimaryColor(context),
+                textColor: appState.onLightBackgroundColor(),
               ),
             ),
         Center(
@@ -112,7 +112,7 @@ class SourceItem extends StatelessWidget {
       padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
       decoration: BoxDecoration(
         border: BoxBorder.fromLTRB(
-          bottom: BorderSide(color: appState.lightBackgroundColor()),
+          bottom: BorderSide(color: appState.lessContrastBackgroundColor()),
         ),
       ),
       child: Row(

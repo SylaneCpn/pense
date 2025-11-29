@@ -54,7 +54,7 @@ class RetrospectLineChart extends StatelessWidget {
               aspectRatio: aspectRatio,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LineChart(buildLineChartDate(context, appState)),
+                child: LineChart(buildLineChartData(context, appState)),
               ),
             ),
           ),
@@ -63,7 +63,7 @@ class RetrospectLineChart extends StatelessWidget {
     );
   }
 
-  LineChartData buildLineChartDate(BuildContext context, AppState appState) {
+  LineChartData buildLineChartData(BuildContext context, AppState appState) {
     Widget bottomTitleWidgets(double value, TitleMeta meta) {
       const style = TextStyle(fontWeight: FontWeight.bold);
       final numberOfMonthBegin = dateRange.beginMonth.toNumberOfMonths(
@@ -123,6 +123,7 @@ class RetrospectLineChart extends StatelessWidget {
       return appState.lightBackgroundColor();
     }
 
+    //Builder
     final gradientMainColor = appState.primaryColor(context);
     final gradientColors = [
       gradientMainColor,

@@ -31,7 +31,7 @@ class SumBanner extends StatelessWidget {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          appState.primaryContainer(context),
+          appState.inversePrimary(context),
           appState.lessContrastBackgroundColor(),
         ],
         stops: [0.0, 0.66],

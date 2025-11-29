@@ -28,20 +28,24 @@ class Accordion extends StatefulWidget {
 
 class _AccordionState extends State<Accordion> with TickerProviderStateMixin {
   bool _collapsed = true;
-  final Tween<double> tween = Tween(begin: 0.0, end: 1.0);
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
+  late final  AnimationController _controller = AnimationController(
       duration: Duration(milliseconds: 100),
       vsync: this,
     );
-    _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
+  late final CurvedAnimation _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
+  double _animationValue = 0.0;
 
+  @override
+  void initState() {
+    _animation.addListener((){
+      setState(() {
+        _animationValue = _animation.value;
+      });
+    });
     super.initState();
   }
+
+
 
   void toggleCollapsed() {
     setState(() {
@@ -61,7 +65,7 @@ class _AccordionState extends State<Accordion> with TickerProviderStateMixin {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Transform.rotate(
-              angle: pi * _animation.value,
+              angle: pi * _animationValue,
               child: Icon(Icons.keyboard_arrow_down),
             ),
           ),

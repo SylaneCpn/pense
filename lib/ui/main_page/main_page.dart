@@ -20,6 +20,7 @@ class MainPage extends StatelessWidget {
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: Column(
+              spacing: 10.0,
               children: [
                 DateBanner(
                   height: 100.0,
@@ -35,9 +36,9 @@ class MainPage extends StatelessWidget {
                   width: constraints.maxWidth,
                 ),
       
-                SizedBox(
-                  height: 40,
-                ),
+                // SizedBox(
+                //   height: 40,
+                // ),
       
                 CategoriesWidget(
                   label: "Revenus",
@@ -46,9 +47,9 @@ class MainPage extends StatelessWidget {
                   year: year,
                 ),
       
-                SizedBox(
-                  height: 40,
-                ),
+                // SizedBox(
+                //   height: 40,
+                // ),
       
                 CategoriesWidget(
                   label: "Dépenses",
@@ -57,9 +58,9 @@ class MainPage extends StatelessWidget {
                   year: year,
                 ),
       
-                SizedBox(
-                  height: 40,
-                ),
+                // SizedBox(
+                //   height: 40,
+                // ),
               ],
             ),
           );

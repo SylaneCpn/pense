@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/ui/utils/date_selector.dart';
+import 'package:pense/ui/utils/elevated_container.dart';
+import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
 
@@ -29,11 +31,20 @@ class DateBanner extends StatelessWidget {
     final color = appState.onLightBackgroundColor();
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: ElevatedContainer(
         decoration: BoxDecoration(
-          color: appState.primaryContainer(context),
-          borderRadius: BorderRadius.circular(8.0),
+          color: appState.lessContrastBackgroundColor(),
+          gradient: LinearGradient(
+            colors: [
+              appState.lessContrastBackgroundColor(),
+              appState.inversePrimary(context),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.33,1.0]
+          ),
         ),
+        borderRadius: BorderRadius.circular(8.0),
         child: SizedBox(
           height: height,
           child: Row(
@@ -64,25 +75,9 @@ class DateBanner extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          style: TextStyle(
-                            fontSize: PortView.doubleRegularTextSize(
-                              MediaQuery.sizeOf(context).width,
-                            ),
-                            color: color,
-                          ),
-                          month.toStringFr(),
-                        ),
+                        GradientTitle(label: month.toStringFr()),
 
-                        Text(
-                          style: TextStyle(
-                            fontSize: PortView.regularTextSize(
-                              MediaQuery.sizeOf(context).width,
-                            ),
-                            color: color,
-                          ),
-                          year.toString(),
-                        ),
+                        GradientTitle(label: year.toString()),
                       ],
                     ),
                   ),
