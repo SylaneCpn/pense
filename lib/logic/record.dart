@@ -6,7 +6,7 @@ import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pense/logic/category_type.dart';
-import 'package:pense/logic/chart_type.dart';
+import 'package:pense/logic/retrospect_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 
@@ -208,11 +208,11 @@ class RecordElement implements Comparable<RecordElement> {
     };
   }
 
-  int totalFromChartType(ChartType type) {
+  int totalFromRetrospectType(RetrospectType type) {
     return switch (type) {
-      ChartType.expense => totalExpense(),
-      ChartType.income => totalIncome(),
-      ChartType.diff => totalElement()
+      RetrospectType.expense => totalExpense(),
+      RetrospectType.income => totalIncome(),
+      RetrospectType.diff => totalElement()
     };
   }
 

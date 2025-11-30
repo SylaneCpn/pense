@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
-import 'package:pense/logic/chart_type.dart';
+import 'package:pense/logic/retrospect_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
@@ -17,7 +17,7 @@ import 'package:collection/collection.dart';
 class RetrospectLineChart extends StatelessWidget {
   final List<RecordElement?> data;
   final DateRange dateRange;
-  final ChartType lineChartType;
+  final RetrospectType lineChartType;
   final double aspectRatio;
 
   const RetrospectLineChart({
@@ -185,7 +185,7 @@ class RetrospectLineChart extends StatelessWidget {
                 (index, recordElement) => FlSpot(
                   index.toDouble(),
                   recordElement
-                          ?.totalFromChartType(lineChartType)
+                          ?.totalFromRetrospectType(lineChartType)
                           .toDouble() ??
                       0.0,
                 ),

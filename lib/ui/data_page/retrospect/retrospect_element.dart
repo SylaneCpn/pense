@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
-import 'package:pense/logic/chart_type.dart';
+import 'package:pense/logic/retrospect_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
@@ -10,13 +10,13 @@ import 'package:provider/provider.dart';
 class RetrospectElement extends StatelessWidget {
   final List<RecordElement?> data;
   final DateRange dateRange;
-  final ChartType lineChartType;
+  final RetrospectType retrospectType;
 
   const RetrospectElement({
     super.key,
     required this.data,
     required this.dateRange,
-    required this.lineChartType,
+    required this.retrospectType,
   });
 
   @override
@@ -33,16 +33,21 @@ class RetrospectElement extends StatelessWidget {
           builder: (context,constraints) {
 
             final ratio = switch (constraints.maxWidth) {
-              < 500.0 => 1.7,
+              < 600.0 => 1.7,
               < 800.0 => 2.1,
               _ => 2.9
             };
 
-            return RetrospectLineChart(
-              data: data,
-              dateRange: dateRange,
-              lineChartType: lineChartType,
-              aspectRatio: ratio,
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RetrospectLineChart(
+                  data: data,
+                  dateRange: dateRange,
+                  lineChartType: retrospectType,
+                  aspectRatio: ratio,
+                ),
+              ],
             );
           }
         ),

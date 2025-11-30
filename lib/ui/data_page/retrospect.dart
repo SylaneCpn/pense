@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
-import 'package:pense/logic/chart_type.dart';
+import 'package:pense/logic/retrospect_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
@@ -143,13 +143,19 @@ class RetrospectLoaded extends StatelessWidget {
           RetrospectElement(
             data: data,
             dateRange: dateRange,
-            lineChartType: ChartType.income,
+            retrospectType: RetrospectType.diff,
           ),
 
           RetrospectElement(
             data: data,
             dateRange: dateRange,
-            lineChartType: ChartType.expense,
+            retrospectType: RetrospectType.income,
+          ),
+
+          RetrospectElement(
+            data: data,
+            dateRange: dateRange,
+            retrospectType: RetrospectType.expense,
           ),
         ],
 
