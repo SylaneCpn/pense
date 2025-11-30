@@ -2,12 +2,12 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
-import 'package:pense/logic/category_type.dart';
+import 'package:pense/logic/chart_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect/invalid_range.dart';
-import 'package:pense/ui/data_page/retrospect/retrospect_line_chart.dart';
+import 'package:pense/ui/data_page/retrospect/retrospect_element.dart';
 import 'package:pense/ui/processing_placeholder.dart';
 import 'package:pense/ui/utils/date_selector.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
@@ -140,16 +140,16 @@ class RetrospectLoaded extends StatelessWidget {
           ),
         ),
         if (data.isNotEmpty) ...[
-          RetrospectLineChart(
+          RetrospectElement(
             data: data,
             dateRange: dateRange,
-            categoryType: CategoryType.income,
+            lineChartType: ChartType.income,
           ),
 
-          RetrospectLineChart(
+          RetrospectElement(
             data: data,
             dateRange: dateRange,
-            categoryType: CategoryType.expense,
+            lineChartType: ChartType.expense,
           ),
         ],
 

@@ -1,62 +1,63 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
-import 'package:pense/logic/category_type.dart';
+import 'package:pense/logic/chart_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/logic/utils.dart';
-import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/with_title.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
+
+
 class RetrospectLineChart extends StatelessWidget {
   final List<RecordElement?> data;
   final DateRange dateRange;
-  final CategoryType categoryType;
+  final ChartType lineChartType;
   final double aspectRatio;
 
   const RetrospectLineChart({
     super.key,
     required this.data,
     required this.dateRange,
-    required this.categoryType,
+    required this.lineChartType,
     this.aspectRatio = 1.7,
   });
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final title = switch (categoryType) {
-      CategoryType.expense => "Dépenses",
-      CategoryType.income => "Revenus",
-    };
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedContainer(
-        decoration: BoxDecoration(
-          color: appState.lessContrastBackgroundColor(),
-        ),
-        borderRadius: BorderRadius.circular(8.0),
-        elevation: 8.0,
-        child: WithTitle(
-          title: Padding(
-            padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
-            child: GradientTitle(label: title),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AspectRatio(
-              aspectRatio: aspectRatio,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: LineChart(buildLineChartData(context, appState)),
+    return WithTitle(
+      title: Padding(
+        padding: const EdgeInsetsGeometry.only(left: 10.0, top: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GradientTitle(label: lineChartType.title()),
+            Text(
+              lineChartType.subtitle(),
+              style: TextStyle(
+                color: appState.onLightBackgroundColor(),
+                fontSize: PortView.slightlyBiggerRegularTextSize(
+                  MediaQuery.widthOf(context),
+                ),
               ),
             ),
+          ],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: AspectRatio(
+          aspectRatio: aspectRatio,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: LineChart(buildLineChartData(context, appState)),
           ),
         ),
       ),
@@ -184,7 +185,7 @@ class RetrospectLineChart extends StatelessWidget {
                 (index, recordElement) => FlSpot(
                   index.toDouble(),
                   recordElement
-                          ?.totalFromCategoryType(categoryType)
+                          ?.totalFromChartType(lineChartType)
                           .toDouble() ??
                       0.0,
                 ),
