@@ -325,7 +325,7 @@ class CategoryWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedContainer(
-              decoration: BoxDecoration(color: appState.lightBackgroundColor(),),
+              decoration: BoxDecoration(color: appState.backgroundColor(),),
               borderRadius: BorderRadius.circular(8.0),
               child: Accordion(
                 header: header,

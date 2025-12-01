@@ -33,17 +33,8 @@ class DateBanner extends StatelessWidget {
       child: ElevatedContainer(
         decoration: BoxDecoration(
           color: appState.lessContrastBackgroundColor(),
-          gradient: LinearGradient(
-            colors: [
-              appState.lessContrastBackgroundColor(),
-              appState.inversePrimary(context),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.33,1.0]
-          ),
         ),
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(24.0),
         child: SizedBox(
           height: height,
           child: Row(

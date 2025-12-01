@@ -143,9 +143,9 @@ class AppState extends ChangeNotifier {
 
   Color lightBackgroundColor() {
     if (useSystemBrightness) {
-      return isSystemDark() ? Colors.grey[900]! : Colors.grey[100]!;
+      return isSystemDark() ? Color.fromRGBO(25, 25, 25, 1.0) : Color.fromRGBO(240, 240, 240, 1.0);
     } else {
-      return isDark ? Colors.grey[900]! : Colors.grey[100]!;
+      return isDark ? Color.fromRGBO(25, 25, 25, 1.0) : Color.fromRGBO(240, 240, 240, 1.0);
     }
   }
 
@@ -159,17 +159,17 @@ class AppState extends ChangeNotifier {
 
   Color lessContrastBackgroundColor() {
     if (useSystemBrightness) {
-      return isSystemDark() ? Color.fromRGBO(20, 20, 20, 1.0) : Colors.grey[50]!;
+      return isSystemDark() ? Color.fromRGBO(15, 15, 15, 1.0) : Colors.grey[50]!;
     } else {
-      return isDark ? Color.fromRGBO(20, 20, 20, 1.0) : Colors.grey[50]!;
+      return isDark ? Color.fromRGBO(15, 15, 15, 1.0) : Colors.grey[50]!;
     }
   }
 
   Color onLessContrastBackgroundColor() {
     if (useSystemBrightness) {
-      return isSystemDark() ?  Colors.grey[50]! : Color.fromRGBO(20, 20, 20, 1.0) ;
+      return isSystemDark() ?  Colors.grey[50]! : Color.fromRGBO(15, 15, 15, 1.0) ;
     } else {
-      return isDark ? Colors.grey[50]! : Color.fromRGBO(20, 20, 20, 1.0);
+      return isDark ? Colors.grey[50]! : Color.fromRGBO(15, 15, 15, 1.0);
     }
   }
 

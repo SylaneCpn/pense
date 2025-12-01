@@ -112,7 +112,7 @@ class SourceItem extends StatelessWidget {
       padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
       decoration: BoxDecoration(
         border: BoxBorder.fromLTRB(
-          bottom: BorderSide(color: appState.lessContrastBackgroundColor()),
+          bottom: BorderSide(color: appState.lightBackgroundColor()),
         ),
       ),
       child: Row(

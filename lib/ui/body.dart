@@ -50,6 +50,6 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
             )
             : ProcessingPlaceholder();
 
-    return SafeArea(child: Scaffold(body: body));
+    return SafeArea(child: body);
   }
 }

@@ -41,7 +41,6 @@ class SumBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.read<AppState>();
     final record = context.watch<Record>();
     final currentElement = record.where(month, year);
 
@@ -49,51 +48,46 @@ class SumBanner extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ElevatedContainer(
-        elevation: 8.0,
-        borderRadius: BorderRadius.circular(bRadius),
-          decoration: containerDecoration(context, appState),
-          child: Column(
+      child: Column(
+        children: [
+          Epargne(sum: sum, height: 120),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Epargne(sum: sum, height: 120),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: width / 20,
-                        right: width / 20,
-                        bottom: 40.0,
-                      ),
-                      child: TopSources(
-                        categoryType: CategoryType.income,
-                        categories: currentElement.incomes,
-                        sourceCount: 3,
-                        label: "Revenus principaux :",
-                      ),
-                    ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: width / 20,
+                    right: width / 20,
+                    bottom: 40.0,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: width / 20,
-                        right: width / 20,
-                        bottom: 40.0,
-                      ),
-                      child: TopSources(
-                        categoryType: CategoryType.expense,
-                        categories: currentElement.expenses,
-                        sourceCount: 3,
-                        label: "Dépenses principales :",
-                      ),
-                    ),
+                  child: TopSources(
+                    categoryType: CategoryType.income,
+                    categories: currentElement.incomes,
+                    sourceCount: 3,
+                    label: "Revenus principaux :",
                   ),
-                ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: width / 20,
+                    right: width / 20,
+                    bottom: 40.0,
+                  ),
+                  child: TopSources(
+                    categoryType: CategoryType.expense,
+                    categories: currentElement.expenses,
+                    sourceCount: 3,
+                    label: "Dépenses principales :",
+                  ),
+                ),
               ),
             ],
           ),
+        ],
       ),
     );
   }

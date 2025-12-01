@@ -125,11 +125,9 @@ class RetrospectLoaded extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(24.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: vPadding,
-                right: vPadding,
-                top: hPadding,
-                bottom: hPadding,
+              padding: const EdgeInsets.symmetric(
+                vertical: vPadding,
+                horizontal: hPadding,
               ),
               child: DateRangeSelector(
                 dateRange: dateRange,
