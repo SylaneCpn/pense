@@ -5,7 +5,6 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/category_type.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
-import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
 import 'package:pense/ui/main_page/categories_pie_chart.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
@@ -15,7 +14,7 @@ import 'package:pense/ui/main_page/sources_widget.dart';
 import 'package:pense/ui/utils/accordion.dart';
 import 'package:pense/ui/utils/default_text.dart';
 import 'package:pense/ui/utils/text_add_button.dart';
-import 'package:pense/ui/utils/gradient_chip.dart';
+import 'package:pense/ui/utils/with_chip_subtitle.dart';
 import 'package:pense/ui/utils/with_title.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +51,6 @@ class CategoriesWidget extends StatelessWidget {
     };
 
     final total = categories.fold(0, (acc, c) => acc + c.sourceSum());
-    final labelColor = appState.primaryColor(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedContainer(
@@ -85,65 +83,15 @@ class CategoriesWidget extends StatelessWidget {
                   ? Column(
                       children: [
                         if (total > 0.0)
-                          WithTitle(
-                            leading: GradientChip(
-                              start: labelColor,
-                              end: gradientPairColor(labelColor),
-                              width: 4.0,
-                              height: PortView.bigTextSize(
-                                MediaQuery.widthOf(context),
-                              ),
-                              borderRadius: 4.0,
-                            ),
-                            titlePadding: const EdgeInsets.only(
-                              top: 10.0,
-                              left: 10.0,
-                              bottom: 10.0,
-                            ),
-                            title: Padding(
-                              padding: const EdgeInsets.only(left: 6.0),
-                              child: Text(
-                                style: TextStyle(
-                                  color: appState.onLightBackgroundColor(),
-                                  fontSize: PortView.mediumTextSize(
-                                    MediaQuery.sizeOf(context).width,
-                                  ),
-                                ),
-                                "Vue d'ensemble",
-                              ),
-                            ),
+                          WithChipSubtitle(
+                            subtitle : "Vue d'ensemble",
                             child: CategoriesPieChart(
                               total: total,
                               categories: categories,
                             ),
                           ),
-                        WithTitle(
-                          leading: GradientChip(
-                            start: labelColor,
-                            end: gradientPairColor(labelColor),
-                            width: 4.0,
-                            height: PortView.bigTextSize(
-                              MediaQuery.widthOf(context),
-                            ),
-                            borderRadius: 4.0,
-                          ),
-                          titlePadding: const EdgeInsets.only(
-                            top: 10.0,
-                            left: 10.0,
-                            bottom: 10.0,
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.only(left: 6.0),
-                            child: Text(
-                              style: TextStyle(
-                                color: appState.onLightBackgroundColor(),
-                                fontSize: PortView.mediumTextSize(
-                                  MediaQuery.sizeOf(context).width,
-                                ),
-                              ),
-                              "Catégories",
-                            ),
-                          ),
+                        WithChipSubtitle(
+                          subtitle: "Catégories",
                           child: Column(
                             children: [
                               ...categories.map(

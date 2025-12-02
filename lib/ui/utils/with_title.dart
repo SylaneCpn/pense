@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
-class WithTitle extends StatelessWidget{
+class WithTitle extends StatelessWidget {
   final Widget child;
   final Widget title;
   final Widget? leading;
   final EdgeInsets titlePadding;
-  const WithTitle({super.key, required this.child , required this.title , this.leading , this.titlePadding = const EdgeInsets.all(0.0)});
+  const WithTitle({
+    super.key,
+    required this.title,
+    this.leading,
+    this.titlePadding = const EdgeInsets.all(0.0),
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class WithTitle extends StatelessWidget{
             ],
           ),
         ),
-        child
+        child,
       ],
     );
   }

@@ -5,7 +5,6 @@ import 'package:pense/logic/retrospect_type.dart';
 import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
-import 'package:pense/logic/utils.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/ui/utils/with_title.dart';
@@ -125,11 +124,11 @@ class RetrospectLineChart extends StatelessWidget {
     }
 
     //Builder
-    final gradientMainColor = appState.primaryColor(context);
-    final gradientColors = [
-      gradientMainColor,
-      gradientPairColor(gradientMainColor),
-    ];
+    final mainColor = appState.primaryColor(context);
+    // final gradientColors = [
+    //   gradientMainColor,
+    //   gradientPairColor(gradientMainColor),
+    // ];
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
@@ -143,10 +142,10 @@ class RetrospectLineChart extends StatelessWidget {
         // horizontalInterval: 1,
         // verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
-          return FlLine(color: gradientMainColor, strokeWidth: 1);
+          return FlLine(color: mainColor, strokeWidth: 1);
         },
         getDrawingVerticalLine: (value) {
-          return FlLine(color: gradientMainColor, strokeWidth: 1);
+          return FlLine(color: mainColor, strokeWidth: 1);
         },
       ),
       titlesData: FlTitlesData(
@@ -172,7 +171,7 @@ class RetrospectLineChart extends StatelessWidget {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: gradientMainColor),
+        border: Border.all(color: mainColor),
       ),
       // minX: 0,
       // maxX: 11,
@@ -192,16 +191,17 @@ class RetrospectLineChart extends StatelessWidget {
               )
               .toList(),
           isCurved: false,
-          gradient: LinearGradient(colors: gradientColors),
+          color: mainColor,
+          // gradient: LinearGradient(colors: gradientColors),
           barWidth: 4,
           isStrokeCapRound: true,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withValues(alpha: 0.3))
-                  .toList(),
+              colors: [mainColor , mainColor.withValues(alpha: 0.0)],
+              begin: AlignmentGeometry.topCenter,
+              end: AlignmentGeometry.bottomCenter
             ),
           ),
         ),
