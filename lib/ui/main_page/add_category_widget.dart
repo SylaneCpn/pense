@@ -17,6 +17,7 @@ class AddCategoryWidget extends StatefulWidget {
 
 class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   final TextEditingController _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -36,37 +37,46 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
           child: Text("Retour"),
         ),
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: _controller,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Catégorie',
+      content: Form(
+        key : _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Entrez un titre pour cette catégorie.";
+                    }
+                    return null;
+                  },
+                  controller: _controller,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Catégorie',
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextButton(
-              onPressed: () {
-
-                widget.categories.add(Category.empty(label: _controller.text));
-                Navigator.pop(context);
-                widget.record.notify();
-                
-              },
-              child: Text("Ajouter"),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    widget.categories.add(Category.empty(label: _controller.text));
+                    Navigator.pop(context);
+                    widget.record.notify();
+                  }
+                },
+                child: Text("Ajouter"),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

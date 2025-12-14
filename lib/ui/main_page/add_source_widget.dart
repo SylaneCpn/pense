@@ -20,11 +20,10 @@ class AddSourceWidget extends StatefulWidget {
 class _AddSourceWidgetState extends State<AddSourceWidget> {
   final TextEditingController _labelController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  int processAmountInput() {
-    final value = _valueController.text
-        .replaceAll(',', '.')
-        .replaceAll(" ", "");
+  static int _processAmountInput(String input) {
+    final value = input.replaceAll(',', '.').replaceAll(" ", "");
 
     if (value.contains(".")) {
       final [whole, decimal] = value.split(".");
@@ -49,55 +48,78 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
           child: Text("Retour"),
         ),
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: _labelController,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Source',
-                ),
-              ),
-            ),
-          ),
-
-          SizedBox(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: _valueController,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Montant (en ${appState.currency})',
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextButton(
-              onPressed: () {
-                widget.sources.add(
-                  Source(
-                    label: _labelController.text,
-                    value: processAmountInput(),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Entrez un titre pour cette source.";
+                    }
+                    return null;
+                  },
+                  controller: _labelController,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Source',
                   ),
-                );
-                Navigator.pop(context);
-                widget.record.notify();
-              },
-              child: Text("Ajouter"),
+                ),
+              ),
             ),
-          ),
-        ],
+
+            SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Ajoutez une valeur à la source.";
+                    }
+                    try {
+                      _processAmountInput(value);
+                      return null;
+                    } catch (e) {
+                      return "La valeur n'est pas un nombre valide";
+                    }
+                  },
+                  controller: _valueController,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Montant (en ${appState.currency})',
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    widget.sources.add(
+                      Source(
+                        label: _labelController.text,
+                        value: _processAmountInput(_valueController.text),
+                      ),
+                    );
+                    Navigator.pop(context);
+                    widget.record.notify();
+                  }
+                },
+                child: Text("Ajouter"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
