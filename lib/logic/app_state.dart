@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pense/logic/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState extends ChangeNotifier {
-  static final Color defaultPrimarySeedColor = Colors.greenAccent;
-  static final Color defaultSecondarySeedColor = Colors.blueAccent;
-  static final Color defaultTertiarySeedColor = Colors.deepPurpleAccent;
-  static final avalaibleCurrencies = ['€', '£', '\$'];
+  static const Color defaultPrimarySeedColor = Colors.greenAccent;
+  static const avalaibleCurrencies = ['€', '£', '\$'];
+  static const List<Color> colors = Colors.primaries;
 
-  bool isDark;
+  bool isDark = false;
   String currency = avalaibleCurrencies[0];
   bool useSystemBrightness = true;
   bool trySystemColors = true;
   bool _canUseSystemColors = false;
-  late AppColors _customColors;
+  ColorScheme _customColors = ColorScheme.fromSeed(seedColor: colors[0]);
 
   bool get canUseSystemColors => _canUseSystemColors;
 
-  AppState({this.isDark = false}) {
-    _customColors = generateDefaultAppColor();
+  AppState();
+
+  Future<void> initFields() async {
+    final prefs = await SharedPreferences.getInstance();
+    isDark = prefs.getBool('isDark') ?? false;
+    trySystemColors = prefs.getBool('trySystemColors') ?? true;
+    currency = avalaibleCurrencies[prefs.getInt("currencyIndex") ?? 0];
+    useSystemBrightness = prefs.getBool('useSystemBrightness') ?? true;
+    _customColors = ColorScheme.fromSeed(seedColor: colors[prefs.getInt('colorIndex') ?? 0]);
+    notifyListeners();
+
+
   }
 
   static bool isSystemDark() {
@@ -35,23 +45,10 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  AppColors generateDefaultAppColor() {
-    return AppColors(
-      isDark: isDark,
-      primarySeed: AppState.defaultPrimarySeedColor,
-      secondarySeed: AppState.defaultSecondarySeedColor,
-      tertiarySeed: AppState.defaultTertiarySeedColor,
-    );
-  }
+
 
   void toggleTheme() {
     isDark = !isDark;
-
-    _customColors = AppColors(
-      primarySeed: _customColors.primarySeed,
-      secondarySeed: _customColors.secondarySeed,
-      tertiarySeed: _customColors.tertiarySeed,
-    );
     notifyListeners();
   }
 
@@ -68,61 +65,61 @@ class AppState extends ChangeNotifier {
   Color primaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.primary
-        : _customColors.primaryScheme.primary;
+        : _customColors.primary;
   }
 
   Color onPrimaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
-        ? Theme.of(context).colorScheme.primary
-        : _customColors.primaryScheme.onPrimary;
+        ? Theme.of(context).colorScheme.onPrimary
+        : _customColors.onPrimary;
   }
 
   Color secondaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.secondary
-        : _customColors.secondaryScheme.primary;
+        : _customColors.secondary;
   }
 
   Color onSecondaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.onSecondary
-        : _customColors.secondaryScheme.onPrimary;
+        : _customColors.onSecondary;
   }
 
   Color tertiaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.tertiary
-        : _customColors.tertiaryScheme.primary;
+        : _customColors.tertiary;
   }
 
   Color onTertiaryColor(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.onTertiary
-        : _customColors.tertiaryScheme.onPrimary;
+        : _customColors.onTertiary;
   }
 
   Color onPrimaryContainer(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.onPrimaryContainer
-        : _customColors.primaryScheme.onPrimaryContainer;
+        : _customColors.onPrimaryContainer;
   }
 
   Color primaryContainer(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.primaryContainer
-        : _customColors.primaryScheme.primaryContainer;
+        : _customColors.primaryContainer;
   }
 
   Color onSurface(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.onSurface
-        : _customColors.primaryScheme.onSurface;
+        : _customColors.onSurface;
   }
 
   Color inversePrimary(BuildContext context) {
     return trySystemColors && _canUseSystemColors
         ? Theme.of(context).colorScheme.inversePrimary
-        : _customColors.primaryScheme.inversePrimary;
+        : _customColors.inversePrimary;
   }
 
   Color backgroundColor() {
@@ -177,7 +174,7 @@ class AppState extends ChangeNotifier {
 
   ThemeData _theme(ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
     if (lightDynamic == null || darkDynamic == null) {
-      return ThemeData(colorScheme: _customColors.primaryScheme);
+      return ThemeData(colorScheme: _customColors , brightness: isDark ? Brightness.dark : Brightness.light);
     } else {
       late ColorScheme scheme;
 
@@ -188,7 +185,7 @@ class AppState extends ChangeNotifier {
           scheme = isDark ? darkDynamic : lightDynamic;
         }
       } else {
-        scheme = _customColors.primaryScheme;
+        scheme = _customColors;
       }
       return ThemeData(colorScheme: scheme , fontFamily: "HankenGrotesk");
     }
@@ -200,40 +197,27 @@ class AppState extends ChangeNotifier {
   }
 }
 
-class AppColors {
-  final Color primarySeed;
-  final Color secondarySeed;
-  final Color tertiarySeed;
+// class AppColors {
+//   final Color seed;
 
-  late final ColorScheme primaryScheme;
-  late final ColorScheme secondaryScheme;
-  late final ColorScheme tertiaryScheme;
-  late final bool isDark;
 
-  AppColors({
-    required this.primarySeed,
-    required this.secondarySeed,
-    required this.tertiarySeed,
-    bool? isDark,
-  }) {
-    this.isDark = isDark ?? false;
-    primaryScheme = ColorScheme.fromSeed(
-      brightness: this.isDark ? Brightness.dark : Brightness.light,
-      seedColor: primarySeed,
-    );
-    secondaryScheme = ColorScheme.fromSeed(
-      brightness: this.isDark ? Brightness.dark : Brightness.light,
-      seedColor: secondarySeed,
-    );
-    tertiaryScheme = ColorScheme.fromSeed(
-      brightness: this.isDark ? Brightness.dark : Brightness.light,
-      seedColor: secondarySeed,
-    );
-  }
-}
+//   late final ColorScheme scheme;
+//   late final bool isDark;
 
-extension IsDark on Brightness {
-  bool isDark() {
-    return this == Brightness.dark;
-  }
-}
+//   AppColors({
+//     required this.seed,
+//     bool? isDark,
+//   }) {
+//     this.isDark = isDark ?? false;
+//     scheme = ColorScheme.fromSeed(
+//       brightness: this.isDark ? Brightness.dark : Brightness.light,
+//       seedColor: seed,
+//     );
+//   }
+// }
+
+// extension IsDark on Brightness {
+//   bool isDark() {
+//     return this == Brightness.dark;
+//   }
+// }
