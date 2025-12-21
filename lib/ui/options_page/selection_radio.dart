@@ -27,12 +27,7 @@ class SelectionRadio<T> extends StatelessWidget {
     );
   }
 
-  TextStyle _textStyle(AppState appState, BuildContext context) {
-    return TextStyle(
-      color: appState.onLessContrastBackgroundColor(),
-      fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.widthOf(context)),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
