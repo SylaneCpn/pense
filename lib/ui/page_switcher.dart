@@ -4,6 +4,7 @@ import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/data_page.dart';
 import 'package:pense/ui/main_page/main_page.dart';
+import 'package:pense/ui/options_page/options_page.dart';
 import 'package:provider/provider.dart';
 
 class PageSwitcher extends StatefulWidget {
@@ -107,7 +108,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
           setMonthCallBack: setDate,
           recordElements: record.elements,
         ),
-        Placeholder(),
+        OptionsPage(),
       ][currentPageIndex]) ,
     );
   }

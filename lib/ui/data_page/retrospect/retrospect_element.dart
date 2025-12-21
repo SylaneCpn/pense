@@ -169,7 +169,7 @@ class _RetrospectTopState extends State<RetrospectTop> {
   @override
   void initState() {
     elements = _generateSortedElements();
-    count = count < elements.length ? count : elements.length;
+    count = widget.initCount < elements.length ? widget.initCount : elements.length;
     super.initState();
   }
 
