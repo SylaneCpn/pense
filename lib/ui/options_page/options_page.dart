@@ -62,6 +62,7 @@ class OptionsPage extends StatelessWidget {
                 label: "Couleur de l'app",
                 selectedElementIndex: appState.colorIndex,
                 setIndexCallBack: appState.setColorIndex,
+                disabled: appState.trySystemColors,
                 widgetFromElement: (element) => Row(
                   spacing: 8.0,
                   children: [

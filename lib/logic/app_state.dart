@@ -75,9 +75,11 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _isDark = prefs.getBool('isDark') ?? false;
     _trySystemColors = prefs.getBool('trySystemColors') ?? true;
-    _currencyIndex = prefs.getInt('currencyIndex') ?? 0;
+    final storedCurrencyIndex = prefs.getInt('currencyIndex') ?? 0;
+    _currencyIndex = storedCurrencyIndex > Currency.values.length ? 0 : storedCurrencyIndex;
     _useSystemBrightness = prefs.getBool('useSystemBrightness') ?? true;
-    _colorIndex = prefs.getInt('colorIndex') ?? 0;
+    final storedColorIndex = (prefs.getInt('colorIndex') ?? 0);
+    _colorIndex =  storedColorIndex > colors.length ? 0 : storedColorIndex ;
     notifyListeners();
   }
 
