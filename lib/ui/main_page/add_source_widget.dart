@@ -41,11 +41,11 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
     final appState = context.read<AppState>();
     return AlertDialog(
       backgroundColor: appState.lightBackgroundColor(),
-      title: Text("Ajouter une source."),
+      title: const Text("Ajouter une source."),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Retour"),
+          child: const Text("Retour"),
         ),
       ],
       content: Form(
@@ -66,7 +66,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
                   },
                   controller: _labelController,
                   obscureText: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Source',
                   ),
@@ -79,7 +79,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Ajoutez une valeur à la source.";
@@ -94,8 +94,8 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
                   controller: _valueController,
                   obscureText: false,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Montant (en ${appState.currency})',
+                    border: const OutlineInputBorder(),
+                    labelText: 'Montant (en ${appState.currency.symbol()})',
                   ),
                 ),
               ),
@@ -115,7 +115,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
                     widget.record.notify();
                   }
                 },
-                child: Text("Ajouter"),
+                child: const Text("Ajouter"),
               ),
             ),
           ],

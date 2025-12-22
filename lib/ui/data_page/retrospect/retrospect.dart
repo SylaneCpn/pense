@@ -83,7 +83,7 @@ class _RetrospectState extends State<Retrospect> {
   @override
   Widget build(BuildContext context) {
     if (data == null) {
-      return ProcessingPlaceholder(viewPortHeighRatio: 0.66);
+      return const ProcessingPlaceholder(viewPortHeighRatio: 0.66);
     } else {
       return RetrospectLoaded(
         dateRange: dateRange,

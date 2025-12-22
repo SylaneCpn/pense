@@ -30,11 +30,11 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
     final appState = context.read<AppState>();
     return AlertDialog(
       backgroundColor: appState.lightBackgroundColor(),
-      title: Text("Ajouter une catégorie."),
+      title: const Text("Ajouter une catégorie."),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Retour"),
+          child: const Text("Retour"),
         ),
       ],
       content: Form(
@@ -55,7 +55,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
                   },
                   controller: _controller,
                   obscureText: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Catégorie',
                   ),
@@ -72,7 +72,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
                     widget.record.notify();
                   }
                 },
-                child: Text("Ajouter"),
+                child: const Text("Ajouter"),
               ),
             ),
           ],

@@ -46,9 +46,9 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
         (record != null)
             ? ChangeNotifierProvider(
               create: (context) => record!,
-              child: PageSwitcher(),
+              child: const PageSwitcher(),
             )
-            : ProcessingPlaceholder();
+            : const ProcessingPlaceholder();
 
     return SafeArea(child: body);
   }

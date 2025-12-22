@@ -41,7 +41,7 @@ class _DataPageState extends State<DataPage> {
       child: Column(
         spacing: 20.8,
         children: [
-          SizedBox(height: 20.0,),
+          const SizedBox(height: 20.0,),
           Padding(
             padding: const EdgeInsets.only(left : 8.0),
             child: ChipSelector(

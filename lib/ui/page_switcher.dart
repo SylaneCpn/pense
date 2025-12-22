@@ -85,12 +85,12 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
           replay();
         }),
         destinations: [
-          NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
-          NavigationDestination(
+          const NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
+          const NavigationDestination(
             icon: Icon(Icons.poll_outlined),
             label: "Données",
           ),
-          NavigationDestination(icon: Icon(Icons.settings), label: "Options"),
+          const NavigationDestination(icon: Icon(Icons.settings), label: "Options"),
         ],
       ),
 
@@ -108,7 +108,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
           setMonthCallBack: setDate,
           recordElements: record.elements,
         ),
-        OptionsPage(),
+        const OptionsPage(),
       ][currentPageIndex]) ,
     );
   }

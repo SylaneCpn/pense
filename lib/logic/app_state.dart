@@ -6,14 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 extension ToStringFr on Color {
   String toStringFr() {
-    return switch(this) {
+    return switch (this) {
       Colors.amber => "Ambre",
       Colors.blue => "Bleu",
       Colors.cyan => "Cyan",
-      Colors.deepOrange => "Orange Foncé",
-      Colors.deepPurple => "Violet Foncé",
       Colors.green => "Vert",
-      Colors.lightGreen => "Vert Clair",
       Colors.indigo => "Indigo",
       Colors.lightBlue => "Bleu Clair",
       Colors.lime => "Citron",
@@ -23,24 +20,18 @@ extension ToStringFr on Color {
       Colors.red => "Rouge",
       Colors.teal => "Turquoise",
       Colors.yellow => "Jaune",
-      _ => "Inutilisé"
+      _ => "Inutilisé",
     };
   }
 }
-
-
 
 class AppState extends ChangeNotifier {
   static const List<Color> colors = [
     Colors.amber,
     Colors.blue,
     Colors.cyan,
-    Colors.deepOrange,
-    Colors.deepPurple,
     Colors.green,
-    Colors.lightGreen,
     Colors.indigo,
-    Colors.lightBlue,
     Colors.lime,
     Colors.orange,
     Colors.pink,
@@ -77,8 +68,6 @@ class AppState extends ChangeNotifier {
     seedColor: colors[_colorIndex],
     brightness: brightness,
   );
-
-  
 
   AppState();
 

@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create:
-          (context) => AppState(),
-      child: ThemeProvider(),
+          (context) => AppState()..initFields(),
+      child: const ThemeProvider(),
     );
   }
 }

@@ -142,7 +142,7 @@ class SourceItem extends StatelessWidget {
             onPressed: onDeleteCallBack,
             icon: Transform.rotate(
               angle: pi / 4,
-              child: Icon(Icons.add, color: Colors.red),
+              child: const Icon(Icons.add, color: Colors.red),
             ),
           ),
         ],
