@@ -37,40 +37,41 @@ class _SelectionRadioState<T> extends State<SelectionRadio<T>> with TickerProvid
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    return SizeTransition(
-      sizeFactor:  position,
-      child: ElevatedContainer(
-        decoration: BoxDecoration(color: appState.lessContrastBackgroundColor()),
-        borderRadius: BorderRadius.circular(24.0),
+    return ElevatedContainer(
+      decoration: BoxDecoration(color: appState.lessContrastBackgroundColor()),
+      borderRadius: BorderRadius.circular(24.0),
+      child: SizeTransition(
+        sizeFactor: position,
         child: Padding(
           padding: const EdgeInsetsGeometry.all(12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.label, style: _labelStyle(appState, context)),
-              RadioGroup<int>(
-                groupValue: widget.selectedElementIndex,
-                onChanged: (value) => widget.setIndexCallBack(value!),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Column(
-                    spacing: 12.0,
-                    children: widget.elements.indexed.map((ie) {
-                      return LayoutBuilder(
-                        builder: (context , constraints) {
-                          final pad = constraints.maxWidth * (1 - 0.8) / 2;
-                          return Padding(
-                            padding: EdgeInsets.only(left: pad , right: pad ),
-                            child: Row(
-                              children: [
-                                Expanded(child: widget.widgetFromElement(ie.$2)),
-                                Radio(value: ie.$1),
-                              ],
-                            ),
-                          );
-                        }
-                      );
-                    }).toList(),
+              Align(
+                child: RadioGroup<int>(
+                  groupValue: widget.selectedElementIndex,
+                  onChanged: (value) => widget.setIndexCallBack(value!),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: LayoutBuilder(
+                      builder: (context ,constraints) {
+                        return SizedBox(
+                          width: constraints.maxWidth * 0.8,
+                          child: Column(
+                            spacing: 12.0,
+                            children: widget.elements.indexed.map((ie) {
+                              return Row(
+                                children: [
+                                  Expanded(child: widget.widgetFromElement(ie.$2)),
+                                  Radio(value: ie.$1),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      }
+                    ),
                   ),
                 ),
               ),

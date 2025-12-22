@@ -1,13 +1,16 @@
 enum Currency {
   euro,
   dollar,
-  pound;
+  pound,
+  yen
+  ;
 
   String symbol() {
     return switch (this) {
       Currency.euro => '€',
       Currency.dollar => '\$',
       Currency.pound => '£',
+      Currency.yen => '¥'
     };
   }
 
@@ -16,6 +19,7 @@ enum Currency {
       Currency.euro => "Euro",
       Currency.dollar => "Dollar",
       Currency.pound => "Livre",
+      Currency.yen => "Yen"
     };
   }
 }

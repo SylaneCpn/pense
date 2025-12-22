@@ -4,19 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/data_page/retrospect/retrospect.dart';
+import 'package:pense/ui/data_page/summary/summary.dart';
 import 'package:pense/ui/utils/chip_selector.dart';
 
 class DataPage extends StatefulWidget {
   final Month month;
   final int year;
   final UnmodifiableListView<RecordElement>  recordElements;
-  final void Function(Month, int)? setMonthCallBack;
+  final void Function(Month, int)? setDateCallBack;
   const DataPage({
     super.key,
     required this.month,
     required this.year,
     required this.recordElements,
-    this.setMonthCallBack,
+    this.setDateCallBack,
   });
 
   @override
@@ -26,6 +27,7 @@ class DataPage extends StatefulWidget {
 class _DataPageState extends State<DataPage> {
   late List<(String, Widget)> modes = [
     ("Rétrospective", Retrospect(initMonth: widget.month, initYear: widget.year, recordElements: widget.recordElements)),
+    ("Résumé" , Summary(month: widget.month, year: widget.year, setDateCallBack: widget.setDateCallBack))
   ];
   int _selectedIndex = 0;
 

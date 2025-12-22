@@ -66,14 +66,14 @@ class _AccordionState extends State<Accordion> with TickerProviderStateMixin {
             padding: EdgeInsets.all(8.0),
             child: Transform.rotate(
               angle: pi * _animationValue,
-              child: Icon(Icons.keyboard_arrow_down),
+              child: const Icon(Icons.keyboard_arrow_down),
             ),
           ),
           Expanded(
-            child: Padding(padding: EdgeInsets.all(8.0), child: widget.header),
+            child: Padding(padding: const EdgeInsets.all(8.0), child: widget.header),
           ),
           if (widget.tail != null)
-            Padding(padding: EdgeInsets.only(left: 10.0), child: widget.tail!),
+            Padding(padding: const EdgeInsets.only(left: 10.0), child: widget.tail!),
         ],
       ),
     );

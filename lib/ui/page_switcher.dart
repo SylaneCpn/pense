@@ -105,7 +105,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
         DataPage(
           month: month,
           year: year,
-          setMonthCallBack: setDate,
+          setDateCallBack: setDate,
           recordElements: record.elements,
         ),
         const OptionsPage(),
