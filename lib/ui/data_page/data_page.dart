@@ -10,7 +10,7 @@ import 'package:pense/ui/utils/chip_selector.dart';
 class DataPage extends StatefulWidget {
   final Month month;
   final int year;
-  final UnmodifiableListView<RecordElement>  recordElements;
+  final UnmodifiableListView<RecordElement> recordElements;
   final void Function(Month, int)? setDateCallBack;
   const DataPage({
     super.key,
@@ -25,10 +25,6 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
-  late List<(String, Widget)> modes = [
-    ("Rétrospective", Retrospect(initMonth: widget.month, initYear: widget.year, recordElements: widget.recordElements)),
-    ("Résumé" , Summary(month: widget.month, year: widget.year, setDateCallBack: widget.setDateCallBack))
-  ];
   int _selectedIndex = 0;
 
   void _setSelectedIndex(int newIndex) {
@@ -39,13 +35,31 @@ class _DataPageState extends State<DataPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<(String, Widget)> modes = [
+      (
+        "Résumé",
+        Summary(
+          month: widget.month,
+          year: widget.year,
+          setDateCallBack: widget.setDateCallBack,
+        ),
+      ),
+      (
+        "Rétrospective",
+        Retrospect(
+          initMonth: widget.month,
+          initYear: widget.year,
+          recordElements: widget.recordElements,
+        ),
+      ),
+    ];
     return SingleChildScrollView(
       child: Column(
-        spacing: 20.8,
+        spacing: 20.0,
         children: [
-          const SizedBox(height: 20.0,),
+          const SizedBox(height: 20.0),
           Padding(
-            padding: const EdgeInsets.only(left : 8.0),
+            padding: const EdgeInsets.only(left: 8.0),
             child: ChipSelector(
               selectedIndex: _selectedIndex,
               setSelectedIndexCallBack: _setSelectedIndex,
