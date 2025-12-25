@@ -62,6 +62,7 @@ class Summary extends StatelessWidget {
             child: SummaryInfoBox(element: element, type: RetrospectType.diff),
           ),
 
+
           Align(
             alignment: AlignmentGeometry.centerLeft,
             child: ExpensesInfoBox(element: element),
