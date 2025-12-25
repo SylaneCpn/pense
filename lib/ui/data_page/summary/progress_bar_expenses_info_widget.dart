@@ -13,7 +13,14 @@ class ProgressBarExpensesInfoWidget extends StatelessWidget {
 
   const ProgressBarExpensesInfoWidget({super.key , required this.element});
 
-  TextStyle _textStyle(AppState appState, BuildContext context) {
+  TextStyle _ratioTextStyle(AppState appState, BuildContext context) {
+    return TextStyle(
+      color: appState.onLessContrastBackgroundColor(),
+      fontSize: PortView.regularTextSize(MediaQuery.widthOf(context)),
+    );
+  }
+
+  TextStyle _percentageTextStyle(AppState appState, BuildContext context) {
     return TextStyle(
       color: appState.onLessContrastBackgroundColor(),
       fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.widthOf(context)),
@@ -35,11 +42,11 @@ class ProgressBarExpensesInfoWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Column(
-                spacing: 20.0,
+                spacing: 24.0,
                 children: [
                   ProgressBar(progress: ratio, height: 30.0),
                   Text(
-                    style: _textStyle(appState, context),
+                    style: _ratioTextStyle(appState, context),
                     "${appState.formatWithCurrency(element.totalExpense())} / ${appState.formatWithCurrency(element.totalIncome())}",
                   ),
                   if (ratio != double.infinity)
@@ -47,17 +54,17 @@ class ProgressBarExpensesInfoWidget extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            style: _textStyle(appState, context),
+                            style: _percentageTextStyle(appState, context),
                             text: "Soit ",
                           ),
                           TextSpan(
-                            style: _textStyle(appState, context).copyWith(
+                            style: _percentageTextStyle(appState, context).copyWith(
                               color: (ratio > 1.0 ? Colors.red : Colors.green).harmonizeWith(appState.backgroundColor()),
                             ),
                             text: ratio.toPercentage(2),
                           ),
                           TextSpan(
-                            style: _textStyle(appState, context),
+                            style: _percentageTextStyle(appState, context),
                             text: " des revenus.",
                           ),
                         ],

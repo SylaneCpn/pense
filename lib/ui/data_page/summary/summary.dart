@@ -101,7 +101,7 @@ class SummaryInfoBox extends StatelessWidget {
   ) {
     return TextStyle(
       color: valueColor(appState, value),
-      fontSize: PortView.sumBannerSize(MediaQuery.widthOf(context)),
+      fontSize: PortView.sumSmallBannerSize(MediaQuery.widthOf(context)),
     );
   }
 
@@ -124,6 +124,7 @@ class SummaryInfoBox extends StatelessWidget {
           
               Text("Ce mois ci : ", style: _textStyle(appState, context)),
               Text(
+                textAlign: TextAlign.center,
                 style: _valueTextStyle(appState, context, value),
                 appState.formatWithCurrency(value),
               ),

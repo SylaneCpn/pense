@@ -19,6 +19,16 @@ abstract final class PortView {
     }
   }
 
+  static double sumSmallBannerSize(double viewSize) {
+    if (viewSize > 800.0) {
+      return 80.0;
+    } else if (viewSize > 400.0) {
+      return 65.0;
+    } else {
+      return 42.0;
+    }
+  }
+
   static double regularTextSize(double viewSize) {
     if (viewSize > 800.0) {
       return 18.0;
