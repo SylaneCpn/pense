@@ -27,7 +27,7 @@ class SummaryBarChart extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GradientTitle(label: "Comparation"),
+              GradientTitle(label: "Comparaison"),
               Text(
                 "Compairaison entre les revenus et les dépenses de ce mois-ci :",
                 style: TextStyle(

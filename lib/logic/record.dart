@@ -11,7 +11,7 @@ import 'package:pense/logic/date_range.dart';
 import 'package:pense/logic/month.dart';
 
 class Record extends ChangeNotifier {
-  List<RecordElement> _elements;
+  final List<RecordElement> _elements;
 
   static const path = "record.json";
 
@@ -125,8 +125,8 @@ Future<List<RecordElement?>> computeMaybeRecordElementsRange(
 class RecordElement implements Comparable<RecordElement> {
   final Month month;
   final int year;
-  List<Category> expenses;
-  List<Category> incomes;
+  final List<Category> expenses;
+  final List<Category> incomes;
 
   RecordElement({
     required this.month,
@@ -228,11 +228,37 @@ class RecordElement implements Comparable<RecordElement> {
     otherMonth: other.month,
     otherYear: other.year,
   );
+
+  Iterable<Category> getTopCategories(CategoryType type , [int? count]) {
+    
+    final sources = switch (type) {
+      CategoryType.expense => expenses,
+      CategoryType.income => incomes
+    };
+
+    count ??= sources.length;
+
+    final List<Category> sortedCategorires = List.from(sources);
+    sortedCategorires.sort((a, b) => Comparable.compare(b.sourceSum(), a.sourceSum()));
+    return sortedCategorires.take(count);
+  }
+
+  Iterable<SourceWithCategoryRef> getTopSources(CategoryType type , [int? count]) {
+    final sources = switch (type) {
+      CategoryType.expense => expenses,
+      CategoryType.income => incomes
+    };
+
+    count ??= sources.length;
+    return Category.getTopSourcesWithRefInAllCategory(sources, count);
+  }
 }
 
+
+
 class Category {
-  String label;
-  List<Source> sources;
+  final String label;
+  final List<Source> sources;
 
   Category({required this.label, required this.sources});
   Category.empty({required this.label}) : sources = [];
@@ -266,6 +292,12 @@ class Category {
     return sortedSources.take(count);
   }
 
+  Iterable<SourceWithCategoryRef> getTopSourcesWithRef(int count) {
+    final List<SourceWithCategoryRef> sortedSources = sources.map((s) => SourceWithCategoryRef(categoryRef: this, source: s)).toList();
+    sortedSources.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
+    return sortedSources.take(count);
+  }
+
   static Iterable<Source> getTopSourcesInAllCategory(
     Iterable<Category> categories,
     int count,
@@ -275,6 +307,18 @@ class Category {
         .expand((e) => e)
         .toList();
     top.sort((a, b) => Comparable.compare(b.value, a.value));
+    return top.take(count);
+  }
+
+  static Iterable<SourceWithCategoryRef> getTopSourcesWithRefInAllCategory(
+    Iterable<Category> categories,
+    int count,
+  ) {
+    final top = categories
+        .map((e) => e.getTopSourcesWithRef(count))
+        .expand((e) => e)
+        .toList();
+    top.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
     return top.take(count);
   }
 }
@@ -299,4 +343,13 @@ class Source {
   Map<String, dynamic> toJson() {
     return {'label': label, 'value': value};
   }
+}
+
+class SourceWithCategoryRef {
+  final Category categoryRef;
+  final Source source;
+
+  SourceWithCategoryRef({required this.categoryRef , required this.source});
+
+
 }

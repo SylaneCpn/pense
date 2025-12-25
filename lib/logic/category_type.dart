@@ -9,5 +9,13 @@ enum CategoryType {
 
     };
   }
+
+  String fancyToStringFr() {
+    return switch(this) {
+      CategoryType.income => "Revenus",
+      CategoryType.expense => "Dépenses"
+
+    };
+  }
 }
 
