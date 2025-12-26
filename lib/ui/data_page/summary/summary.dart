@@ -205,13 +205,13 @@ class _NoDataAvailable extends StatelessWidget {
               spacing: 20.0,
               children: [
                 Text(
-                  "Pas de données disponibles",
+                  "Pas de données disponibles.",
                   style: TextStyle(
                     color: appState.onBackgroundColor(),
                     fontSize: PortView.bigTextSize(MediaQuery.widthOf(context)),
                   ),
                 ),
-                Text("Ajoutez-en pour les voir apparaitre",style: TextStyle(
+                Text("Ajoutez-en pour les voir apparaitre.",style: TextStyle(
                     color: appState.onBackgroundColor(),
                     fontSize: PortView.regularTextSize(MediaQuery.widthOf(context)),
                   )),
