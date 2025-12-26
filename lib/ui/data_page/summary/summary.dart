@@ -187,7 +187,6 @@ class ExpensesInfoBox extends StatelessWidget {
 }
 
 class _NoDataAvailable extends StatelessWidget {
-  const _NoDataAvailable({super.key});
 
   @override
   Widget build(BuildContext context) {
