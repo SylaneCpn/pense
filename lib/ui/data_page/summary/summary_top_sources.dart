@@ -27,7 +27,6 @@ class SummaryTopSources extends StatefulWidget {
 
 class _SummaryTopSourcesState extends State<SummaryTopSources> {
   late int _count;
-  late List<SourceWithCategoryRef> _sortedSources;
 
   String _valueWithPercentageText(
     AppState appState,
@@ -56,18 +55,16 @@ class _SummaryTopSourcesState extends State<SummaryTopSources> {
   @override
   void initState() {
     super.initState();
-    _sortedSources = widget.element.getTopSources(widget.categoryType).toList();
-    _count = widget.initCount < _sortedSources.length
+    final sortedSources = widget.element.getTopSources(widget.categoryType).toList();
+    _count = widget.initCount < sortedSources.length
         ? widget.initCount
-        : _sortedSources.length;
+        : sortedSources.length;
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final sortedSources = widget.element
-        .getTopSources(widget.categoryType)
-        .toList();
+    final sortedSources = widget.element.getTopSources(widget.categoryType).toList();
     return Container(
       decoration: BoxDecoration(
         border: BoxBorder.fromLTRB(

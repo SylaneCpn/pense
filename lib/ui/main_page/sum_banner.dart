@@ -169,7 +169,7 @@ class TopSources extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
 
-    final sortedSources = Category.getTopSourcesInAllCategory(
+    final sortedSources = Source.getTopSourcesInAllCategories(
       categories,
       sourceCount,
     );

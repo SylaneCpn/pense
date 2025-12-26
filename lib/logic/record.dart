@@ -249,8 +249,7 @@ class RecordElement implements Comparable<RecordElement> {
       CategoryType.income => incomes
     };
 
-    count ??= sources.length;
-    return Category.getTopSourcesWithRefInAllCategory(sources, count);
+    return SourceWithCategoryRef.getTopSourcesWithRefInAllCategories(sources, count);
   }
 }
 
@@ -292,35 +291,15 @@ class Category {
     return sortedSources.take(count);
   }
 
-  Iterable<SourceWithCategoryRef> getTopSourcesWithRef(int count) {
+  Iterable<SourceWithCategoryRef> getTopSourcesWithRef([int? count]) {
     final List<SourceWithCategoryRef> sortedSources = sources.map((s) => SourceWithCategoryRef(categoryRef: this, source: s)).toList();
     sortedSources.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
-    return sortedSources.take(count);
+    return sortedSources.take(count ?? sortedSources.length);
   }
 
-  static Iterable<Source> getTopSourcesInAllCategory(
-    Iterable<Category> categories,
-    int count,
-  ) {
-    final top = categories
-        .map((e) => e.getTopSources(count))
-        .expand((e) => e)
-        .toList();
-    top.sort((a, b) => Comparable.compare(b.value, a.value));
-    return top.take(count);
-  }
+  
 
-  static Iterable<SourceWithCategoryRef> getTopSourcesWithRefInAllCategory(
-    Iterable<Category> categories,
-    int count,
-  ) {
-    final top = categories
-        .map((e) => e.getTopSourcesWithRef(count))
-        .expand((e) => e)
-        .toList();
-    top.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
-    return top.take(count);
-  }
+  
 }
 
 class Source {
@@ -343,6 +322,18 @@ class Source {
   Map<String, dynamic> toJson() {
     return {'label': label, 'value': value};
   }
+
+  static Iterable<Source> getTopSourcesInAllCategories(
+    Iterable<Category> categories,
+    int count,
+  ) {
+    final top = categories
+        .map((e) => e.getTopSources(count))
+        .expand((e) => e)
+        .toList();
+    top.sort((a, b) => Comparable.compare(b.value, a.value));
+    return top.take(count);
+  }
 }
 
 class SourceWithCategoryRef {
@@ -350,6 +341,18 @@ class SourceWithCategoryRef {
   final Source source;
 
   SourceWithCategoryRef({required this.categoryRef , required this.source});
+
+  static Iterable<SourceWithCategoryRef> getTopSourcesWithRefInAllCategories(
+    Iterable<Category> categories,
+    [int? count]
+  ) {
+    final top = categories
+        .map((e) => e.getTopSourcesWithRef(count))
+        .expand((e) => e)
+        .toList();
+    top.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
+    return top.take(count ?? top.length);
+  }
 
 
 }

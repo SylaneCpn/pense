@@ -23,7 +23,6 @@ class SummaryTopCategories  extends StatefulWidget{
 class _SummaryTopCategoriesState extends State<SummaryTopCategories> {
 
   late int _count;
-  late List<Category> _sortedCategorires;
 
   String _valueWithPercentageText(
     AppState appState,
@@ -53,8 +52,8 @@ class _SummaryTopCategoriesState extends State<SummaryTopCategories> {
   @override
   void initState() {
     super.initState();
-    _sortedCategorires = widget.element.getTopCategories(widget.categoryType).toList();
-    _count = widget.initCount < _sortedCategorires.length ? widget.initCount : _sortedCategorires.length;
+    final sortedCategorires = widget.element.getTopCategories(widget.categoryType).toList();
+    _count = widget.initCount < sortedCategorires.length ? widget.initCount : sortedCategorires.length;
   
   }
 

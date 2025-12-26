@@ -164,11 +164,11 @@ class RetrospectTop extends StatefulWidget {
 
 class _RetrospectTopState extends State<RetrospectTop> {
   late int count;
-  late final List<RecordElement> elements;
+
 
   @override
   void initState() {
-    elements = _generateSortedElements();
+    final elements = _generateSortedElements();
     count = widget.initCount < elements.length ? widget.initCount : elements.length;
     super.initState();
   }
