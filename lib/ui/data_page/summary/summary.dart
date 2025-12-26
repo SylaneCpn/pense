@@ -55,18 +55,23 @@ class Summary extends StatelessWidget {
               ),
             ),
           ),
+          if (!element.isEmpty) ...[
+            SummaryBarChart(element: element),
 
-          SummaryBarChart(element: element),
+            Align(
+              child: SummaryInfoBox(
+                element: element,
+                type: RetrospectType.diff,
+              ),
+            ),
 
-          Align(
-            child: SummaryInfoBox(element: element, type: RetrospectType.diff),
-          ),
+            Align(
+              alignment: AlignmentGeometry.centerLeft,
+              child: ExpensesInfoBox(element: element),
+            ),
+          ],
 
-
-          Align(
-            alignment: AlignmentGeometry.centerLeft,
-            child: ExpensesInfoBox(element: element),
-          ),
+          if (element.isEmpty) _NoDataAvailable(),
         ],
       ),
     );
@@ -121,8 +126,6 @@ class SummaryInfoBox extends StatelessWidget {
           child: Column(
             spacing: 12.0,
             children: [
-              
-          
               Text("Ce mois ci : ", style: _textStyle(appState, context)),
               Text(
                 textAlign: TextAlign.center,
@@ -179,6 +182,44 @@ class ExpensesInfoBox extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _NoDataAvailable extends StatelessWidget {
+  const _NoDataAvailable({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
+    return LayoutBuilder(
+      builder: (context,constraints) {
+        return SizedBox(
+          height: MediaQuery.heightOf(context) * 0.5,
+          width: constraints.maxWidth*0.9,
+          child: ElevatedContainer(
+            decoration: BoxDecoration(color: appState.lessContrastBackgroundColor()),
+            borderRadius: BorderRadius.circular(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 20.0,
+              children: [
+                Text(
+                  "Pas de données disponibles",
+                  style: TextStyle(
+                    color: appState.onBackgroundColor(),
+                    fontSize: PortView.bigTextSize(MediaQuery.widthOf(context)),
+                  ),
+                ),
+                Text("Ajoutez-en pour les voir apparaitre",style: TextStyle(
+                    color: appState.onBackgroundColor(),
+                    fontSize: PortView.regularTextSize(MediaQuery.widthOf(context)),
+                  )),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 }

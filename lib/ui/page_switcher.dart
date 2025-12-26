@@ -45,6 +45,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
       this.month = month;
       this.year = year;
     });
+    replay();
   }
 
   void toPrevMonth() {
@@ -53,6 +54,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
       month = m;
       year = y;
     });
+    replay();
   }
 
   void toNextMonth() {
@@ -61,6 +63,7 @@ class _PageSwitcherState extends State<PageSwitcher> with TickerProviderStateMix
       month = m;
       year = y;
     });
+    replay();
   }
 
   bool provideToNextMonth() {

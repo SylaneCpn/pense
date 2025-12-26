@@ -165,6 +165,8 @@ class RecordElement implements Comparable<RecordElement> {
     };
   }
 
+  bool get isEmpty => expenses.noDefinedElements && incomes.noDefinedElements;
+
   bool isInDateRange(DateRange range) {
     final isBeforeEnd = switch (compareDates(
       thisMonth: month,
@@ -255,12 +257,15 @@ class RecordElement implements Comparable<RecordElement> {
 
 
 
+
 class Category {
   final String label;
   final List<Source> sources;
 
   Category({required this.label, required this.sources});
   Category.empty({required this.label}) : sources = [];
+
+  bool get isEmpty => sources.isEmpty;
 
   factory Category.fromJson(dynamic json) {
     return switch (json) {
@@ -300,6 +305,10 @@ class Category {
   
 
   
+}
+
+extension on List<Category> {
+  bool get noDefinedElements => this.isEmpty || every((c) => c.isEmpty);
 }
 
 class Source {
