@@ -113,7 +113,6 @@ jobs:
           channel: master
           flutter-version: 3.38.5
       - run: flutter build windows
-      - run: dir build\windows\
       - name: Archive Windows Build
         run: Compress-Archive -Path build\windows\arm64\runner\Release\* -DestinationPath build-windows-arm64.zip
 
