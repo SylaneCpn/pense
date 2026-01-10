@@ -6,7 +6,7 @@ A Mutiplatform app to keep troack of your expenses.
 
 ## Screenshots
 
-<div>
+
 <img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_14
 .png" width="30%" />
 <img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_13
@@ -35,7 +35,7 @@ A Mutiplatform app to keep troack of your expenses.
 .png" width="30%" />
 <img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_1
 .png" width="30%" />
-</div>
+
 
 
 
