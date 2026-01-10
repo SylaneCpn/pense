@@ -36,7 +36,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          channel: master
           flutter-version: 3.38.5
       - run: |
           sudo apt-get update -y
@@ -111,7 +111,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: master
-          flutter-version: 3.38.5
+          flutter-version: 3.38.1
       - run: flutter build windows
       - name: Archive Windows Build
         run: Compress-Archive -Path build\windows\arm64\runner\Release\* -DestinationPath pense-windows-arm64.zip
