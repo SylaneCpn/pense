@@ -8,7 +8,7 @@ jobs:
   build-linux:
     strategy:
         matrix:
-            os : [ubuntu-latest , ubuntu-22.04-arm]
+            os : [ubuntu-latest , ubuntu-24.04-arm]
 
     runs-on: $ {{matrix.os}}
     env :
@@ -66,11 +66,11 @@ jobs:
           channel: stable
       - run: flutter pub get
       - run: flutter build apk
-      - run: flutter build appbundle
       - uses: actions/upload-artifact@v4
         with:
           name: pense.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+      - run: flutter build appbundle
       - uses: actions/upload-artifact@v4
         with:
           name: pense-android-bundle
