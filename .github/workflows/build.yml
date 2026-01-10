@@ -22,11 +22,11 @@ jobs:
       - run: flutter build linux
 
       - name: Archive Linux Build
-        run : tar -czf build-linux-x64.tar.gz -C build/linux/x64/release/bundle .
+        run : tar -czf pense-linux-x64.tar.gz -C build/linux/x64/release/bundle .
       - uses: actions/upload-artifact@v4
         with:
           name: pense-build-linux-x64
-          path: build-linux-x64.tar.gz
+          path: pense-linux-x64.tar.gz
 
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
@@ -36,7 +36,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: master
+          channel: stable
           flutter-version: 3.38.5
       - run: |
           sudo apt-get update -y
@@ -44,11 +44,11 @@ jobs:
       - run: flutter build linux
 
       - name: Archive Linux Build
-        run : tar -czf build-linux-arm64.tar.gz -C build/linux/arm64/release/bundle .
+        run : tar -czf pense-linux-arm64.tar.gz -C build/linux/arm64/release/bundle .
       - uses: actions/upload-artifact@v4
         with:
           name: pense-build-linux-arm64
-          path: build-linux-arm64.tar.gz
+          path: pense-linux-arm64.tar.gz
 
 
 #   build-linux:
@@ -92,12 +92,12 @@ jobs:
           flutter-version: 3.38.5
       - run: flutter build windows
       - name: Archive Windows Build
-        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath build-windows-x64.zip
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath pense-windows-x64.zip
 
       - uses: actions/upload-artifact@v4
         with:
           name: pense-windows-x64
-          path: build-windows-x64.zip
+          path: pense-windows-x64.zip
 
 
   build-windows-arm64:
@@ -114,12 +114,12 @@ jobs:
           flutter-version: 3.38.5
       - run: flutter build windows
       - name: Archive Windows Build
-        run: Compress-Archive -Path build\windows\arm64\runner\Release\* -DestinationPath build-windows-arm64.zip
+        run: Compress-Archive -Path build\windows\arm64\runner\Release\* -DestinationPath pense-windows-arm64.zip
 
       - uses: actions/upload-artifact@v4
         with:
           name: pense-windows-arm64
-          path: build-windows-arm64.zip
+          path: pense-windows-arm64.zip
 
 
 #   build-windows:
