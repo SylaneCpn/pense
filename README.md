@@ -7,34 +7,20 @@ A Mutiplatform app to keep troack of your expenses.
 ## Screenshots
 
 
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_14
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_13
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_12
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_11
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_10
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_9
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_8
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_7
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_6
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_5
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_4
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_3
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_2
-.png" width="30%" />
-<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_1
-.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_14.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_13.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_12.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_11.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_10.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_9.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/screenshots/Screenshot_8.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_7.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_6.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_5.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_4.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/refs/heads/main/screenshots/Screenshot_3.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_2.png" width="30%" />
+<img src="https://raw.githubusercontent.com/SylaneCpn/pense/main/screenshots/Screenshot_1.png" width="30%" />
 
 
 
