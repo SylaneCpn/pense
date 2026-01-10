@@ -308,6 +308,7 @@ class Category {
 }
 
 extension on List<Category> {
+  // ignore: unnecessary_this
   bool get noDefinedElements => this.isEmpty || every((c) => c.isEmpty);
 }
 
