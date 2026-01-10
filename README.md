@@ -7,33 +7,33 @@ A Mutiplatform app to keep troack of your expenses.
 ## Screenshots
 
 <div>
-<img src="screenshots/Screenshot_14
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_14
 .png" width="30%" />
-<img src="screenshots/Screenshot_13
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_13
 .png" width="30%" />
-<img src="screenshots/Screenshot_12
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_12
 .png" width="30%" />
-<img src="screenshots/Screenshot_11
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_11
 .png" width="30%" />
-<img src="screenshots/Screenshot_10
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_10
 .png" width="30%" />
-<img src="screenshots/Screenshot_9
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_9
 .png" width="30%" />
-<img src="screenshots/Screenshot_8
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_8
 .png" width="30%" />
-<img src="screenshots/Screenshot_7
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_7
 .png" width="30%" />
-<img src="screenshots/Screenshot_6
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_6
 .png" width="30%" />
-<img src="screenshots/Screenshot_5
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_5
 .png" width="30%" />
-<img src="screenshots/Screenshot_4
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_4
 .png" width="30%" />
-<img src="screenshots/Screenshot_3
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_3
 .png" width="30%" />
-<img src="screenshots/Screenshot_2
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_2
 .png" width="30%" />
-<img src="screenshots/Screenshot_1
+<img src="https://github.com/sylanecpn/pense/blob/main/screenshots/Screenshot_1
 .png" width="30%" />
 </div>
 
