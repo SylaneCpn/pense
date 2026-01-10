@@ -6,7 +6,7 @@ A Mutiplatform app to keep troack of your expenses.
 
 ## Screenshots
 
-
+<div>
 <img src="screenshots/Screenshot_14
 .png" width="30%" />
 <img src="screenshots/Screenshot_13
@@ -35,6 +35,7 @@ A Mutiplatform app to keep troack of your expenses.
 .png" width="30%" />
 <img src="screenshots/Screenshot_1
 .png" width="30%" />
+</div>
 
 
 
