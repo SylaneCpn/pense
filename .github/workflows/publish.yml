@@ -158,14 +158,19 @@ jobs:
           channel: stable
       - run: flutter pub get
       - run: flutter build apk
+      - name: Rename apk
+        run: mv build/app/outputs/flutter-apk/app-release.apk pense.apk
+
       - uses: actions/upload-artifact@v4
         with:
-          name: pense.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: pense-android
+          path: pense.apk
       - run: flutter build appbundle
+      - name: Rename aab
+        run: mv build/app/outputs/bundle/release/app-release.aab pense.aab
       - uses: actions/upload-artifact@v4
         with:
-          name: pense-android-bundle.aab
+          name: pense-android-bundle
           path: build/app/outputs/bundle/release/app-release.aab
   publish:
     needs:
@@ -188,7 +193,7 @@ jobs:
              artifacts/pense-linux-x64/pense-linux-x64.tar.gz
              artifacts/pense-windows-x64/pense-windows-x64.zip
              artifacts/pense-linux-arm64/pense-linux-arm64.tar.gz
-             artifacts/pense.apk
-             artifacts/pense-android-bundle.aab
+             artifacts/pense-android/pense.apk
+             artifacts/pense-android-bundle/pense.aab
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
