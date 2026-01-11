@@ -1,0 +1,23 @@
+on:
+  push:
+    tags:
+    - 'v*'
+
+name: Upload Release Asset
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download artifacts
+              uses: actions/download-artifacts@v4
+              with:
+                path: artifacts
+            - name: Create release
+              uses : softprops/action-gh-release@v2
+              with:
+                tag_name: ${{ github.ref_name }}
+                name: Release ${{ github.ref_name }}
+                files: artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
