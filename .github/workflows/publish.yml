@@ -27,7 +27,7 @@ jobs:
         run : tar -czf pense-linux-x64.tar.gz -C build/linux/x64/release/bundle .
       - uses: actions/upload-artifact@v4
         with:
-          name: pense-build-linux-x64
+          name: pense-linux-x64
           path: pense-linux-x64.tar.gz
 
   build-linux-arm64:
@@ -49,7 +49,7 @@ jobs:
         run : tar -czf pense-linux-arm64.tar.gz -C build/linux/arm64/release/bundle .
       - uses: actions/upload-artifact@v4
         with:
-          name: pense-build-linux-arm64
+          name: pense-linux-arm64
           path: pense-linux-arm64.tar.gz
     #   build-linux:
     #     strategy:
@@ -165,7 +165,7 @@ jobs:
       - run: flutter build appbundle
       - uses: actions/upload-artifact@v4
         with:
-          name: pense-android-bundle
+          name: pense-android-bundle.aab
           path: build/app/outputs/bundle/release/app-release.aab
   publish:
     needs:
@@ -184,6 +184,11 @@ jobs:
           with:
             tag_name: ${{ github.ref_name }}
             name: Release ${{ github.ref_name }}
-            files: artifacts/*
+            files:  |
+             artifacts/pense-linux-x64/pense-linux-x64.tar.gz
+             artifacts/pense-windows-x64/pense-windows-x64.zip
+             artifacts/pense-linux-arm64/pense-linux-arm64.tar.gz
+             artifacts/pense.apk
+             artifacts/pense-android-bundle.aab
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
