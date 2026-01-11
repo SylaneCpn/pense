@@ -54,8 +54,8 @@ Pense can be compiled to the following platforms :
 
 ## Installing the app on your system
 
-If you're on Windows, Linux or Android, you can directly grab the application on your
-system. On Android you'll just need to put the .apk on your device and click on it to install the software.
+If you're on Windows, Linux or Android, you can directly grab the application for your
+system [on the release page](https://github.com/sylanecpn/pense/releases/latest). On Android you'll just need to put the .apk on your device and click on it to install the software.
 
 For Desktop (Linux & Windows), you have to download the coresponding zipped file and extract it somewhere on your PC. At this point you'll just have to launch the app by double-clicking the executable file ('pense.exe' on Windows or 'pense' on Linux).
 
