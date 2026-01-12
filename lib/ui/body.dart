@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_window_close/flutter_window_close.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/page_switcher.dart';
 import 'package:pense/ui/processing_placeholder.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -22,6 +24,12 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
       });
     });
     super.initState();
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      FlutterWindowClose.setWindowShouldCloseHandler(() async {
+        await record?.storeRecord();
+        return true;
+      });
+    }
     WidgetsBinding.instance.addObserver(this);
   }
 
