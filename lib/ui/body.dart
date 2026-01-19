@@ -1,10 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_window_close/flutter_window_close.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/page_switcher.dart';
 import 'package:pense/ui/processing_placeholder.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -23,14 +23,8 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
         record = value;
       });
     });
-    super.initState();
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      FlutterWindowClose.setWindowShouldCloseHandler(() async {
-        await record?.storeRecord();
-        return true;
-      });
-    }
     WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   @override
@@ -41,12 +35,20 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
-      record?.storeRecord();
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.paused) {
+      await record?.storeRecord();
     }
     super.didChangeAppLifecycleState(state);
   }
+
+
+  @override
+  Future<AppExitResponse> didRequestAppExit() async {
+    await record?.storeRecord();
+    return super.didRequestAppExit();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
