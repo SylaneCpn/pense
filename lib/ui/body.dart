@@ -36,7 +36,7 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.hidden || state == AppLifecycleState.inactive) {
       await record?.storeRecord();
     }
     super.didChangeAppLifecycleState(state);

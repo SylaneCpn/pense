@@ -2,7 +2,7 @@
 
 ![logo](assets/icon/icon.png)
 
-A Mutiplatform app to keep troack of your expenses.
+A Mutiplatform app to keep track of your expenses.
 
 ## Screenshots
 <div>
