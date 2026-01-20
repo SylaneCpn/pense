@@ -53,24 +53,39 @@ class Record extends ChangeNotifier {
     notifyListeners();
   }
 
-  static Future<Record> getRecord() async {
+  static Future<Record> getRecord({
+    int maxTries = 20,
+    int? currentAttempt,
+  }) async {
     final appDir = await getApplicationSupportDirectory();
     try {
       final record = await File("${appDir.path}/$path").readAsString();
+      if (record.isEmpty) return Record(elements: []);
       final json = await compute(jsonDecode, record);
       return Record.fromJson(json);
-    }
-    // file doesn't exist
-    catch (e) {
+      // File doesn't exist, new data.
+    } on PathNotFoundException {
       return Record(elements: []);
     }
+    // Could not read file
+    catch (e) {
+      final attempt = currentAttempt ?? 0;
+      // Retry
+      if (attempt < maxTries) {
+        await getRecord(maxTries: maxTries, currentAttempt: attempt + 1);
+      }
+      // Could not get data despite the retries
+      return Record(elements: []);
+    }
+    
   }
 
   Future<void> storeRecord() async {
-    final appDir = await getApplicationSupportDirectory();
-    final recordAsJson = toJson();
-    final recordAsString = await compute(jsonEncode, recordAsJson);
-    await File("${appDir.path}/$path").writeAsString(recordAsString);
+      final appDir = await getApplicationSupportDirectory();
+      final recordAsJson = toJson();
+      final recordAsString = await compute(jsonEncode, recordAsJson);
+      File("${appDir.path}/$path").writeAsStringSync(recordAsString);
+    
   }
 
   RecordElement where(Month month, int year) {
@@ -214,7 +229,7 @@ class RecordElement implements Comparable<RecordElement> {
     return switch (type) {
       RetrospectType.expense => totalExpense(),
       RetrospectType.income => totalIncome(),
-      RetrospectType.diff => totalElement()
+      RetrospectType.diff => totalElement(),
     };
   }
 
@@ -231,32 +246,36 @@ class RecordElement implements Comparable<RecordElement> {
     otherYear: other.year,
   );
 
-  Iterable<Category> getTopCategories(CategoryType type , [int? count]) {
-    
+  Iterable<Category> getTopCategories(CategoryType type, [int? count]) {
     final sources = switch (type) {
       CategoryType.expense => expenses,
-      CategoryType.income => incomes
+      CategoryType.income => incomes,
     };
 
     count ??= sources.length;
 
     final List<Category> sortedCategorires = List.from(sources);
-    sortedCategorires.sort((a, b) => Comparable.compare(b.sourceSum(), a.sourceSum()));
+    sortedCategorires.sort(
+      (a, b) => Comparable.compare(b.sourceSum(), a.sourceSum()),
+    );
     return sortedCategorires.take(count);
   }
 
-  Iterable<SourceWithCategoryRef> getTopSources(CategoryType type , [int? count]) {
+  Iterable<SourceWithCategoryRef> getTopSources(
+    CategoryType type, [
+    int? count,
+  ]) {
     final sources = switch (type) {
       CategoryType.expense => expenses,
-      CategoryType.income => incomes
+      CategoryType.income => incomes,
     };
 
-    return SourceWithCategoryRef.getTopSourcesWithRefInAllCategories(sources, count);
+    return SourceWithCategoryRef.getTopSourcesWithRefInAllCategories(
+      sources,
+      count,
+    );
   }
 }
-
-
-
 
 class Category {
   final String label;
@@ -297,14 +316,14 @@ class Category {
   }
 
   Iterable<SourceWithCategoryRef> getTopSourcesWithRef([int? count]) {
-    final List<SourceWithCategoryRef> sortedSources = sources.map((s) => SourceWithCategoryRef(categoryRef: this, source: s)).toList();
-    sortedSources.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
+    final List<SourceWithCategoryRef> sortedSources = sources
+        .map((s) => SourceWithCategoryRef(categoryRef: this, source: s))
+        .toList();
+    sortedSources.sort(
+      (a, b) => Comparable.compare(b.source.value, a.source.value),
+    );
     return sortedSources.take(count ?? sortedSources.length);
   }
-
-  
-
-  
 }
 
 extension on List<Category> {
@@ -350,12 +369,12 @@ class SourceWithCategoryRef {
   final Category categoryRef;
   final Source source;
 
-  SourceWithCategoryRef({required this.categoryRef , required this.source});
+  SourceWithCategoryRef({required this.categoryRef, required this.source});
 
   static Iterable<SourceWithCategoryRef> getTopSourcesWithRefInAllCategories(
-    Iterable<Category> categories,
-    [int? count]
-  ) {
+    Iterable<Category> categories, [
+    int? count,
+  ]) {
     final top = categories
         .map((e) => e.getTopSourcesWithRef(count))
         .expand((e) => e)
@@ -363,6 +382,4 @@ class SourceWithCategoryRef {
     top.sort((a, b) => Comparable.compare(b.source.value, a.source.value));
     return top.take(count ?? top.length);
   }
-
-
 }

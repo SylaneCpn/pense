@@ -29,36 +29,34 @@ class _BodyState extends State<Body> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-     record?.storeRecord();
+    record?.storeRecord();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.hidden || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       await record?.storeRecord();
     }
     super.didChangeAppLifecycleState(state);
   }
-
 
   @override
   Future<AppExitResponse> didRequestAppExit() async {
     await record?.storeRecord();
     return super.didRequestAppExit();
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    final body =
-        (record != null)
-            ? ChangeNotifierProvider(
-              create: (context) => record!,
-              child: const PageSwitcher(),
-            )
-            : const ProcessingPlaceholder();
+    final body = (record != null)
+        ? ChangeNotifierProvider(
+            create: (context) => record!,
+            child: const PageSwitcher(),
+          )
+        : const ProcessingPlaceholder();
 
     return SafeArea(child: body);
   }
