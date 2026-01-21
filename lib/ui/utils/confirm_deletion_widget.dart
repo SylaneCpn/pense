@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pense/logic/app_state.dart';
+import 'package:provider/provider.dart';
 
 class ConfirmDeletionWidget extends StatelessWidget {
   final void Function() onDeleteCallBack;
@@ -12,7 +14,9 @@ class ConfirmDeletionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return AlertDialog(
+      backgroundColor: appState.lightBackgroundColor(),
       title: Text(title),
       actions: [
         TextButton(

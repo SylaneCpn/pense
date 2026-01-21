@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 class AddSourceWidget extends StatefulWidget {
   final List<Source> sources;
   final Record record;
+  final String categoryLabel;
 
   const AddSourceWidget({
     super.key,
     required this.sources,
     required this.record,
+    required this.categoryLabel
   });
 
   @override
@@ -41,7 +43,7 @@ class _AddSourceWidgetState extends State<AddSourceWidget> {
     final appState = context.read<AppState>();
     return AlertDialog(
       backgroundColor: appState.lightBackgroundColor(),
-      title: const Text("Ajouter une source."),
+      title: Text("Ajouter une source pour \"${widget.categoryLabel}\"."),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

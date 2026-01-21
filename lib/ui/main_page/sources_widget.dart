@@ -11,11 +11,13 @@ import 'package:pense/ui/utils/text_add_button.dart';
 import 'package:provider/provider.dart';
 
 class SourcesWidget extends StatelessWidget {
+  final String categoryLabel;
   final List<Source> sources;
   final CategoryType categoryType;
   const SourcesWidget({
     super.key,
     required this.sources,
+    required this.categoryLabel,
     this.categoryType = CategoryType.income,
   });
 
@@ -63,7 +65,7 @@ class SourcesWidget extends StatelessWidget {
                   context: context,
                   builder:
                       (context) =>
-                          AddSourceWidget(sources: sources, record: record),
+                          AddSourceWidget(categoryLabel: categoryLabel, sources: sources, record: record),
                 );
               },
               text: "Source",

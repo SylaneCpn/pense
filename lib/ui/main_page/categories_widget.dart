@@ -292,6 +292,7 @@ class CategoryWidget extends StatelessWidget {
                   ),
                 ),
                 child: SourcesWidget(
+                  categoryLabel: category.label,
                   sources: category.sources,
                   categoryType: categoryType,
                 ),
