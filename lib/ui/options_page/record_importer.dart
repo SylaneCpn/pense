@@ -8,6 +8,7 @@ import 'package:pense/logic/app_state.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:pense/logic/record.dart';
+import 'package:pense/ui/utils/snackbar.dart';
 import 'package:provider/provider.dart';
 
 class RecordImporter extends StatefulWidget {
@@ -43,25 +44,10 @@ class _RecordImporterState extends State<RecordImporter> {
     );
   }
 
-  static SnackBar _snackBar(
-    String message,
-    AppState appState,
-    BuildContext context,
-  ) => SnackBar(
-    backgroundColor: appState.onLessContrastBackgroundColor(),
-    content: Text(
-      message,
-      style: TextStyle(
-        color: appState.lessContrastBackgroundColor(),
-        fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.widthOf(context)),
-      ),
-    ),
-  );
 
   Future<void> _importRecord() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
-      allowedExtensions: ['json'],
     );
 
     if (result == null) {
@@ -87,13 +73,13 @@ class _RecordImporterState extends State<RecordImporter> {
       record.notify();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          _snackBar("Fichier importé avec succès !", appState, context),
+          snackBar("Fichier importé avec succès !", appState, context),
         );
       }
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          _snackBar("Le fichier n'a pas pu être importé.", appState, context),
+          snackBar("Le fichier n'a pas pu être importé.", appState, context),
         );
       }
     } finally {
@@ -115,7 +101,7 @@ class _RecordImporterState extends State<RecordImporter> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Exporter des données", style: _labelStyle(appState, context)),
+            Text("Importer des données", style: _labelStyle(appState, context)),
             Align(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -123,31 +109,35 @@ class _RecordImporterState extends State<RecordImporter> {
                   builder: (context, constraints) {
                     return SizedBox(
                       width: constraints.maxWidth * 0.8,
-                      child: Column(
-                        spacing: 24.0,
-                        children: [
-                          Text(
-                            _file?.name ?? "Pas de fichier sélectionné.",
-                            style: _textStyle(appState, context),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                style: _buttonStyle(appState, context),
-                                onPressed: _importRecord,
-                                child: Text("Importer un fichier"),
-                              ),
-                              TextButton(
-                                style: _buttonStyle(appState, context),
-                                onPressed: _file == null
-                                    ? null
-                                    : () => _useImportedRecord(context,appState, record),
-                                child: Text("Utiliser le fichier importé"),
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: Column(
+                          spacing: 24.0,
+                          children: [
+                            Text(
+                              _file?.name ?? "Pas de fichier sélectionné.",
+                              style: _textStyle(appState, context),
+                            ),
+                            Wrap(
+                              spacing: 50.0,
+                              alignment: WrapAlignment.spaceEvenly,
+                              children: [
+                                TextButton(
+                                  style: _buttonStyle(appState, context),
+                                  onPressed: _file == null
+                                      ? null
+                                      : () => _useImportedRecord(context,appState, record),
+                                  child: Text("Utiliser le fichier importé"),
+                                ),
+                                TextButton(
+                                  style: _buttonStyle(appState, context),
+                                  onPressed: _importRecord,
+                                  child: Text("Importer un fichier"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

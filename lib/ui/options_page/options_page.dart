@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pense/logic/app_state.dart';
 import 'package:pense/logic/currency.dart';
 import 'package:pense/ui/options_page/color_circle.dart';
+import 'package:pense/ui/options_page/record_exporter.dart';
 import 'package:pense/ui/options_page/selection_radio.dart';
 import 'package:pense/ui/options_page/switch_label.dart';
-import 'package:pense/ui/record_importer.dart';
+import 'package:pense/ui/options_page/record_importer.dart';
 import 'package:pense/ui/utils/decorated_gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,14 @@ class OptionsPage extends StatelessWidget {
             ],
           ),
 
-          OptionSection(sectionName: "Données", children: [RecordImporter()]),
+          OptionSection(
+            sectionName: "Données",
+            children: [
+              Column(
+                spacing: 20.0,
+                children: [const RecordImporter() , const RecordExporter()],)
+            ],
+          ),
           SizedBox(height: 40.0),
         ],
       ),
