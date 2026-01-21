@@ -7,6 +7,7 @@ import 'package:pense/logic/month.dart';
 import 'package:pense/logic/record.dart';
 import 'package:pense/ui/main_page/add_category_widget.dart';
 import 'package:pense/ui/main_page/categories_pie_chart.dart';
+import 'package:pense/ui/utils/confirm_deletion_widget.dart';
 import 'package:pense/ui/utils/elevated_container.dart';
 import 'package:pense/ui/utils/gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
@@ -84,7 +85,7 @@ class CategoriesWidget extends StatelessWidget {
                       children: [
                         if (total > 0.0)
                           WithChipSubtitle(
-                            subtitle : "Vue d'ensemble",
+                            subtitle: "Vue d'ensemble",
                             child: CategoriesPieChart(
                               total: total,
                               categories: categories,
@@ -273,12 +274,18 @@ class CategoryWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedContainer(
-              decoration: BoxDecoration(color: appState.backgroundColor(),),
+              decoration: BoxDecoration(color: appState.backgroundColor()),
               borderRadius: BorderRadius.circular(8.0),
               child: Accordion(
                 header: header,
                 tail: IconButton(
-                  onPressed: onDeleteCallBack,
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (_) => ConfirmDeletionWidget(
+                      onDeleteCallBack: onDeleteCallBack,
+                      title: "Supprimer la catégorie : \"${category.label}\" ?",
+                    ),
+                  ),
                   icon: Transform.rotate(
                     angle: pi / 4,
                     child: const Icon(Icons.add, color: Colors.red),
