@@ -4,6 +4,7 @@ import 'package:pense/logic/currency.dart';
 import 'package:pense/ui/options_page/color_circle.dart';
 import 'package:pense/ui/options_page/selection_radio.dart';
 import 'package:pense/ui/options_page/switch_label.dart';
+import 'package:pense/ui/record_importer.dart';
 import 'package:pense/ui/utils/decorated_gradient_title.dart';
 import 'package:pense/ui/utils/port_view.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,9 @@ class OptionsPage extends StatelessWidget {
   TextStyle _selectionTextStyle(AppState appState, BuildContext context) {
     return TextStyle(
       color: appState.onLessContrastBackgroundColor(),
-      fontSize: PortView.slightlyBiggerRegularTextSize(MediaQuery.widthOf(context)),
+      fontSize: PortView.slightlyBiggerRegularTextSize(
+        MediaQuery.widthOf(context),
+      ),
     );
   }
 
@@ -62,12 +65,18 @@ class OptionsPage extends StatelessWidget {
                 label: "Couleur de l'app",
                 selectedElementIndex: appState.colorIndex,
                 setIndexCallBack: appState.setColorIndex,
-                disabled: appState.trySystemColors && appState.canUseSystemColors,
+                disabled:
+                    appState.trySystemColors && appState.canUseSystemColors,
                 widgetFromElement: (element) => Row(
                   spacing: 8.0,
                   children: [
                     ColorCircle(color: element),
-                    Expanded(child: Text(element.toStringFr() , style: _selectionTextStyle(appState, context),))
+                    Expanded(
+                      child: Text(
+                        element.toStringFr(),
+                        style: _selectionTextStyle(appState, context),
+                      ),
+                    ),
                   ],
                 ),
                 elements: AppState.colors,
@@ -82,11 +91,17 @@ class OptionsPage extends StatelessWidget {
                 label: "Devise",
                 selectedElementIndex: appState.currencyIndex,
                 setIndexCallBack: appState.setCurrencyIndex,
-                widgetFromElement: (element) => Text("${element.toStringFr()} (${element.symbol()})" ,style: _selectionTextStyle(appState, context),),
+                widgetFromElement: (element) => Text(
+                  "${element.toStringFr()} (${element.symbol()})",
+                  style: _selectionTextStyle(appState, context),
+                ),
                 elements: Currency.values,
               ),
             ],
           ),
+
+          OptionSection(sectionName: "Données", children: [RecordImporter()]),
+          SizedBox(height: 40.0),
         ],
       ),
     );

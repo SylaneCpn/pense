@@ -53,6 +53,12 @@ class Record extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  void updateRecord(Record newRecord) {
+    _elements.clear();
+    _elements.addAll(newRecord.elements);
+  }
+
   static Future<Record> getRecord({
     int maxTries = 20,
     int? currentAttempt,
