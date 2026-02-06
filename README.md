@@ -30,7 +30,7 @@ A Mutiplatform app to keep track of your expenses.
 ## Features
 
 - Store your income and expenses each month
-- Various graph to help you visualise date 
+- Various graph to help you visualise data 
 - Various statistics for your expenses
 - Report of you activity over a given period
 - Material You for android
